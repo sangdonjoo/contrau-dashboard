@@ -64,7 +64,7 @@ export default function LineDetailPage() {
       {/* Header: Farm + Line (always visible) */}
       <header className="rounded-xl border border-gray-200 bg-white p-4 sm:p-5 shadow-sm mb-4 sm:mb-6">
         <Link
-          href="/"
+          href="/shrimp"
           className="text-xs text-green-600 hover:text-green-700 font-medium"
         >
           &larr; Back to Overview

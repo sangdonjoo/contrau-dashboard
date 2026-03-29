@@ -114,7 +114,10 @@ export default function HarvestChart() {
             <Tooltip
               contentStyle={{ fontSize: 12 }}
               formatter={(value, name) => {
+                // Hide band entries (harvestBand, ciBand) and any NaN values
+                if (typeof name === "string" && name.toLowerCase().includes("band")) return null;
                 const v = Number(value);
+                if (isNaN(v) || value === null) return null;
                 if (name === "Avg Color Index") return [v.toFixed(0), name];
                 return [`${v.toLocaleString()} kg`, name];
               }}

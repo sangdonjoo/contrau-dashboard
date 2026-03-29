@@ -165,7 +165,10 @@ export default function PondMap({ factory }: PondMapProps) {
                     {n === "I" ? (
                       ri === 0 && ci === 2 ? (
                         <div className="rounded h-full w-full flex items-center justify-center bg-gray-300" style={{ border: "1.5px solid #9ca3af" }}>
-                          <span className="text-xs font-bold text-gray-600">Indoor</span>
+                          <span className="text-xs font-bold text-gray-600">
+                            <span className="hidden sm:inline">Indoor</span>
+                            <span className="sm:hidden">GH</span>
+                          </span>
                         </div>
                       ) : <div />
                     ) : typeof n === "number" && n === 3 ? (
@@ -186,7 +189,10 @@ export default function PondMap({ factory }: PondMapProps) {
                           className="rounded flex items-center justify-center bg-gray-300 mt-1"
                           style={{ height: "25%", width: "50%", border: "1.5px solid #9ca3af" }}
                         >
-                          <span className="text-[8px] font-bold text-gray-600">Processing</span>
+                          <span className="text-[8px] font-bold text-gray-600">
+                            <span className="hidden sm:inline">Processing</span>
+<span className="sm:hidden">P</span>
+                          </span>
                         </div>
                         {/* Bottom: empty space */}
                         <div className="flex-1" />

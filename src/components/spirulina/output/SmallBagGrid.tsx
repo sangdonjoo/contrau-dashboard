@@ -12,7 +12,7 @@ export default function SmallBagGrid() {
     byDate.set(bag.date, existing);
   }
 
-  const sortedDates = Array.from(byDate.keys()).sort();
+  const sortedDates = Array.from(byDate.keys()).sort().reverse();
 
   return (
     <div className="rounded-xl border border-gray-200 bg-white shadow-sm p-4">
