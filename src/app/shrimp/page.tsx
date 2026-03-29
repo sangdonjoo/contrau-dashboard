@@ -166,7 +166,7 @@ export default function OverviewPage() {
                   return (
                     <Link
                       key={`${farm.farmId}-${line.id}`}
-                      href={`/line/${farm.farmId}-${line.id}`}
+                      href={`/shrimp/line/${farm.farmId}-${line.id}`}
                       className={`block rounded-lg border p-3 hover:shadow-sm transition-all cursor-pointer overflow-visible ${
                         !hasStock ? "opacity-60" : ""
                       } ${hasInfraAlert ? "infra-alert-border" : "border-gray-200 hover:border-green-300"}`}
