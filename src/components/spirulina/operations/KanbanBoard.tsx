@@ -3,6 +3,7 @@
 import { operationCards, operationStages } from "@/data/spirulina-mock";
 import type { OperationStage } from "@/data/spirulina-mock";
 import KanbanColumn from "./KanbanColumn";
+import PondCard from "./PondCard";
 
 export default function KanbanBoard() {
   const cardsByStage = (stage: OperationStage) =>
@@ -40,13 +41,7 @@ export default function KanbanBoard() {
               ) : (
                 <div className="space-y-1.5 pl-2">
                   {cards.map((card) => (
-                    <div key={card.pondId} className="rounded-lg border border-gray-200 bg-white p-2 shadow-sm">
-                      <span className="text-xs font-semibold text-gray-800">{card.pondId}</span>
-                      {card.harvestKg !== undefined && (
-                        <span className="text-[10px] text-gray-500 ml-2">{card.harvestKg} kg</span>
-                      )}
-                      <span className="text-[10px] text-gray-400 ml-2">{card.startedAt}</span>
-                    </div>
+                    <PondCard key={card.pondId} card={card} />
                   ))}
                 </div>
               )}
