@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Contrau Shrimp Production",
-  description: "Shrimp production dashboard — Ca Mau pilot farm",
+  title: "Contrau Production Dashboard",
+  description: "Shrimp, Spirulina & BSFL production monitoring — Con Trau Eco",
 };
 
 export default function RootLayout({
