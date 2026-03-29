@@ -8,85 +8,149 @@ interface PondMapProps {
   factory: Factory;
 }
 
-/* ── Thin vertical pond cell (runway shape) ── */
-function PondCell({ pond }: { pond: Pond }) {
-  const [showTooltip, setShowTooltip] = useState(false);
-  const bgColor = getOdColor(pond.od);
-  const isPending = pond.status === "pending";
-  const textColor = pond.od !== null && pond.od >= 1.0 ? "white" : "#374151";
-  const shortId = pond.id.split("-")[1];
+// ── Compute average OD for a list of ponds (active only) ──
+function avgOd(ponds: Pond[]): number | null {
+  const active = ponds.filter((p) => p.od !== null && p.status === "active");
+  if (active.length === 0) return null;
+  return active.reduce((s, p) => s + (p.od as number), 0) / active.length;
+}
+
+// ── Tooltip for an existing group ──
+function GroupTooltip({ label, ponds }: { label: string; ponds: Pond[] }) {
+  return (
+    <div className="absolute z-30 bottom-full left-1/2 -translate-x-1/2 mb-1 w-44 bg-gray-900 text-white text-[10px] rounded-lg p-2 shadow-xl pointer-events-none whitespace-nowrap">
+      <p className="font-semibold mb-1">{label}</p>
+      {ponds.map((p) => (
+        <p key={p.id} className="leading-tight">
+          {p.id.split("-")[1]}: OD {p.od !== null ? p.od.toFixed(1) : "N/A"}
+          {p.harvestPlanTomorrow ? " 🟠" : ""}
+        </p>
+      ))}
+    </div>
+  );
+}
+
+// ── Existing pond group box ──
+function ExistingGroup({
+  label,
+  ponds,
+  style,
+}: {
+  label: string;
+  ponds: Pond[];
+  style?: React.CSSProperties;
+}) {
+  const [hover, setHover] = useState(false);
+  const od = avgOd(ponds);
+  const bg = getOdColor(od);
+  const isLight = od === null || od < 1.0;
+  const textClass = isLight ? "text-gray-700" : "text-white";
+  const odLabel = getOdLabel(od);
+  const hasHarvest = ponds.some((p) => p.harvestPlanTomorrow);
 
   return (
     <div
       className="relative"
-      onMouseEnter={() => setShowTooltip(true)}
-      onMouseLeave={() => setShowTooltip(false)}
+      style={style}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
     >
       <div
-        className={`flex items-center justify-center rounded-sm text-[8px] font-bold transition-all cursor-default ${
-          pond.harvestPlanTomorrow ? "ring-2 ring-orange-400" : ""
-        } ${isPending ? "border border-dashed border-gray-300" : ""}`}
-        style={{
-          width: 18,
-          height: 64,
-          backgroundColor: isPending ? "#f5f0e8" : bgColor,
-          color: isPending ? "#9ca3af" : textColor,
-          writingMode: "vertical-rl",
-          textOrientation: "mixed",
-        }}
+        className={`rounded-lg h-full w-full flex flex-col items-center justify-center gap-0.5 cursor-default border-2 border-gray-700 ${hasHarvest ? "ring-2 ring-orange-400" : ""}`}
+        style={{ backgroundColor: bg }}
       >
-        {shortId}
+        <span className={`text-[10px] font-bold leading-none ${textClass}`}>{label}</span>
+        <span className={`text-[8px] leading-none ${textClass} opacity-80`}>{odLabel}</span>
+        {od !== null && (
+          <span className={`text-[8px] leading-none ${textClass} opacity-70`}>
+            OD {od.toFixed(1)}
+          </span>
+        )}
       </div>
-      {showTooltip && (
-        <div className="absolute z-20 bottom-full left-1/2 -translate-x-1/2 mb-1 w-40 bg-gray-900 text-white text-[10px] rounded-lg p-2 shadow-lg pointer-events-none">
-          <p className="font-semibold">{pond.id}</p>
-          <p>OD: {pond.od !== null ? pond.od.toFixed(1) : "N/A"} — {getOdLabel(pond.od)}</p>
-          <p>Area: {pond.areaM2.toLocaleString()} m²</p>
-          <p>Status: {pond.status}</p>
-          {pond.lastHarvestDate && <p>Last harvest: {pond.lastHarvestDate}</p>}
-          {pond.harvestPlanTomorrow && (
-            <p className="text-orange-300 font-semibold mt-0.5">Harvest planned tomorrow</p>
-          )}
-        </div>
-      )}
+      {hover && <GroupTooltip label={label} ponds={ponds} />}
     </div>
   );
 }
 
-/* ── Pond group: ponds side-by-side in pairs ── */
-function PondGroup({ label, ponds }: { label: string; ponds: Pond[] }) {
+// ── Existing group that needs relocation (purple border, grey fill) ──
+function RelocateGroup({ label, style }: { label: string; style?: React.CSSProperties }) {
   return (
-    <div className="flex flex-col items-center gap-1">
-      <p className="text-[9px] font-semibold text-gray-500 leading-none">{label}</p>
-      <div className="flex gap-0.5">
-        {ponds.map((p) => (
-          <PondCell key={p.id} pond={p} />
-        ))}
-      </div>
-    </div>
-  );
-}
-
-/* ── Facility block ── */
-function Facility({ label, sublabel, className = "" }: { label: string; sublabel?: string; className?: string }) {
-  return (
-    <div className={`rounded border border-gray-300 bg-gray-200/60 flex flex-col items-center justify-center gap-0.5 ${className}`}>
-      <span className="text-[9px] font-bold text-gray-500 text-center leading-tight">{label}</span>
-      {sublabel && (
-        <span className="text-[8px] text-gray-400 text-center leading-tight">{sublabel}</span>
-      )}
-    </div>
-  );
-}
-
-/* ── Future expansion zone ── */
-function FutureZone({ label, phase, className = "" }: { label: string; phase: string; className?: string }) {
-  return (
-    <div className={`rounded border border-dashed flex flex-col items-center justify-center gap-0.5 ${className}`}
-      style={{ borderColor: "#d4c9a8", backgroundColor: "rgba(212,201,168,0.08)" }}
+    <div
+      className="rounded-lg h-full w-full flex flex-col items-center justify-center gap-0.5 border-2 border-purple-500 bg-gray-400"
+      style={style}
     >
-      <span className="text-[8px] font-semibold text-gray-400 text-center leading-tight">{label}</span>
-      <span className="text-[7px] text-gray-300 text-center leading-tight">{phase}</span>
+      <span className="text-[10px] font-bold text-gray-700 leading-none">{label}</span>
+      <span className="text-[8px] text-gray-600 leading-none">relocate</span>
+    </div>
+  );
+}
+
+// ── Facility block (Indoor GH / Processing) ──
+function FacilityBlock({
+  label,
+  style,
+}: {
+  label: string;
+  style?: React.CSSProperties;
+}) {
+  return (
+    <div
+      className="rounded-lg h-full w-full flex flex-col items-center justify-center bg-orange-400 border-2 border-orange-500"
+      style={style}
+    >
+      <span className="text-[10px] font-bold text-white text-center leading-tight px-1">{label}</span>
+    </div>
+  );
+}
+
+// ── Future phase box ──
+type Phase = 1 | 2 | 3 | 4;
+const phaseStyles: Record<Phase, string> = {
+  1: "border-red-400",
+  2: "border-purple-400",
+  3: "border-green-400",
+  4: "border-blue-500",
+};
+const phaseLabels: Record<Phase, string> = {
+  1: "Ph.1",
+  2: "Ph.2",
+  3: "Ph.3",
+  4: "Ph.4",
+};
+
+function FutureBox({ phase, style }: { phase: Phase; style?: React.CSSProperties }) {
+  return (
+    <div
+      className={`rounded-lg h-full w-full flex items-center justify-center border-2 border-dashed ${phaseStyles[phase]}`}
+      style={{ backgroundColor: "rgba(245,240,232,0.35)", ...style }}
+    >
+      <span className="text-[9px] font-semibold text-gray-400">{phaseLabels[phase]}</span>
+    </div>
+  );
+}
+
+// ── Cell wrapper: positions a box on the CSS grid ──
+function Cell({
+  row,
+  col,
+  rowSpan = 1,
+  colSpan = 1,
+  children,
+}: {
+  row: number;
+  col: number;
+  rowSpan?: number;
+  colSpan?: number;
+  children: React.ReactNode;
+}) {
+  return (
+    <div
+      style={{
+        gridRow: rowSpan > 1 ? `${row} / span ${rowSpan}` : row,
+        gridColumn: colSpan > 1 ? `${col} / span ${colSpan}` : col,
+      }}
+    >
+      {children}
     </div>
   );
 }
@@ -105,158 +169,244 @@ export default function PondMap({ factory }: PondMapProps) {
   const rwp6 = factory.zones.find((z) => z.id === "RWP6");
   const rwp7 = factory.zones.find((z) => z.id === "RWP7");
 
-  const rwp7Active01_04 = rwp7?.ponds.filter((p) => {
+  // RWP7: 01-04 (top sub-group), 09-12 (bottom sub-group), 05-08 pending → split into two display groups
+  const rwp7a = rwp7?.ponds.filter((p) => {
     const n = parseInt(p.id.split("-")[1], 10);
     return n >= 1 && n <= 4;
   }) ?? [];
-  const rwp7Active09_12 = rwp7?.ponds.filter((p) => {
+  const rwp7b = rwp7?.ponds.filter((p) => {
     const n = parseInt(p.id.split("-")[1], 10);
     return n >= 9 && n <= 12;
   }) ?? [];
-  const rwp7Pending = rwp7?.ponds.filter((p) => p.status === "pending") ?? [];
+
+  const cellH = 72; // base cell height px
+  const gap = 6;    // grid gap px
+
+  const gridStyle: React.CSSProperties = {
+    display: "grid",
+    gridTemplateColumns: "repeat(10, 1fr)",
+    gridTemplateRows: `${cellH}px ${cellH}px ${cellH}px ${cellH}px`,
+    gap: `${gap}px`,
+  };
 
   return (
     <div className="rounded-xl border border-gray-200 bg-white shadow-sm p-4">
       <h3 className="text-sm font-semibold text-gray-700 mb-3">Factory Pond Map — Tra Vinh</h3>
 
-      {/* Satellite-style map container */}
       <div
-        className="relative rounded-lg overflow-hidden p-3"
+        className="rounded-lg p-3"
         style={{
           backgroundColor: "#ede8db",
-          backgroundImage: "radial-gradient(circle at 20% 80%, rgba(180,170,140,0.15) 0%, transparent 50%)",
+          backgroundImage:
+            "radial-gradient(circle at 20% 80%, rgba(180,170,140,0.15) 0%, transparent 50%)",
         }}
       >
-        {/*
-          Layout grid: 5 columns x 3 rows
-          Row 1: RWP4 | RWP5 | Greenhouse | RWP6 | Warehouse
-          Row 2: future green | future yellow | future red | RWP7 01-04 + 09-12 | RWP7 pending
-          Row 3: (future green cont) | (future yellow) | (future blue zones)
-        */}
-        <div
-          className="grid gap-2"
-          style={{
-            gridTemplateColumns: "auto auto 1.2fr auto auto",
-            gridTemplateRows: "auto auto auto",
-          }}
-        >
-          {/* ── Row 1 ── */}
-          {rwp4 && (
-            <div className="row-start-1 col-start-1">
-              <PondGroup label="RWP4" ponds={rwp4.ponds} />
-            </div>
-          )}
-          {rwp5 && (
-            <div className="row-start-1 col-start-2">
-              <PondGroup label="RWP5" ponds={rwp5.ponds} />
-            </div>
-          )}
-          <Facility
-            label="Indoor GH"
-            sublabel="Greenhouse"
-            className="row-start-1 col-start-3 min-h-[72px] min-w-[80px] px-2"
-          />
-          {rwp6 && (
-            <div className="row-start-1 col-start-4">
-              <PondGroup label="RWP6" ponds={rwp6.ponds} />
-            </div>
-          )}
-          <Facility
-            label="Processing"
-            sublabel="VBF / Dryer / WH"
-            className="row-start-1 col-start-5 min-h-[72px] px-2"
-          />
+        <div style={gridStyle}>
+          {/* ─── ROW 1 ─── */}
 
-          {/* ── Row 2 ── */}
-          <FutureZone
-            label="Green Zone"
-            phase="Phase 3"
-            className="row-start-2 col-start-1 col-end-3 min-h-[52px]"
-          />
-          <FutureZone
-            label="Yellow Zone"
-            phase="Phase 2"
-            className="row-start-2 col-start-3 min-h-[52px]"
-          />
-          {/* RWP7 active: 01-04 and 09-12 as two rows of 4 thin ponds */}
-          <div className="row-start-2 col-start-4 flex flex-col items-center gap-1">
-            <p className="text-[9px] font-semibold text-gray-500 leading-none">RWP7</p>
-            <div className="flex gap-0.5">
-              {rwp7Active01_04.map((p) => (
-                <PondCell key={p.id} pond={p} />
-              ))}
-            </div>
-            <div className="flex gap-0.5">
-              {rwp7Active09_12.map((p) => (
-                <PondCell key={p.id} pond={p} />
-              ))}
-            </div>
-          </div>
-          {/* RWP7 pending */}
-          {rwp7Pending.length > 0 && (
-            <div className="row-start-2 col-start-5 flex flex-col items-center gap-1">
-              <p className="text-[9px] font-semibold text-gray-400 leading-none">RWP7 Pending</p>
-              <div className="flex gap-0.5 flex-wrap justify-center" style={{ maxWidth: 80 }}>
-                {rwp7Pending.map((p) => (
-                  <PondCell key={p.id} pond={p} />
-                ))}
-              </div>
-            </div>
-          )}
+          {/* Col 1: Future Ph.1 (red dashed) */}
+          <Cell row={1} col={1}>
+            <FutureBox phase={1} />
+          </Cell>
 
-          {/* ── Row 3: Future expansion zones ── */}
-          <FutureZone
-            label="Red Zone"
-            phase="Phase 1"
-            className="row-start-3 col-start-1 col-end-3 min-h-[40px]"
-          />
-          <FutureZone
-            label="Blue Zone A"
-            phase="Phase 4"
-            className="row-start-3 col-start-3 min-h-[40px]"
-          />
-          <FutureZone
-            label="Blue Zone B"
-            phase="Phase 4"
-            className="row-start-3 col-start-4 min-h-[40px]"
-          />
-          <FutureZone
-            label="Blue Zone C"
-            phase="Phase 4"
-            className="row-start-3 col-start-5 min-h-[40px]"
-          />
+          {/* Col 2: Existing RWP4 (tall — spans rows 1-2) */}
+          <Cell row={1} col={2} rowSpan={2}>
+            {rwp4 && (
+              <ExistingGroup label="RWP4" ponds={rwp4.ponds} style={{ height: "100%" }} />
+            )}
+          </Cell>
+
+          {/* Col 3: Indoor Greenhouse (orange, spans rows 1-2) */}
+          <Cell row={1} col={3} rowSpan={2}>
+            <FacilityBlock label="1 Indoor GH" style={{ height: "100%" }} />
+          </Cell>
+
+          {/* Col 4: Existing small group (row 1 only) */}
+          <Cell row={1} col={4}>
+            {rwp5 && (
+              <ExistingGroup label="RWP5" ponds={rwp5.ponds} style={{ height: "100%" }} />
+            )}
+          </Cell>
+
+          {/* ─── ROW 2 ─── */}
+
+          {/* Col 1 row 2: placeholder (part of a gap) */}
+          <Cell row={2} col={1}>
+            <div className="h-full" />
+          </Cell>
+
+          {/* Col 4 row 2: Processing/Warehouse (orange, below RWP5) */}
+          <Cell row={2} col={4}>
+            <FacilityBlock label="2 Processing" style={{ height: "100%" }} />
+          </Cell>
+
+          {/* Col 5-6 row 2: 2 existing groups */}
+          <Cell row={2} col={5}>
+            {rwp6 && (
+              <ExistingGroup label="RWP6" ponds={rwp6.ponds} style={{ height: "100%" }} />
+            )}
+          </Cell>
+          <Cell row={2} col={6}>
+            {rwp7a.length > 0 && (
+              <ExistingGroup label="RWP7a" ponds={rwp7a} style={{ height: "100%" }} />
+            )}
+          </Cell>
+
+          {/* Col 7 row 2: Future Ph.1 (red dashed) */}
+          <Cell row={2} col={7}>
+            <FutureBox phase={1} />
+          </Cell>
+
+          {/* Col 8-10 row 2: 3x Future Ph.4 (blue dashed) */}
+          <Cell row={2} col={8}>
+            <FutureBox phase={4} />
+          </Cell>
+          <Cell row={2} col={9}>
+            <FutureBox phase={4} />
+          </Cell>
+          <Cell row={2} col={10}>
+            <FutureBox phase={4} />
+          </Cell>
+
+          {/* ─── ROW 3 ─── */}
+
+          {/* Col 1-3 row 3: 3x Future Ph.3 (green dashed) */}
+          <Cell row={3} col={1}>
+            <FutureBox phase={3} />
+          </Cell>
+          <Cell row={3} col={2}>
+            <FutureBox phase={3} />
+          </Cell>
+          <Cell row={3} col={3}>
+            <FutureBox phase={3} />
+          </Cell>
+
+          {/* Col 4 row 3: Existing group needing relocation (purple border, grey fill) */}
+          <Cell row={3} col={4}>
+            <RelocateGroup label="RWP?" style={{ height: "100%" }} />
+          </Cell>
+
+          {/* Col 5 row 3-4: Future Ph.2 (purple dashed, spans 2 rows) */}
+          <Cell row={3} col={5} rowSpan={2}>
+            <FutureBox phase={2} style={{ height: "100%" }} />
+          </Cell>
+
+          {/* Col 6 row 3: Existing group */}
+          <Cell row={3} col={6}>
+            {rwp7b.length > 0 && (
+              <ExistingGroup label="RWP7b" ponds={rwp7b} style={{ height: "100%" }} />
+            )}
+          </Cell>
+
+          {/* Col 7 row 3: Future Ph.1 (red dashed) */}
+          <Cell row={3} col={7}>
+            <FutureBox phase={1} />
+          </Cell>
+
+          {/* Col 8-10 row 3: 3x Future Ph.4 (blue dashed) */}
+          <Cell row={3} col={8}>
+            <FutureBox phase={4} />
+          </Cell>
+          <Cell row={3} col={9}>
+            <FutureBox phase={4} />
+          </Cell>
+          <Cell row={3} col={10}>
+            <FutureBox phase={4} />
+          </Cell>
+
+          {/* ─── ROW 4 ─── */}
+
+          {/* Col 1-3 row 4: 3x Future Ph.3 (green dashed) */}
+          <Cell row={4} col={1}>
+            <FutureBox phase={3} />
+          </Cell>
+          <Cell row={4} col={2}>
+            <FutureBox phase={3} />
+          </Cell>
+          <Cell row={4} col={3}>
+            <FutureBox phase={3} />
+          </Cell>
+
+          {/* Col 4 row 4: Future Ph.2 (purple dashed) */}
+          <Cell row={4} col={4}>
+            <FutureBox phase={2} />
+          </Cell>
+
+          {/* Col 5 row 4: occupied by Ph.2 span from row 3 */}
+
+          {/* Col 6-7 row 4: empty / padding */}
         </div>
       </div>
 
-      {/* Legend */}
-      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-3 text-[10px] text-gray-400">
+      {/* ── Legend ── */}
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 mt-3 text-[10px] text-gray-500">
+        {/* Existing active */}
         <span className="flex items-center gap-1">
-          <span className="inline-block rounded-sm" style={{ width: 8, height: 20, backgroundColor: "#166534" }} />
-          High OD (&ge;1.5)
+          <span className="inline-block rounded w-4 h-4 bg-gray-800 border-2 border-gray-700" />
+          Existing (active)
+        </span>
+        {/* Relocate */}
+        <span className="flex items-center gap-1">
+          <span className="inline-block rounded w-4 h-4 bg-gray-400 border-2 border-purple-500" />
+          Relocate
+        </span>
+        {/* Indoor / Processing */}
+        <span className="flex items-center gap-1">
+          <span className="inline-block rounded w-4 h-4 bg-orange-400 border-2 border-orange-500" />
+          Facility (GH / Processing)
+        </span>
+        {/* Ph.1 */}
+        <span className="flex items-center gap-1">
+          <span
+            className="inline-block rounded w-4 h-4 border-2 border-dashed border-red-400"
+            style={{ backgroundColor: "rgba(245,240,232,0.35)" }}
+          />
+          Future Ph.1
+        </span>
+        {/* Ph.2 */}
+        <span className="flex items-center gap-1">
+          <span
+            className="inline-block rounded w-4 h-4 border-2 border-dashed border-purple-400"
+            style={{ backgroundColor: "rgba(245,240,232,0.35)" }}
+          />
+          Future Ph.2
+        </span>
+        {/* Ph.3 */}
+        <span className="flex items-center gap-1">
+          <span
+            className="inline-block rounded w-4 h-4 border-2 border-dashed border-green-400"
+            style={{ backgroundColor: "rgba(245,240,232,0.35)" }}
+          />
+          Future Ph.3
+        </span>
+        {/* Ph.4 */}
+        <span className="flex items-center gap-1">
+          <span
+            className="inline-block rounded w-4 h-4 border-2 border-dashed border-blue-500"
+            style={{ backgroundColor: "rgba(245,240,232,0.35)" }}
+          />
+          Future Ph.4
+        </span>
+        {/* OD scale */}
+        <span className="flex items-center gap-1 ml-2 pl-2 border-l border-gray-200">
+          <span className="inline-block rounded w-3 h-3" style={{ backgroundColor: "#166534" }} />
+          OD ≥1.5
         </span>
         <span className="flex items-center gap-1">
-          <span className="inline-block rounded-sm" style={{ width: 8, height: 20, backgroundColor: "#22c55e" }} />
-          Mid (&ge;1.0)
+          <span className="inline-block rounded w-3 h-3" style={{ backgroundColor: "#22c55e" }} />
+          OD ≥1.0
         </span>
         <span className="flex items-center gap-1">
-          <span className="inline-block rounded-sm" style={{ width: 8, height: 20, backgroundColor: "#86efac" }} />
-          Low (&ge;0.5)
+          <span className="inline-block rounded w-3 h-3" style={{ backgroundColor: "#86efac" }} />
+          OD ≥0.5
         </span>
         <span className="flex items-center gap-1">
-          <span className="inline-block rounded-sm" style={{ width: 8, height: 20, backgroundColor: "#e5e7eb" }} />
-          Inactive
+          <span className="inline-block rounded w-3 h-3 bg-gray-200 border border-gray-300" />
+          Low / N/A
         </span>
-        <span className="flex items-center gap-1 ml-1 border-l border-gray-200 pl-2">
-          <span className="inline-block rounded-sm ring-2 ring-orange-400 bg-white" style={{ width: 8, height: 20 }} />
+        <span className="flex items-center gap-1 ml-2 pl-2 border-l border-gray-200">
+          <span className="inline-block rounded w-3 h-3 ring-2 ring-orange-400 bg-white" />
           Harvest planned
-        </span>
-        <span className="flex items-center gap-1">
-          <span className="inline-block rounded-sm border border-dashed border-gray-300" style={{ width: 8, height: 20, backgroundColor: "#f5f0e8" }} />
-          Pending
-        </span>
-        <span className="flex items-center gap-1 ml-1 border-l border-gray-200 pl-2">
-          <span className="inline-block rounded-sm border border-dashed" style={{ width: 12, height: 12, borderColor: "#d4c9a8" }} />
-          Future zone
         </span>
       </div>
     </div>

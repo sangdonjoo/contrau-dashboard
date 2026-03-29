@@ -364,7 +364,7 @@ export const bigBags: BigBag[] = [
   {
     id: "BB-002",
     componentLots: smallBags.slice(5, 10).map((b) => b.lotNumber),
-    totalWeightKg: 487,
+    totalWeightKg: 500,
     blendedColorIndex: null,
     status: "pending_ci",
     createdDate: "2026-03-27",
@@ -380,7 +380,7 @@ export const bigBags: BigBag[] = [
   {
     id: "BB-004",
     componentLots: smallBags.slice(15, 19).map((b) => b.lotNumber),
-    totalWeightKg: 375,
+    totalWeightKg: 500,
     blendedColorIndex: null,
     status: "filling",
     createdDate: "2026-03-29",
