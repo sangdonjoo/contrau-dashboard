@@ -116,110 +116,59 @@ export default function PondMap({ factory }: PondMapProps) {
     <div className="rounded-xl border border-gray-200 bg-white shadow-sm p-4">
       <h3 className="text-sm font-semibold text-gray-700 mb-3">Factory Pond Map — Tra Vinh</h3>
 
-      <div className="rounded-lg p-3" style={{ backgroundColor: "#ede8db", backgroundImage: "radial-gradient(circle at 20% 80%, rgba(180,170,140,0.15) 0%, transparent 50%)" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(10, 1fr)", gridTemplateRows: `${cellH * 1.3}px ${cellH}px ${cellH}px`, gap: "6px" }}>
+      <div className="rounded-lg p-3 overflow-x-auto" style={{ backgroundColor: "#ede8db" }}>
+        {(() => {
+          const borderColors: Record<number, string> = {
+            // 검은색 (existing)
+            2: "#1f2937", 10: "#1f2937", 20: "#1f2937", 8: "#1f2937", 4: "#1f2937",
+            // 녹색 (Phase 3)
+            5: "#22c55e", 6: "#22c55e", 7: "#22c55e", 15: "#22c55e", 16: "#22c55e", 17: "#22c55e",
+            // 노란색 (Phase 2)
+            9: "#eab308", 18: "#eab308", 19: "#eab308",
+            // 빨간색 (Phase 1)
+            1: "#ef4444", 11: "#ef4444", 21: "#ef4444",
+            // 파란색 (Phase 4)
+            12: "#3b82f6", 13: "#3b82f6", 14: "#3b82f6", 22: "#3b82f6", 23: "#3b82f6", 24: "#3b82f6",
+          };
+          // 8: currently operating (black) but needs relocation during Phase 2
+          borderColors[8] = "#1f2937";
 
-          {/* ═══ ROW 1 — top, LEFT SIDE ONLY (cols 1-4) ═══ */}
+          const rows = [[1,2,3,4], [5,6,7,8,9,10,11,12,13,14], [15,16,17,18,19,20,21,22,23,24]];
 
-          {/* Col 1: Future Ph.1 */}
-          <Cell row={1} col={1}>
-            <FutureBox phase={1} />
-          </Cell>
-
-          {/* Col 2: Existing RWP5 (the larger group, top-left) */}
-          <Cell row={1} col={2}>
-            {rwp5 && <ExistingGroup label="RWP5" ponds={rwp5.ponds} />}
-          </Cell>
-
-          {/* Col 3: Indoor Greenhouse (orange, tall) */}
-          <Cell row={1} col={3}>
-            <FacilityBlock label="1 Indoor GH" />
-          </Cell>
-
-          {/* Col 4: RWP4 (small group near warehouse) + Processing below */}
-          <Cell row={1} col={4}>
-            <div className="flex flex-col gap-1 h-full">
-              <div className="flex-1">
-                {rwp4 && <ExistingGroup label="RWP4" ponds={rwp4.ponds} />}
-              </div>
-              <div style={{ height: "36px" }}>
-                <FacilityBlock label="2 Processing" />
-              </div>
+          return (
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(10, minmax(40px, 1fr))", gridAutoRows: "180px", gap: "4px" }}>
+              {rows.map((row, ri) =>
+                row.map((n, ci) => (
+                  <Cell key={n} row={ri + 1} col={ci + 1}>
+                    {n === 3 ? (
+                      <div className="rounded h-full w-full flex items-center justify-center bg-gray-300" style={{ border: `3px solid ${borderColors[n] || "#9ca3af"}` }}>
+                        <span className="text-xs font-bold text-gray-600">Indoor</span>
+                      </div>
+                    ) : (
+                      <div className="rounded h-full w-full flex items-center justify-center bg-white relative" style={{ border: `3px solid ${borderColors[n] || "#9ca3af"}` }}>
+                        <span className="text-sm font-bold text-gray-600">{n}</span>
+                        {n === 8 && (
+                          <span className="absolute top-1 right-1 text-[8px] font-bold text-yellow-600 bg-yellow-100 px-1 rounded">↻</span>
+                        )}
+                      </div>
+                    )}
+                  </Cell>
+                ))
+              )}
             </div>
-          </Cell>
-
-          {/* Cols 5-10 row 1: EMPTY (right side starts from row 2) */}
-
-          {/* ═══ ROW 2 — middle, FULL WIDTH ═══ */}
-
-          {/* Left: Green Ph.3 × 3 */}
-          <Cell row={2} col={1}><FutureBox phase={3} /></Cell>
-          <Cell row={2} col={2}><FutureBox phase={3} /></Cell>
-          <Cell row={2} col={3}><FutureBox phase={3} /></Cell>
-
-          {/* Col 4: Relocate group (purple border, grey fill) */}
-          <Cell row={2} col={4}><RelocateGroup label="Relocate" /></Cell>
-
-          {/* Col 5: Purple Ph.2 */}
-          <Cell row={2} col={5}><FutureBox phase={2} /></Cell>
-
-          {/* Col 6: Existing RWP6 */}
-          <Cell row={2} col={6}>
-            {rwp6 && <ExistingGroup label="RWP6" ponds={rwp6.ponds} />}
-          </Cell>
-
-          {/* Col 7: Future Ph.1 (red) */}
-          <Cell row={2} col={7}><FutureBox phase={1} /></Cell>
-
-          {/* Cols 8-10: Blue Ph.4 × 3 */}
-          <Cell row={2} col={8}><FutureBox phase={4} /></Cell>
-          <Cell row={2} col={9}><FutureBox phase={4} /></Cell>
-          <Cell row={2} col={10}><FutureBox phase={4} /></Cell>
-
-          {/* ═══ ROW 3 — bottom, FULL WIDTH ═══ */}
-
-          {/* Left: Green Ph.3 × 3 */}
-          <Cell row={3} col={1}><FutureBox phase={3} /></Cell>
-          <Cell row={3} col={2}><FutureBox phase={3} /></Cell>
-          <Cell row={3} col={3}><FutureBox phase={3} /></Cell>
-
-          {/* Col 4: Purple Ph.2 */}
-          <Cell row={3} col={4}><FutureBox phase={2} /></Cell>
-
-          {/* Col 5: Existing RWP7a (01-04) */}
-          <Cell row={3} col={5}>
-            {rwp7a.length > 0 && <ExistingGroup label="RWP7a" ponds={rwp7a} />}
-          </Cell>
-
-          {/* Col 6: Existing RWP7b (09-12) */}
-          <Cell row={3} col={6}>
-            {rwp7b.length > 0 && <ExistingGroup label="RWP7b" ponds={rwp7b} />}
-          </Cell>
-
-          {/* Col 7: Future Ph.1 (red) */}
-          <Cell row={3} col={7}><FutureBox phase={1} /></Cell>
-
-          {/* Cols 8-10: Blue Ph.4 × 3 */}
-          <Cell row={3} col={8}><FutureBox phase={4} /></Cell>
-          <Cell row={3} col={9}><FutureBox phase={4} /></Cell>
-          <Cell row={3} col={10}><FutureBox phase={4} /></Cell>
-
-        </div>
+          );
+        })()}
       </div>
 
       {/* Legend */}
       <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 mt-3 text-[10px] text-gray-500">
-        <span className="flex items-center gap-1"><span className="inline-block rounded w-4 h-4 bg-gray-800 border-2 border-gray-700" /> Existing</span>
-        <span className="flex items-center gap-1"><span className="inline-block rounded w-4 h-4 bg-gray-400 border-2 border-purple-500" /> Relocate</span>
-        <span className="flex items-center gap-1"><span className="inline-block rounded w-4 h-4 bg-orange-400 border-2 border-orange-500" /> Facility</span>
-        <span className="flex items-center gap-1"><span className="inline-block rounded w-4 h-4 border-2 border-dashed border-red-400" style={{ backgroundColor: "rgba(245,240,232,0.35)" }} /> Ph.1</span>
-        <span className="flex items-center gap-1"><span className="inline-block rounded w-4 h-4 border-2 border-dashed border-purple-400" style={{ backgroundColor: "rgba(245,240,232,0.35)" }} /> Ph.2</span>
-        <span className="flex items-center gap-1"><span className="inline-block rounded w-4 h-4 border-2 border-dashed border-green-400" style={{ backgroundColor: "rgba(245,240,232,0.35)" }} /> Ph.3</span>
-        <span className="flex items-center gap-1"><span className="inline-block rounded w-4 h-4 border-2 border-dashed border-blue-500" style={{ backgroundColor: "rgba(245,240,232,0.35)" }} /> Ph.4</span>
-        <span className="flex items-center gap-1 ml-2 pl-2 border-l border-gray-200"><span className="inline-block rounded w-3 h-3" style={{ backgroundColor: "#166534" }} /> High OD</span>
-        <span className="flex items-center gap-1"><span className="inline-block rounded w-3 h-3" style={{ backgroundColor: "#22c55e" }} /> Mid</span>
-        <span className="flex items-center gap-1"><span className="inline-block rounded w-3 h-3" style={{ backgroundColor: "#86efac" }} /> Low</span>
-        <span className="flex items-center gap-1"><span className="inline-block rounded w-3 h-3 ring-2 ring-orange-400 bg-white" /> Harvest</span>
+        <span className="flex items-center gap-1"><span className="inline-block rounded w-4 h-4 bg-white" style={{ border: "3px solid #1f2937" }} /> Active (5 groups)</span>
+        <span className="flex items-center gap-1"><span className="inline-block rounded w-4 h-4 bg-gray-300" style={{ border: "3px solid #9ca3af" }} /> Indoor</span>
+        <span className="flex items-center gap-1"><span className="inline-block rounded w-4 h-4 bg-white" style={{ border: "3px solid #ef4444" }} /> Ph.1 Expansion</span>
+        <span className="flex items-center gap-1"><span className="inline-block rounded w-4 h-4 bg-white" style={{ border: "3px solid #eab308" }} /> Ph.2 Expansion</span>
+        <span className="flex items-center gap-1"><span className="inline-block rounded w-4 h-4 bg-white" style={{ border: "3px solid #22c55e" }} /> Ph.3 Expansion</span>
+        <span className="flex items-center gap-1"><span className="inline-block rounded w-4 h-4 bg-white" style={{ border: "3px solid #3b82f6" }} /> Ph.4 Expansion</span>
+        <span className="flex items-center gap-1"><span className="inline-block rounded w-4 h-4 bg-white relative" style={{ border: "3px solid #1f2937" }}><span className="absolute top-0 right-0 text-[6px] text-yellow-600">↻</span></span> Relocate (Ph.2)</span>
       </div>
     </div>
   );
