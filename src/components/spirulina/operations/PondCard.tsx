@@ -12,15 +12,18 @@ export default function PondCard({ card }: PondCardProps) {
   const isQueued = !isActive && card.stage === "harvest" && card.startedAt === "-";
 
   return (
-    <div className={`rounded-lg border p-2.5 shadow-sm transition-all ${
-      isActive
-        ? "border-green-500 bg-green-100 ring-2 ring-green-400"
-        : isCompleted
-          ? "border-gray-200 bg-gray-50 opacity-60"
-          : isQueued
-            ? "border-gray-200 bg-white opacity-70"
-            : "border-gray-200 bg-white"
-    }`}>
+    <div
+      className="rounded-lg border p-2.5 shadow-sm transition-all"
+      style={
+        isActive
+          ? { borderColor: "#22c55e", backgroundColor: "#dcfce7", boxShadow: "0 0 0 2px #4ade80" }
+          : isCompleted
+            ? { borderColor: "#e5e7eb", backgroundColor: "#f9fafb", opacity: 0.6 }
+            : isQueued
+              ? { borderColor: "#e5e7eb", backgroundColor: "#ffffff", opacity: 0.7 }
+              : { borderColor: "#e5e7eb", backgroundColor: "#ffffff" }
+      }
+    >
       <p className={`text-xs font-semibold ${isActive ? "text-green-800" : "text-gray-800"}`}>
         {card.pondId}
       </p>
