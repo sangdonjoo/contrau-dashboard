@@ -14,7 +14,7 @@ export default function PondCard({ card }: PondCardProps) {
   return (
     <div className={`rounded-lg border p-2.5 shadow-sm transition-all ${
       isActive
-        ? "border-green-500 bg-green-50 ring-1 ring-green-300"
+        ? "border-green-500 bg-green-100 ring-2 ring-green-400"
         : isCompleted
           ? "border-gray-200 bg-gray-50 opacity-60"
           : isQueued

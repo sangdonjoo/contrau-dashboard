@@ -31,12 +31,19 @@ function computeCloudBands(data: typeof dailyHarvest, window = 30) {
     const hStd = Math.sqrt(hVals.reduce((s, v) => s + (v - hAvg) ** 2, 0) / hVals.length);
     const cStd = Math.sqrt(cVals.reduce((s, v) => s + (v - cAvg) ** 2, 0) / cVals.length);
 
+    const hUpper = Math.round(hAvg + hStd * 0.8);
+    const hLower = Math.round(hAvg - hStd * 0.8);
+    const cUpper = Math.round(cAvg + cStd * 0.8);
+    const cLower = Math.round(cAvg - cStd * 0.8);
+
     return {
       ...data[i],
-      harvestUpper: Math.round(hAvg + hStd * 0.8),
-      harvestLower: Math.round(hAvg - hStd * 0.8),
-      ciUpper: Math.round(cAvg + cStd * 0.8),
-      ciLower: Math.round(cAvg - cStd * 0.8),
+      harvestUpper: hUpper,
+      harvestLower: hLower,
+      ciUpper: cUpper,
+      ciLower: cLower,
+      harvestBand: [hLower, hUpper],
+      ciBand: [cLower, cUpper],
     };
   });
 }
@@ -88,7 +95,7 @@ export default function HarvestChart() {
               dataKey="date"
               tickFormatter={formatDateTick}
               tick={{ fontSize: isMobile ? 9 : 11 }}
-              interval={0}
+              ticks={chartData.filter(d => d.date.endsWith("-01")).map(d => d.date)}
             />
             <YAxis
               yAxisId="left"
@@ -113,46 +120,28 @@ export default function HarvestChart() {
               }}
             />
             <Legend wrapperStyle={{ fontSize: isMobile ? 10 : 11 }} />
-            {/* Cloud bands — 30-day moving avg ± 0.8 std dev */}
+            {/* Cloud bands — 30-day moving avg ± 0.8 std dev, rendered as range area */}
             <Area
               yAxisId="left"
               type="monotone"
-              dataKey="harvestUpper"
+              dataKey="harvestBand"
               fill="#22c55e"
-              fillOpacity={0.12}
+              fillOpacity={0.15}
               stroke="none"
               legendType="none"
               name=""
-            />
-            <Area
-              yAxisId="left"
-              type="monotone"
-              dataKey="harvestLower"
-              fill="#ffffff"
-              fillOpacity={1}
-              stroke="none"
-              legendType="none"
-              name=""
+              isAnimationActive={false}
             />
             <Area
               yAxisId="right"
               type="monotone"
-              dataKey="ciUpper"
+              dataKey="ciBand"
               fill="#ca8a04"
-              fillOpacity={0.12}
+              fillOpacity={0.15}
               stroke="none"
               legendType="none"
               name=""
-            />
-            <Area
-              yAxisId="right"
-              type="monotone"
-              dataKey="ciLower"
-              fill="#ffffff"
-              fillOpacity={1}
-              stroke="none"
-              legendType="none"
-              name=""
+              isAnimationActive={false}
             />
             <Line
               yAxisId="left"

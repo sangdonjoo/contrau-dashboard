@@ -1,6 +1,6 @@
 export default function ExperimentPage() {
   return (
-    <div className="space-y-4">
+    <div className="space-y-4" style={{ minHeight: "600px" }}>
       <h2 className="text-sm font-semibold text-gray-700">Experiment Engine</h2>
       <div className="rounded-xl border border-gray-200 bg-white shadow-sm p-8 sm:p-12 text-center">
         <div className="text-4xl mb-4">&#x1F9EA;</div>
