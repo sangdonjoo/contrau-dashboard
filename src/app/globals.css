@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+:root {
+  --accent: #22c55e;
+  --accent-light: #dcfce7;
+  --bg: #ffffff;
+  --bg-subtle: #f9fafb;
+  --border: #e5e7eb;
+  --text: #111827;
+  --text-muted: #6b7280;
+}
+
+body {
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  background: var(--bg-subtle);
+  color: var(--text);
+}
+
+@keyframes borderBlink {
+  0%, 100% { border-color: #e5e7eb; }
+  50% { border-color: #ef4444; }
+}
+
+.infra-alert-border {
+  animation: borderBlink 1s infinite;
+}
