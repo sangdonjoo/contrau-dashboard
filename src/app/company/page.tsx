@@ -14,7 +14,7 @@ export default function CompanyPage() {
       <header className="mb-2">
         <h1 className="text-xl font-bold text-gray-900">Company Overview</h1>
         <p className="text-xs text-gray-400 mt-0.5">
-          SSOT 파이프라인 현황 + 메시지 수집 트렌드
+          SSOT pipeline status · message collection trends
         </p>
       </header>
       <PipelineStatus />

@@ -12,7 +12,7 @@ export default function OverridePage() {
       <header className="mb-5">
         <h1 className="text-xl font-bold text-gray-900">Context Override</h1>
         <p className="text-xs text-gray-400 mt-0.5">
-          딥다이브 · 먼쓸리 플랜 · 특수 태스크 — 티켓 번호를 터미널에서 로드하여 대응
+          Deep Dive · Monthly Plan · Special Task — load ticket ID in terminal to proceed
         </p>
       </header>
       <OverrideList />

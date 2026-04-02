@@ -179,23 +179,23 @@ export const specialTasks: SpecialTask[] = [
 
 // Status display helpers
 export const ddStatusMap: Record<string, { label: string; color: string }> = {
-  pending: { label: "대기 중", color: "bg-gray-100 text-gray-600" },
-  in_progress: { label: "작성 중", color: "bg-blue-50 text-blue-700" },
-  submitted: { label: "제출됨", color: "bg-green-50 text-green-700" },
+  pending: { label: "Pending", color: "bg-gray-100 text-gray-600" },
+  in_progress: { label: "In Progress", color: "bg-blue-50 text-blue-700" },
+  submitted: { label: "Submitted", color: "bg-green-50 text-green-700" },
 };
 
 export const mpStatusMap: Record<string, { label: string; color: string }> = {
-  ai_draft: { label: "AI 초안", color: "bg-gray-100 text-gray-600" },
-  pl_review: { label: "PL 검토 중", color: "bg-blue-50 text-blue-700" },
-  pl_confirmed: { label: "PL 확인", color: "bg-blue-100 text-blue-800" },
-  ceo_review: { label: "대표 검토 중", color: "bg-yellow-50 text-yellow-700" },
-  ceo_feedback: { label: "대표 피드백", color: "bg-orange-50 text-orange-700" },
-  final: { label: "최종안", color: "bg-purple-50 text-purple-700" },
-  confirmed: { label: "확정", color: "bg-green-50 text-green-700" },
+  ai_draft: { label: "AI Draft", color: "bg-gray-100 text-gray-600" },
+  pl_review: { label: "PL Review", color: "bg-blue-50 text-blue-700" },
+  pl_confirmed: { label: "PL Confirmed", color: "bg-blue-100 text-blue-800" },
+  ceo_review: { label: "CEO Review", color: "bg-yellow-50 text-yellow-700" },
+  ceo_feedback: { label: "CEO Feedback", color: "bg-orange-50 text-orange-700" },
+  final: { label: "Final Draft", color: "bg-purple-50 text-purple-700" },
+  confirmed: { label: "Confirmed", color: "bg-green-50 text-green-700" },
 };
 
 export const tkStatusMap: Record<string, { label: string; color: string }> = {
-  pending: { label: "대기 중", color: "bg-gray-100 text-gray-600" },
-  in_progress: { label: "진행 중", color: "bg-blue-50 text-blue-700" },
-  completed: { label: "완료", color: "bg-green-50 text-green-700" },
+  pending: { label: "Pending", color: "bg-gray-100 text-gray-600" },
+  in_progress: { label: "In Progress", color: "bg-blue-50 text-blue-700" },
+  completed: { label: "Completed", color: "bg-green-50 text-green-700" },
 };

@@ -65,7 +65,7 @@ export default function PipelineStatus() {
     <div className="rounded-xl border border-gray-200 bg-white p-4 sm:p-5 shadow-sm">
       <h3 className="text-sm font-semibold text-gray-700 mb-1">Pipeline Status</h3>
       <p className="text-xs text-gray-400 mb-4">
-        SSOT 파이프라인 수집 현황 — Vietnam time (UTC+7) 기준 어제자
+        SSOT pipeline status — Vietnam time (UTC+7), yesterday
       </p>
 
       <div className="flex items-start gap-3 sm:gap-4 flex-wrap">
@@ -114,11 +114,6 @@ export default function PipelineStatus() {
               />
             )}
 
-            {!s.days && (
-              <span className="text-[10px] text-gray-400 leading-tight text-center max-w-[72px] truncate">
-                {singleDateLabel(s.stage)}
-              </span>
-            )}
           </div>
         ))}
 

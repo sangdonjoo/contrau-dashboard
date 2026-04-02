@@ -38,11 +38,11 @@ export default function OverviewPage() {
     : `Lines: ${totalLines} total (${activeLines} active / ${idleLines} idle) across ${farms.length} farms`;
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-6">
+    <div className="max-w-6xl mx-auto px-4 py-6">
       <header className="mb-4">
         <h1 className="text-xl font-bold text-gray-900">Shrimp Production</h1>
         <p className="text-xs text-gray-400 mt-0.5">
-          Ca Mau — 양식장 라인별 현황, 배치 추적, 수확 예측
+          Ca Mau — farm lines, batch tracking, harvest forecast
         </p>
       </header>
 

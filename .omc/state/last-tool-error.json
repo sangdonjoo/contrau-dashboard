@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"python -c \\\"import sqlite3; conn = sqlite3.connect('C:/Users/ASUS/Desktop/Claude-Code/contrau-ssot/04_people/people.db'); cur = conn.cursor(); cur.execute(\\\\\\\"SELECT employee_name, zalo_us...",
+  "error": "Exit code 1\nTraceback (most recent call last):\r\n  File \"<string>\", line 1, in <module>\r\n    import sqlite3; conn = sqlite3.connect('C:/Users/ASUS/Desktop/Claude-Code/contrau-ssot/04_people/people.db'); cur = conn.cursor(); cur.execute(\"SELECT employee_name, zalo_user_id, people_level FROM staff WHERE employee_name LIKE '%angdon%' OR employee_name LIKE '%oo%' LIMIT 10\"); [print(r) for r in cur.fetchall()]; conn.close()\r\n                                                                             ...",
+  "timestamp": "2026-03-29T13:08:57.934Z",
+  "retry_count": 3
+}

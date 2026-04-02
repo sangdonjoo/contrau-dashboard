@@ -34,7 +34,7 @@ export default function SourceVolumeChart() {
         Daily Message Volume by Source
       </h3>
       <p className="text-xs text-gray-400 mb-4">
-        소스별 일별 수집량 (KB, 축적 실선) — 최근 30일
+        Daily collection by source (KB, stacked lines) — last 30 days
       </p>
       <ResponsiveContainer width="100%" height={isMobile ? 240 : 300}>
         <ComposedChart

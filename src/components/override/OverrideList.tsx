@@ -75,13 +75,13 @@ function ProgressBar({ progress }: { progress: number }) {
 }
 
 const MP_STEPS: { key: MonthlyPlan["status"]; label: string }[] = [
-  { key: "ai_draft", label: "AI 초안" },
-  { key: "pl_review", label: "PL 검토" },
-  { key: "pl_confirmed", label: "PL 확인" },
-  { key: "ceo_review", label: "CEO 검토" },
-  { key: "ceo_feedback", label: "CEO 피드백" },
-  { key: "final", label: "최종안" },
-  { key: "confirmed", label: "확정" },
+  { key: "ai_draft", label: "AI Draft" },
+  { key: "pl_review", label: "PL Review" },
+  { key: "pl_confirmed", label: "PL Confirm" },
+  { key: "ceo_review", label: "CEO Review" },
+  { key: "ceo_feedback", label: "CEO Feedback" },
+  { key: "final", label: "Final" },
+  { key: "confirmed", label: "Confirmed" },
 ];
 
 function PlanStepBar({ currentStatus }: { currentStatus: MonthlyPlan["status"] }) {
@@ -153,7 +153,7 @@ export default function OverrideList() {
       {tab === "deep-dive" && (
         <div className="space-y-2">
           <p className="text-[11px] text-gray-400">
-            People L1-3이 자기 레벨 이하에게 요청하는 구조화된 심층 인터뷰. 텔레그램봇 인증 후 수행.
+            Structured deep-dive interviews requested by People L1-3. Requires authentication via Telegram bot.
           </p>
           {deepDives.map((dd) => {
             const status = ddStatusMap[dd.status];
@@ -199,7 +199,7 @@ export default function OverrideList() {
       {tab === "monthly-plan" && (
         <div className="space-y-2">
           <p className="text-[11px] text-gray-400">
-            PL이 AI와 v1→v2 완성 → 대표 피드백 → 최종 확정. 확정 후 불변.
+            PL finalizes v1→v2 with AI → CEO feedback → confirmed. Immutable after confirmation.
           </p>
           {monthlyPlans.map((mp) => {
             const status = mpStatusMap[mp.status];
@@ -249,7 +249,7 @@ export default function OverrideList() {
       {tab === "special-task" && (
         <div className="space-y-2">
           <p className="text-[11px] text-gray-400">
-            People L1-3이 자기 레벨 이하에게 요청한 중요 태스크. 텔레그램봇 또는 터미널에서 수행.
+            Important tasks assigned by People L1-3. Executed via Telegram bot or terminal.
           </p>
           {specialTasks.map((tk) => {
             const status = tkStatusMap[tk.status];
