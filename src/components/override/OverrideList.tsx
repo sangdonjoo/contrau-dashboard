@@ -8,14 +8,16 @@ import {
   ddStatusMap,
   mpStatusMap,
   tkStatusMap,
+  type MonthlyPlan,
 } from "@/data/override-mock";
 
 type Tab = "deep-dive" | "monthly-plan" | "special-task";
 
-function CopyButton({ text }: { text: string }) {
+function CopyButton({ id, filePath }: { id: string; filePath: string }) {
   const [copied, setCopied] = useState(false);
+  const combined = `${id} | ${filePath}`;
   const handleCopy = () => {
-    navigator.clipboard.writeText(text);
+    navigator.clipboard.writeText(combined);
     setCopied(true);
     setTimeout(() => setCopied(false), 1500);
   };
@@ -23,7 +25,7 @@ function CopyButton({ text }: { text: string }) {
     <button
       onClick={handleCopy}
       className="px-1.5 py-0.5 text-[10px] rounded border border-gray-200 bg-gray-50 text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition-colors shrink-0"
-      title={`Copy: ${text}`}
+      title={`Copy: ${combined}`}
     >
       {copied ? "Copied!" : "Copy"}
     </button>
@@ -72,6 +74,50 @@ function ProgressBar({ progress }: { progress: number }) {
   );
 }
 
+const MP_STEPS: { key: MonthlyPlan["status"]; label: string }[] = [
+  { key: "ai_draft", label: "AI 초안" },
+  { key: "pl_review", label: "PL 검토" },
+  { key: "pl_confirmed", label: "PL 확인" },
+  { key: "ceo_review", label: "CEO 검토" },
+  { key: "ceo_feedback", label: "CEO 피드백" },
+  { key: "final", label: "최종안" },
+  { key: "confirmed", label: "확정" },
+];
+
+function PlanStepBar({ currentStatus }: { currentStatus: MonthlyPlan["status"] }) {
+  const currentIdx = MP_STEPS.findIndex((s) => s.key === currentStatus);
+  return (
+    <div className="flex items-center flex-wrap gap-y-1 mt-2">
+      {MP_STEPS.map((step, i) => {
+        const isDone = i < currentIdx;
+        const isActive = i === currentIdx;
+        return (
+          <span key={step.key} className="flex items-center">
+            <span
+              className={[
+                "text-[9px] font-medium px-1.5 py-0.5 rounded",
+                isActive
+                  ? "bg-green-100 text-green-700 border border-green-300"
+                  : isDone
+                  ? "bg-gray-100 text-gray-400"
+                  : "text-gray-300",
+              ].join(" ")}
+            >
+              {isDone && "✓ "}
+              {step.label}
+            </span>
+            {i < MP_STEPS.length - 1 && (
+              <span className={`text-[9px] px-0.5 ${i < currentIdx ? "text-gray-300" : "text-gray-200"}`}>
+                →
+              </span>
+            )}
+          </span>
+        );
+      })}
+    </div>
+  );
+}
+
 export default function OverrideList() {
   const [tab, setTab] = useState<Tab>("deep-dive");
 
@@ -114,11 +160,9 @@ export default function OverrideList() {
             return (
               <div key={dd.id} className="rounded-lg border border-gray-200 bg-white p-3 shadow-sm">
                 <div className="flex items-start gap-2">
-                  {/* Left: ticket info */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1 flex-wrap">
                       <code className="text-[11px] font-mono text-gray-500">{dd.id}</code>
-                      <CopyButton text={dd.id} />
                       <span className={`text-[10px] px-1.5 py-0.5 rounded ${status.color}`}>
                         {status.label}
                       </span>
@@ -143,11 +187,7 @@ export default function OverrideList() {
                       <span>{dd.createdAt}</span>
                     </div>
                   </div>
-                  {/* Right: file copy */}
-                  <div className="shrink-0 flex flex-col items-end gap-1">
-                    <CopyButton text={dd.filePath} />
-                    <span className="text-[9px] text-gray-300">file path</span>
-                  </div>
+                  <CopyButton id={dd.id} filePath={dd.filePath} />
                 </div>
               </div>
             );
@@ -169,7 +209,6 @@ export default function OverrideList() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1 flex-wrap">
                       <code className="text-[11px] font-mono text-gray-500">{mp.id}</code>
-                      <CopyButton text={mp.id} />
                       <span className={`text-[10px] px-1.5 py-0.5 rounded ${status.color}`}>
                         {status.label}
                       </span>
@@ -196,11 +235,9 @@ export default function OverrideList() {
                       <span className="text-gray-300">|</span>
                       <span>{mp.period}</span>
                     </div>
+                    <PlanStepBar currentStatus={mp.status} />
                   </div>
-                  <div className="shrink-0 flex flex-col items-end gap-1">
-                    <CopyButton text={mp.filePath} />
-                    <span className="text-[9px] text-gray-300">file path</span>
-                  </div>
+                  <CopyButton id={mp.id} filePath={mp.filePath} />
                 </div>
               </div>
             );
@@ -222,7 +259,6 @@ export default function OverrideList() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1 flex-wrap">
                       <code className="text-[11px] font-mono text-gray-500">{tk.id}</code>
-                      <CopyButton text={tk.id} />
                       <span className={`text-[10px] px-1.5 py-0.5 rounded ${status.color}`}>
                         {status.label}
                       </span>
@@ -244,17 +280,13 @@ export default function OverrideList() {
                       <span className="text-gray-300">|</span>
                       <span>{tk.createdAt}</span>
                     </div>
-                    {/* Progress bar for in_progress tasks */}
                     {tk.status === "in_progress" && (
                       <div className="mt-2">
                         <ProgressBar progress={tk.progress} />
                       </div>
                     )}
                   </div>
-                  <div className="shrink-0 flex flex-col items-end gap-1">
-                    <CopyButton text={tk.filePath} />
-                    <span className="text-[9px] text-gray-300">file path</span>
-                  </div>
+                  <CopyButton id={tk.id} filePath={tk.filePath} />
                 </div>
               </div>
             );
