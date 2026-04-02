@@ -4,10 +4,17 @@
 export type PipelineStage = "R0" | "R1" | "W" | "M" | "Q" | "Snapshot";
 export type StageStatus = "green" | "yellow" | "red";
 
+export interface DayStatus {
+  date: string;
+  status: StageStatus;
+  reason?: string;
+}
+
 export interface PipelineStageInfo {
   stage: PipelineStage;
   status: StageStatus;
   reason?: string;
+  days?: DayStatus[]; // R0/R1/Snapshot: 5-day individual dots
 }
 
 // Vietnam timezone helper: "yesterday" = today VN - 1
@@ -28,8 +35,8 @@ function lastMonday(): string {
 }
 
 export const pipelineDates = {
-  r0: [vnYesterday(1), vnYesterday(2), vnYesterday(3)],
-  r1: [vnYesterday(1), vnYesterday(2), vnYesterday(3)],
+  r0: [vnYesterday(1), vnYesterday(2), vnYesterday(3), vnYesterday(4), vnYesterday(5)],
+  r1: [vnYesterday(1), vnYesterday(2), vnYesterday(3), vnYesterday(4), vnYesterday(5)],
   w: lastMonday(),
   m: (() => {
     const d = new Date();
@@ -46,16 +53,46 @@ export const pipelineDates = {
     const year = currentQ === 0 ? d.getFullYear() - 1 : d.getFullYear();
     return `${year}-Q${prevQ + 1}`;
   })(),
-  snapshot: vnYesterday(1),
+  snapshot: [vnYesterday(1), vnYesterday(2), vnYesterday(3), vnYesterday(4), vnYesterday(5)],
 };
 
 export const pipelineStatus: PipelineStageInfo[] = [
-  { stage: "R0", status: "green" },
-  { stage: "R1", status: "green" },
+  {
+    stage: "R0",
+    status: "red",
+    days: [
+      { date: vnYesterday(1), status: "green" },
+      { date: vnYesterday(2), status: "green" },
+      { date: vnYesterday(3), status: "green" },
+      { date: vnYesterday(4), status: "red", reason: "Swit R0 수집 누락 — API 타임아웃" },
+      { date: vnYesterday(5), status: "green" },
+    ],
+  },
+  {
+    stage: "R1",
+    status: "yellow",
+    days: [
+      { date: vnYesterday(1), status: "green" },
+      { date: vnYesterday(2), status: "green" },
+      { date: vnYesterday(3), status: "yellow", reason: "PI:LOW_CONFIDENCE 태그 2건 — 현장 맥락 불충분" },
+      { date: vnYesterday(4), status: "red", reason: "R1 미생성 — R0 수집 장애 연계" },
+      { date: vnYesterday(5), status: "green" },
+    ],
+  },
   { stage: "W", status: "yellow", reason: "W 생성 완료, Follow-up 2건 PI:LOW_CONFIDENCE 태그" },
   { stage: "M", status: "green" },
   { stage: "Q", status: "red", reason: "2026-Q1 Q 리포트 미생성 — W 4건 중 3건만 확보" },
-  { stage: "Snapshot", status: "yellow", reason: "Snapshot 갱신됨, 생산 도메인 데이터 지연 (2일)" },
+  {
+    stage: "Snapshot",
+    status: "yellow",
+    days: [
+      { date: vnYesterday(1), status: "yellow", reason: "생산 도메인 데이터 지연 (2일)" },
+      { date: vnYesterday(2), status: "green" },
+      { date: vnYesterday(3), status: "green" },
+      { date: vnYesterday(4), status: "red", reason: "Snapshot 미생성 — 스케줄러 오류" },
+      { date: vnYesterday(5), status: "green" },
+    ],
+  },
 ];
 
 // --- Chart 1: Daily message KB by source (30 days) ---
