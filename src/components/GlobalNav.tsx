@@ -20,8 +20,9 @@ export default function GlobalNav() {
   return (
     <nav className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
       <div className="max-w-6xl mx-auto px-4 flex items-center h-12 gap-1">
-        <Link href="/company" className="text-sm font-bold text-gray-900 mr-4 shrink-0">
-          Contrau
+        <Link href="/company" className="flex items-center gap-1.5 mr-4 shrink-0">
+          <img src="/logo.png" alt="Contrau" className="h-6 w-auto" />
+          <span className="text-sm font-bold text-gray-900">Contrau</span>
         </Link>
         {navItems.map((item) => {
           if (item.href.startsWith("divider")) {
