@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 
 const tabs = [
   { href: "/spirulina", label: "Overview" },
+  { href: "/spirulina/data-status", label: "Data Status" },
   { href: "/spirulina/operations", label: "Operations" },
   { href: "/spirulina/inventory", label: "Inventory" },
   { href: "/spirulina/output", label: "Output" },
