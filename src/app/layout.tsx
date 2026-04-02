@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
+import GlobalNav from "@/components/GlobalNav";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Contrau Production Dashboard",
-  description: "Shrimp, Spirulina & BSFL production monitoring — Con Trau Eco",
+  title: "Contrau Dashboard",
+  description: "Contrau Eco — Company, Production & Operations Dashboard",
 };
 
 export default function RootLayout({
@@ -20,6 +21,7 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen bg-[#f9fafb] antialiased">
+        <GlobalNav />
         {children}
       </body>
     </html>
