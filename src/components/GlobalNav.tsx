@@ -19,7 +19,7 @@ export default function GlobalNav() {
 
   return (
     <nav className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
-      <div className="max-w-6xl mx-auto px-4 flex items-center h-12 gap-1">
+      <div className="max-w-6xl mx-auto px-4 flex items-center h-12 gap-1 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
         <Link href="/company" className="flex items-center gap-1.5 mr-4 shrink-0">
           <img src="/logo.png" alt="Contrau" className="h-6 w-auto" />
           <span className="text-sm font-bold text-gray-900">Contrau</span>
@@ -35,7 +35,7 @@ export default function GlobalNav() {
             <Link
               key={item.href}
               href={item.href}
-              className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
+              className={`shrink-0 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
                 isActive
                   ? "bg-green-50 text-green-700"
                   : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"

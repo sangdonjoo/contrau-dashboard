@@ -161,8 +161,8 @@ function FinancialChart({ title, data, height = 250 }: { title: string; data: Mo
 export default function AccountingCompanyPage() {
   const consolidatedData = buildConsolidated()
   return (
-    <div className="flex-1 overflow-auto bg-gray-50">
-      <div className="max-w-6xl mx-auto px-4 py-6">
+    <div>
+      <div className="py-2">
         <div className="mb-6">
           <FinancialChart title="Consolidated" data={consolidatedData} height={300} />
         </div>

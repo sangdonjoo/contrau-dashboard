@@ -12,7 +12,7 @@ const tabs = [
 function AccountingNav() {
   const pathname = usePathname()
   return (
-    <div className="border-b border-gray-200 bg-white px-4">
+    <div className="border-b border-gray-200">
       <nav className="flex gap-4 overflow-x-auto">
         {tabs.map(tab => {
           const isActive = tab.exact
@@ -37,11 +37,9 @@ function AccountingNav() {
 
 export default function AccountingShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex flex-col h-full">
+    <>
       <AccountingNav />
-      <div className="flex-1 overflow-auto">
-        {children}
-      </div>
-    </div>
+      <div className="mt-4">{children}</div>
+    </>
   )
 }

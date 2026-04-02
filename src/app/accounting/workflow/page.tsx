@@ -78,8 +78,8 @@ export default function AccountingWorkflowPage() {
   const visibleWorkflows = selectedCat === 'all' ? workflows : workflows.filter(wf => wf.type === selectedCat)
 
   return (
-    <div className="flex-1 overflow-auto bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 py-6">
+    <div>
+      <div className="py-2">
         <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-6">
           <div className="flex gap-2">
             <select

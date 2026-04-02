@@ -27,8 +27,8 @@ export default function AccountingPage() {
   const transactions = allTransactions.filter(t => t.status === statusFilter)
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="bg-white border-b border-gray-200 px-4 py-3 flex flex-col sm:flex-row gap-3">
+    <div>
+      <div className="flex flex-col sm:flex-row gap-3 mb-3">
         <input
           type="text"
           placeholder="Search (title, vendor, ref)"
@@ -46,7 +46,7 @@ export default function AccountingPage() {
         </select>
       </div>
       <FilterBar filters={filters} onChange={setFilters} activeCount={transactions.length} />
-      <div className="flex-1 overflow-auto p-4">
+      <div className="mt-3">
         <TransactionListView transactions={transactions} />
       </div>
     </div>
