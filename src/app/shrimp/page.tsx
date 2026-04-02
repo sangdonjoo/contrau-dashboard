@@ -39,15 +39,11 @@ export default function OverviewPage() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-6">
-      {/* Header */}
-      <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
-        <div>
-          <h1 className="text-xl font-bold text-gray-900">
-            Contrau Shrimp Production
-          </h1>
-          <p className="text-xs text-gray-500 mt-0.5">{headerText}</p>
-        </div>
-        <p className="text-xs text-gray-400 mt-1 sm:mt-0">{now}</p>
+      <header className="mb-4">
+        <h1 className="text-xl font-bold text-gray-900">Shrimp Production</h1>
+        <p className="text-xs text-gray-400 mt-0.5">
+          Ca Mau — 양식장 라인별 현황, 배치 추적, 수확 예측
+        </p>
       </header>
 
       {/* Row 2: Farm Filter Buttons (global) */}
