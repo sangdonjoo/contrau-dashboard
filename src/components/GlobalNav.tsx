@@ -10,6 +10,8 @@ const navItems = [
   { href: "divider", label: "" },
   { href: "/shrimp", label: "Shrimp" },
   { href: "/spirulina", label: "Algae" },
+  { href: "divider2", label: "" },
+  { href: "/override", label: "Override" },
 ];
 
 export default function GlobalNav() {
@@ -22,9 +24,9 @@ export default function GlobalNav() {
           Contrau
         </Link>
         {navItems.map((item) => {
-          if (item.href === "divider") {
+          if (item.href.startsWith("divider")) {
             return (
-              <span key="divider" className="mx-2 text-gray-300 select-none">|</span>
+              <span key={item.href} className="mx-2 text-gray-300 select-none">|</span>
             );
           }
           const isActive = pathname.startsWith(item.href);
