@@ -59,7 +59,7 @@ export default function PeoplePage() {
     <div className="max-w-3xl mx-auto px-4 py-8">
       <header className="mb-5">
         <h1 className="text-xl font-bold text-gray-900">People</h1>
-        <p className="text-xs text-gray-400 mt-0.5">Claude 토큰 사용량 — 7일 / 30일</p>
+        <p className="text-xs text-gray-400 mt-0.5">Claude token usage — 7d / 30d</p>
       </header>
       <div className="space-y-2">
         {users.map(user => (
