@@ -1,13 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
-  deepDives,
+  deepDives as mockDeepDives,
   monthlyPlans,
   specialTasks,
   ddStatusMap,
   mpStatusMap,
   tkStatusMap,
+  type DeepDive,
   type MonthlyPlan,
 } from "@/data/override-mock";
 
@@ -120,11 +121,23 @@ function PlanStepBar({ currentStatus }: { currentStatus: MonthlyPlan["status"] }
 
 export default function OverrideList() {
   const [tab, setTab] = useState<Tab>("deep-dive");
+  const [deepDives, setDeepDives] = useState<DeepDive[]>(mockDeepDives);
+
+  useEffect(() => {
+    fetch('/api/deep-dives')
+      .then(res => res.json())
+      .then(data => {
+        if (data.available && data.data.length > 0) {
+          setDeepDives(data.data);
+        }
+      })
+      .catch(() => { /* keep mock fallback */ });
+  }, []);
 
   const tabs: { key: Tab; label: string; count: number }[] = [
     { key: "deep-dive", label: "Deep Dive", count: deepDives.length },
-    { key: "monthly-plan", label: "Monthly Plan", count: monthlyPlans.length },
-    { key: "special-task", label: "Special Task", count: specialTasks.length },
+    { key: "monthly-plan", label: "~Monthly Plan", count: monthlyPlans.length },
+    { key: "special-task", label: "~Special Task", count: specialTasks.length },
   ];
 
   return (

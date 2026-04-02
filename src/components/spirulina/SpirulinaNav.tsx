@@ -4,12 +4,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const tabs = [
-  { href: "/spirulina", label: "Overview" },
-  { href: "/spirulina/data-status", label: "Data Status" },
-  { href: "/spirulina/operations", label: "Operations" },
-  { href: "/spirulina/inventory", label: "Inventory" },
-  { href: "/spirulina/output", label: "Output" },
-  { href: "/spirulina/experiment", label: "Experiment" },
+  { href: "/spirulina", label: "~Overview" },
+  { href: "/spirulina/data-status", label: "~Data Status" },
+  { href: "/spirulina/operations", label: "~Operations" },
+  { href: "/spirulina/inventory", label: "~Inventory" },
+  { href: "/spirulina/output", label: "~Output" },
+  { href: "/spirulina/experiment", label: "~Experiment" },
 ];
 
 export default function SpirulinaNav() {

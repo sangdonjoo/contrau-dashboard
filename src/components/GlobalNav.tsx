@@ -4,12 +4,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const navItems = [
-  { href: "/company", label: "Company" },
-  { href: "/accounting", label: "Accounting" },
-  { href: "/people", label: "People" },
+  { href: "/company", label: "~Company" },
+  { href: "/accounting", label: "~Accounting" },
+  { href: "/people", label: "~People" },
   { href: "divider", label: "" },
-  { href: "/shrimp", label: "Shrimp" },
-  { href: "/spirulina", label: "Algae" },
+  { href: "/shrimp", label: "~Shrimp" },
+  { href: "/spirulina", label: "~Algae" },
   { href: "divider2", label: "" },
   { href: "/override", label: "Override" },
 ];

@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { pipelineStatus, pipelineDates, type PipelineStageInfo } from "@/data/company-mock";
+import { useState, useEffect } from "react";
+import { pipelineStatus as mockPipelineStatus, pipelineDates as mockPipelineDates, type PipelineStageInfo } from "@/data/company-mock";
 
 const statusColor: Record<string, string> = {
   green: "bg-green-500",
@@ -18,23 +18,44 @@ const stageLabels: Record<string, string> = {
   Snapshot: "Snapshot",
 };
 
-function singleDateLabel(stage: string): string {
-  switch (stage) {
-    case "W":
-      return `Weekly ${pipelineDates.w}`;
-    case "M":
-      return `Monthly ${pipelineDates.m}`;
-    case "Q":
-      return `Quarterly ${pipelineDates.q}`;
-    default:
-      return "";
-  }
-}
-
 type ExpandedKey = { stage: string; dayIndex?: number } | null;
 
 export default function PipelineStatus() {
   const [expanded, setExpanded] = useState<ExpandedKey>(null);
+  const [pipelineStatus, setPipelineStatus] = useState<PipelineStageInfo[]>(mockPipelineStatus);
+  const [apiDates, setApiDates] = useState({ w: mockPipelineDates.w, m: mockPipelineDates.m, q: mockPipelineDates.q });
+
+  useEffect(() => {
+    fetch('/api/company/pipeline')
+      .then(res => res.json())
+      .then(data => {
+        if (!data.available) return;
+        const stages: PipelineStageInfo[] = [
+          { stage: "R0", status: data.r0Days.some((d: { status: string }) => d.status !== 'green') ? 'red' : 'green', days: data.r0Days },
+          { stage: "R1", status: data.r1Days.some((d: { status: string }) => d.status === 'red') ? 'red' : data.r1Days.some((d: { status: string }) => d.status === 'yellow') ? 'yellow' : 'green', days: data.r1Days },
+          { stage: "W", status: data.w.status },
+          { stage: "M", status: data.m.status },
+          { stage: "Q", status: data.q.status },
+          { stage: "Snapshot", status: data.snapshotDays.some((d: { status: string }) => d.status !== 'green') ? 'red' : 'green', days: data.snapshotDays },
+        ];
+        setPipelineStatus(stages);
+        setApiDates({ w: data.w.label, m: data.m.label, q: data.q.label });
+      })
+      .catch(() => { /* keep mock fallback */ });
+  }, []);
+
+  function singleDateLabel(stage: string): string {
+    switch (stage) {
+      case "W":
+        return `Weekly ${apiDates.w}`;
+      case "M":
+        return `Monthly ${apiDates.m}`;
+      case "Q":
+        return `Quarterly ${apiDates.q}`;
+      default:
+        return "";
+    }
+  }
 
   const handleDotClick = (stage: string, status: string, dayIndex?: number) => {
     if (status === "green") return;
