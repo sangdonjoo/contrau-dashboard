@@ -56,8 +56,8 @@ export default function PeoplePage() {
   const max30d = Math.max(...users.map(u => u.total30d), 1)
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8">
-      <header className="mb-5">
+    <div className="max-w-6xl mx-auto px-4 py-6">
+      <header className="mb-4">
         <h1 className="text-xl font-bold text-gray-900">People</h1>
         <p className="text-xs text-gray-400 mt-0.5">Claude token usage — 7d / 30d</p>
       </header>

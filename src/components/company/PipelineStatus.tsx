@@ -21,11 +21,11 @@ const stageLabels: Record<string, string> = {
 function singleDateLabel(stage: string): string {
   switch (stage) {
     case "W":
-      return `주간 ${pipelineDates.w}`;
+      return `Weekly ${pipelineDates.w}`;
     case "M":
-      return `월간 ${pipelineDates.m}`;
+      return `Monthly ${pipelineDates.m}`;
     case "Q":
-      return `분기 ${pipelineDates.q}`;
+      return `Quarterly ${pipelineDates.q}`;
     default:
       return "";
   }

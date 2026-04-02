@@ -121,15 +121,15 @@ export default function PondMap({ factory }: PondMapProps) {
           // New numbering: row1=[1,2,Indoor,3], row2=[4..13], row3=[14..23]
           // Old→New mapping: old2→2, old4→3, old8→7, old10→9, old20→19
           const borderColors: Record<number, string> = {
-            // 검은색 (existing active): groups 2, 3, 7, 9, 19
+            // Black (existing active): groups 2, 3, 7, 9, 19
             2: "#1f2937", 3: "#1f2937", 7: "#1f2937", 9: "#1f2937", 19: "#1f2937",
-            // Phase 3 보라색: groups 4,5,6,14,15,16
+            // Phase 3 purple: groups 4,5,6,14,15,16
             4: "#a855f7", 5: "#a855f7", 6: "#a855f7", 14: "#a855f7", 15: "#a855f7", 16: "#a855f7",
-            // Phase 2 노란색: groups 8,17,18
+            // Phase 2 yellow: groups 8,17,18
             8: "#eab308", 17: "#eab308", 18: "#eab308",
-            // Phase 1 빨간색: groups 1,10,20
+            // Phase 1 red: groups 1,10,20
             1: "#ef4444", 10: "#ef4444", 20: "#ef4444",
-            // Phase 4 파란색: groups 11,12,13,21,22,23
+            // Phase 4 blue: groups 11,12,13,21,22,23
             11: "#3b82f6", 12: "#3b82f6", 13: "#3b82f6", 21: "#3b82f6", 22: "#3b82f6", 23: "#3b82f6",
           };
 

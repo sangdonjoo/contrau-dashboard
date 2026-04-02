@@ -4,9 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 const tabs = [
-  { href: '/accounting', label: 'Kanban', exact: true },
-  { href: '/accounting/list', label: 'List' },
-  { href: '/accounting/archive', label: 'Archive' },
+  { href: '/accounting', label: 'Transactions', exact: true },
   { href: '/accounting/workflow', label: 'Workflows' },
   { href: '/accounting/company', label: 'Financials' },
 ]

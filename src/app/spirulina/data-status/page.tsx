@@ -99,7 +99,7 @@ export default function DataStatusPage() {
               DB Collection Status — Tra Vinh Factory
             </h2>
             <p className="text-[11px] text-gray-400">
-              최근 5일간 데이터 수집 현황 ({dates[0]} ~ {dates[4]})
+              Last 5-day collection status ({dates[0]} ~ {dates[4]})
             </p>
           </div>
           <div className="flex items-center gap-3">
