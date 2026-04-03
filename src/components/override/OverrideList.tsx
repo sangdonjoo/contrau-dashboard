@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import {
   monthlyPlans,
   specialTasks,
@@ -13,11 +14,11 @@ import {
 
 type Tab = "deep-dive" | "monthly-plan" | "special-task";
 
-function CopyButton({ id, filePath }: { id: string; filePath: string }) {
+function CopyButton({ id }: { id: string }) {
   const [copied, setCopied] = useState(false);
-  const combined = `${id} | ${filePath}`;
-  const handleCopy = () => {
-    navigator.clipboard.writeText(combined);
+  const handleCopy = (e: React.MouseEvent) => {
+    e.preventDefault();
+    navigator.clipboard.writeText(id);
     setCopied(true);
     setTimeout(() => setCopied(false), 1500);
   };
@@ -25,7 +26,7 @@ function CopyButton({ id, filePath }: { id: string; filePath: string }) {
     <button
       onClick={handleCopy}
       className="px-1.5 py-0.5 text-[10px] rounded border border-gray-200 bg-gray-50 text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition-colors shrink-0"
-      title={`Copy: ${combined}`}
+      title={`Copy ticket: ${id}`}
     >
       {copied ? "Copied!" : "Copy"}
     </button>
@@ -47,18 +48,6 @@ function LevelBadge({ level }: { level: number }) {
   );
 }
 
-function InfoButton({ description }: { description: string }) {
-  return (
-    <span className="relative group">
-      <button className="w-4 h-4 rounded-full bg-gray-100 text-gray-400 text-[10px] leading-none hover:bg-gray-200 hover:text-gray-600 transition-colors">
-        ?
-      </button>
-      <span className="absolute left-6 top-0 z-50 hidden group-hover:block w-64 p-2 text-xs text-gray-700 bg-white border border-gray-200 rounded-lg shadow-lg">
-        {description}
-      </span>
-    </span>
-  );
-}
 
 function ProgressBar({ progress }: { progress: number }) {
   return (
@@ -175,7 +164,7 @@ export default function OverrideList() {
           ) : deepDives.map((dd) => {
             const status = ddStatusMap[dd.status];
             return (
-              <div key={dd.id} className="rounded-lg border border-gray-200 bg-white p-3 shadow-sm">
+              <Link key={dd.id} href={`/override/${dd.id}`} className="block rounded-lg border border-gray-200 bg-white p-3 shadow-sm hover:border-gray-300 hover:shadow-md transition-all">
                 <div className="flex items-start gap-2">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1 flex-wrap">
@@ -183,7 +172,6 @@ export default function OverrideList() {
                       <span className={`text-[10px] px-1.5 py-0.5 rounded ${status.color}`}>
                         {status.label}
                       </span>
-                      <InfoButton description={dd.description} />
                     </div>
                     <p className="text-sm text-gray-800 font-medium leading-snug mb-1 truncate">
                       {dd.title}
@@ -204,9 +192,9 @@ export default function OverrideList() {
                       <span>{dd.createdAt}</span>
                     </div>
                   </div>
-                  <CopyButton id={dd.id} filePath={dd.filePath} />
+                  <CopyButton id={dd.id} />
                 </div>
-              </div>
+              </Link>
             );
           })}
         </div>
@@ -232,7 +220,6 @@ export default function OverrideList() {
                       <span className="text-[10px] px-1.5 py-0.5 rounded bg-gray-50 text-gray-500">
                         {mp.version}
                       </span>
-                      <InfoButton description={mp.description} />
                     </div>
                     <p className="text-sm text-gray-800 font-medium leading-snug mb-1 truncate">
                       {mp.title}
@@ -254,7 +241,7 @@ export default function OverrideList() {
                     </div>
                     <PlanStepBar currentStatus={mp.status} />
                   </div>
-                  <CopyButton id={mp.id} filePath={mp.filePath} />
+                  <CopyButton id={mp.id} />
                 </div>
               </div>
             );
@@ -279,7 +266,6 @@ export default function OverrideList() {
                       <span className={`text-[10px] px-1.5 py-0.5 rounded ${status.color}`}>
                         {status.label}
                       </span>
-                      <InfoButton description={tk.description} />
                     </div>
                     <p className="text-sm text-gray-800 font-medium leading-snug mb-1 truncate">
                       {tk.title}
@@ -303,7 +289,7 @@ export default function OverrideList() {
                       </div>
                     )}
                   </div>
-                  <CopyButton id={tk.id} filePath={tk.filePath} />
+                  <CopyButton id={tk.id} />
                 </div>
               </div>
             );
