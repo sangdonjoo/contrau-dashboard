@@ -1,9 +1,19 @@
-import type { TokenUser, TokenUserProfile, TokenUserData, DailyUsage } from './people/types'
+import type { TokenUser, TokenUserProfile, DailyUsage } from './people/types'
 import profilesData from '@/data/people/profiles.json'
-import usageData from '@/data/people/daily-usage.json'
 
 const profiles = profilesData as TokenUserProfile[]
-const allUsage = usageData as TokenUserData[]
+
+// 고정 3그룹 정의
+const FIXED_USER_IDS = ['sangdon', 'jihyun', 'others'] as const
+
+const OTHERS_PROFILE: TokenUserProfile = {
+  id: 'others',
+  nameKo: '기타',
+  nameEn: 'Others',
+  plan: 'standard',
+  superBotId: '',
+  contextWindow: 0,
+}
 
 function sumDailyUsage(dailyUsage: DailyUsage[], days: number): { total: number; input: number; output: number } {
   const recent = dailyUsage.slice(-days)
@@ -13,9 +23,28 @@ function sumDailyUsage(dailyUsage: DailyUsage[], days: number): { total: number;
 }
 
 export async function fetchTokenUsers(): Promise<TokenUser[]> {
-  const users: TokenUser[] = profiles.map(profile => {
-    const userData = allUsage.find(u => u.userId === profile.id)
-    const dailyUsage = userData?.dailyUsage ?? []
+  let userDaily: Record<string, Record<string, { input: number; output: number }>> = {}
+
+  try {
+    const res = await fetch('/api/people/tokens')
+    if (res.ok) {
+      const json = await res.json()
+      userDaily = json.userDaily ?? {}
+    }
+  } catch {
+    // API 실패 시 빈 데이터로 처리
+  }
+
+  const users: TokenUser[] = FIXED_USER_IDS.map(userId => {
+    const profile: TokenUserProfile =
+      userId === 'others'
+        ? OTHERS_PROFILE
+        : (profiles.find(p => p.id === userId) ?? { ...OTHERS_PROFILE, id: userId, nameKo: userId, nameEn: userId })
+
+    const dateMap = userDaily[userId] ?? {}
+    const dailyUsage: DailyUsage[] = Object.entries(dateMap)
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([date, { input, output }]) => ({ date, input, output }))
     const sum30 = sumDailyUsage(dailyUsage, 30)
     const sum7 = sumDailyUsage(dailyUsage, 7)
     return {

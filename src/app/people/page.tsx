@@ -70,7 +70,7 @@ export default function PeoplePage() {
           >
             <div className="flex items-center gap-3 w-28 shrink-0">
               <div className="w-8 h-8 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center text-xs font-semibold text-gray-500">
-                {user.profile.nameEn[0]}
+                {user.profile.id === 'others' ? '?' : user.profile.nameEn[0]}
               </div>
               <span className="text-sm font-semibold text-gray-800">{user.profile.nameEn}</span>
             </div>
