@@ -13,18 +13,22 @@ import {
 } from "recharts";
 import { useIsMobile } from "@/lib/useIsMobile";
 
-type ChartItem = { date: string; slg: number; bmd: number; others: number };
+type ChartItem = { date: string; microalgae: number; bsfl: number; shrimp: number; bmd: number; hq: number };
 
 const COLORS = {
-  slg: "#06b6d4",
-  bmd: "#22c55e",
-  others: "#6b7280",
+  microalgae: "#06b6d4",
+  bsfl: "#22c55e",
+  shrimp: "#f97316",
+  bmd: "#8b5cf6",
+  hq: "#6b7280",
 };
 
 const LABELS: Record<string, string> = {
-  slg: "Microalgae (SLG)",
+  microalgae: "Microalgae",
+  bsfl: "BSFL",
+  shrimp: "Shrimp",
   bmd: "BMD",
-  others: "Others",
+  hq: "HQ",
 };
 
 export default function CompanyVolumeChart() {
@@ -56,7 +60,7 @@ export default function CompanyVolumeChart() {
         Daily Activity Index by Company
       </h3>
       <p className="text-xs text-gray-400 mb-4">
-        Zalo + Swit × 3 per company — last 30 days
+        Daily text volume by company (chars) — last 30 days
       </p>
       {loading ? (
         <div className="flex items-center justify-center" style={{ height: isMobile ? 240 : 300 }}>
@@ -78,13 +82,13 @@ export default function CompanyVolumeChart() {
             <YAxis
               width={isMobile ? 35 : 50}
               tick={{ fontSize: isMobile ? 9 : 11 }}
-              label={isMobile ? undefined : { value: "idx", position: "insideTopLeft", offset: -5, fontSize: 11 }}
+              label={isMobile ? undefined : { value: "chars", position: "insideTopLeft", offset: -5, fontSize: 10 }}
             />
             <Tooltip
               contentStyle={{ fontSize: 12 }}
               labelFormatter={(label) => formatDate(String(label))}
               formatter={(value, name) => [
-                Number(value).toFixed(0),
+                Number(value).toLocaleString() + " chars",
                 LABELS[String(name)] || String(name),
               ]}
             />
@@ -92,9 +96,11 @@ export default function CompanyVolumeChart() {
               wrapperStyle={{ fontSize: isMobile ? 10 : 11 }}
               formatter={(value: string) => LABELS[value] || value}
             />
-            <Line type="monotone" dataKey="slg" stroke={COLORS.slg} strokeWidth={2} dot={false} activeDot={{ r: 4 }} name="slg" />
+            <Line type="monotone" dataKey="microalgae" stroke={COLORS.microalgae} strokeWidth={2} dot={false} activeDot={{ r: 4 }} name="microalgae" />
+            <Line type="monotone" dataKey="bsfl" stroke={COLORS.bsfl} strokeWidth={2} dot={false} activeDot={{ r: 4 }} name="bsfl" />
+            <Line type="monotone" dataKey="shrimp" stroke={COLORS.shrimp} strokeWidth={2} dot={false} activeDot={{ r: 4 }} name="shrimp" />
             <Line type="monotone" dataKey="bmd" stroke={COLORS.bmd} strokeWidth={2} dot={false} activeDot={{ r: 4 }} name="bmd" />
-            <Line type="monotone" dataKey="others" stroke={COLORS.others} strokeWidth={2} dot={false} activeDot={{ r: 4 }} name="others" />
+            <Line type="monotone" dataKey="hq" stroke={COLORS.hq} strokeWidth={2} dot={false} activeDot={{ r: 4 }} name="hq" />
           </ComposedChart>
         </ResponsiveContainer>
       )}

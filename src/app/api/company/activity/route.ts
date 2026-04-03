@@ -45,10 +45,12 @@ export async function GET(req: NextRequest) {
   const data = dates.map(date => {
     const g = grouped[date] ?? {}
     return {
-      date,
-      slg: g['slg'] ?? 0,
+      date: date.slice(5).replace('-', '/'),
+      microalgae: g['microalgae'] ?? 0,
+      bsfl: g['bsfl'] ?? 0,
+      shrimp: g['shrimp'] ?? 0,
       bmd: g['bmd'] ?? 0,
-      others: g['others'] ?? 0,
+      hq: g['hq'] ?? 0,
     }
   })
 
