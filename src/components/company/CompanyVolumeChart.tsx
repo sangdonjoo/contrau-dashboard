@@ -11,8 +11,9 @@ import {
   Legend,
   ComposedChart,
 } from "recharts";
-import { dailyCompanyActivityData } from "@/data/company-mock";
 import { useIsMobile } from "@/lib/useIsMobile";
+
+type ChartItem = { date: string; slg: number; bmd: number; others: number };
 
 const COLORS = {
   slg: "#06b6d4",
@@ -28,7 +29,8 @@ const LABELS: Record<string, string> = {
 
 export default function CompanyVolumeChart() {
   const isMobile = useIsMobile();
-  const [chartData, setChartData] = useState(dailyCompanyActivityData);
+  const [chartData, setChartData] = useState<ChartItem[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch("/api/company/activity?days=30")
@@ -38,7 +40,8 @@ export default function CompanyVolumeChart() {
           setChartData(j.data);
         }
       })
-      .catch(() => { /* keep mock fallback */ });
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, []);
 
   const formatDate = (dateStr: string) => {
@@ -55,40 +58,46 @@ export default function CompanyVolumeChart() {
       <p className="text-xs text-gray-400 mb-4">
         Zalo + Swit × 3 per company — last 30 days
       </p>
-      <ResponsiveContainer width="100%" height={isMobile ? 240 : 300}>
-        <ComposedChart
-          data={chartData}
-          margin={isMobile ? { top: 5, right: 5, bottom: 5, left: -10 } : { top: 5, right: 20, bottom: 5, left: 0 }}
-        >
-          <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
-          <XAxis
-            dataKey="date"
-            tickFormatter={formatDate}
-            tick={{ fontSize: isMobile ? 9 : 11 }}
-            interval={isMobile ? 6 : 3}
-          />
-          <YAxis
-            width={isMobile ? 35 : 50}
-            tick={{ fontSize: isMobile ? 9 : 11 }}
-            label={isMobile ? undefined : { value: "idx", position: "insideTopLeft", offset: -5, fontSize: 11 }}
-          />
-          <Tooltip
-            contentStyle={{ fontSize: 12 }}
-            labelFormatter={(label) => formatDate(String(label))}
-            formatter={(value, name) => [
-              Number(value).toFixed(0),
-              LABELS[String(name)] || String(name),
-            ]}
-          />
-          <Legend
-            wrapperStyle={{ fontSize: isMobile ? 10 : 11 }}
-            formatter={(value: string) => LABELS[value] || value}
-          />
-          <Line type="monotone" dataKey="slg" stroke={COLORS.slg} strokeWidth={2} dot={false} activeDot={{ r: 4 }} name="slg" />
-          <Line type="monotone" dataKey="bmd" stroke={COLORS.bmd} strokeWidth={2} dot={false} activeDot={{ r: 4 }} name="bmd" />
-          <Line type="monotone" dataKey="others" stroke={COLORS.others} strokeWidth={2} dot={false} activeDot={{ r: 4 }} name="others" />
-        </ComposedChart>
-      </ResponsiveContainer>
+      {loading ? (
+        <div className="flex items-center justify-center" style={{ height: isMobile ? 240 : 300 }}>
+          <span className="text-xs text-gray-400">로딩 중...</span>
+        </div>
+      ) : (
+        <ResponsiveContainer width="100%" height={isMobile ? 240 : 300}>
+          <ComposedChart
+            data={chartData}
+            margin={isMobile ? { top: 5, right: 5, bottom: 5, left: -10 } : { top: 5, right: 20, bottom: 5, left: 0 }}
+          >
+            <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
+            <XAxis
+              dataKey="date"
+              tickFormatter={formatDate}
+              tick={{ fontSize: isMobile ? 9 : 11 }}
+              interval={isMobile ? 6 : 3}
+            />
+            <YAxis
+              width={isMobile ? 35 : 50}
+              tick={{ fontSize: isMobile ? 9 : 11 }}
+              label={isMobile ? undefined : { value: "idx", position: "insideTopLeft", offset: -5, fontSize: 11 }}
+            />
+            <Tooltip
+              contentStyle={{ fontSize: 12 }}
+              labelFormatter={(label) => formatDate(String(label))}
+              formatter={(value, name) => [
+                Number(value).toFixed(0),
+                LABELS[String(name)] || String(name),
+              ]}
+            />
+            <Legend
+              wrapperStyle={{ fontSize: isMobile ? 10 : 11 }}
+              formatter={(value: string) => LABELS[value] || value}
+            />
+            <Line type="monotone" dataKey="slg" stroke={COLORS.slg} strokeWidth={2} dot={false} activeDot={{ r: 4 }} name="slg" />
+            <Line type="monotone" dataKey="bmd" stroke={COLORS.bmd} strokeWidth={2} dot={false} activeDot={{ r: 4 }} name="bmd" />
+            <Line type="monotone" dataKey="others" stroke={COLORS.others} strokeWidth={2} dot={false} activeDot={{ r: 4 }} name="others" />
+          </ComposedChart>
+        </ResponsiveContainer>
+      )}
     </div>
   );
 }
