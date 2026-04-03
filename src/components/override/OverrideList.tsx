@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import {
-  deepDives as mockDeepDives,
   monthlyPlans,
   specialTasks,
   ddStatusMap,
@@ -121,17 +120,18 @@ function PlanStepBar({ currentStatus }: { currentStatus: MonthlyPlan["status"] }
 
 export default function OverrideList() {
   const [tab, setTab] = useState<Tab>("deep-dive");
-  const [deepDives, setDeepDives] = useState<DeepDive[]>(mockDeepDives);
+  const [deepDives, setDeepDives] = useState<DeepDive[]>([]);
+  const [ddLoading, setDdLoading] = useState(true);
 
   useEffect(() => {
     fetch('/api/deep-dives')
       .then(res => res.json())
       .then(data => {
-        if (data.available && data.data.length > 0) {
+        if (data.available) {
           setDeepDives(data.data);
         }
       })
-      .catch(() => { /* keep mock fallback */ });
+      .finally(() => setDdLoading(false));
   }, []);
 
   const tabs: { key: Tab; label: string; count: number }[] = [
@@ -168,7 +168,11 @@ export default function OverrideList() {
           <p className="text-[11px] text-gray-400">
             Structured deep-dive interviews requested by People L1-3. Requires authentication via Telegram bot.
           </p>
-          {deepDives.map((dd) => {
+          {ddLoading ? (
+            <p className="text-[11px] text-gray-400">Loading...</p>
+          ) : deepDives.length === 0 ? (
+            <p className="text-[11px] text-gray-400">No deep dives found.</p>
+          ) : deepDives.map((dd) => {
             const status = ddStatusMap[dd.status];
             return (
               <div key={dd.id} className="rounded-lg border border-gray-200 bg-white p-3 shadow-sm">
