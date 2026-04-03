@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server'
 const SUPABASE_URL = process.env.SUPABASE_URL ?? ''
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY ?? ''
 
-const KNOWN_USERS = new Set(['sangdon', 'jihyun'])
+const KNOWN_USERS = new Set(['sangdon', 'jihyun', 'nhi', 'cu', 'vicky', 'charlie', 'youngin'])
 
 interface CodeUsageRow {
   user_id: string
