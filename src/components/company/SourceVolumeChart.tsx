@@ -29,21 +29,17 @@ export default function SourceVolumeChart() {
       .then(r => r.json())
       .then(j => {
         if (Array.isArray(j.data) && j.data.length > 0) {
-          // API returns binary presence (0/1); map to stacked lines format
-          const mapped = j.data.map((d: Record<string, string | number>) => {
-            const zalo = Number(d.zalo ?? 0);
-            const swit = Number(d.swit ?? 0);
-            const email = Number(d.gmail ?? 0);
-            return {
-              date: String(d.date),
-              zalo,
-              swit,
-              email,
-              zaloStack: zalo,
-              switStack: zalo + swit,
-              emailStack: zalo + swit + email,
-            };
-          });
+          // Normalize each source to its own peak (80% of scale)
+          const raw = j.data as Record<string, string | number>[];
+          const zaloMax = Math.max(...raw.map(d => Number(d.zalo ?? 0)), 1);
+          const switMax = Math.max(...raw.map(d => Number(d.swit ?? 0)), 1);
+          const emailMax = Math.max(...raw.map(d => Number(d.gmail ?? 0)), 1);
+          const mapped = raw.map(d => ({
+            date: String(d.date),
+            zalo: Math.round((Number(d.zalo ?? 0) / zaloMax) * 80 * 10) / 10,
+            swit: Math.round((Number(d.swit ?? 0) / switMax) * 80 * 10) / 10,
+            email: Math.round((Number(d.gmail ?? 0) / emailMax) * 80 * 10) / 10,
+          }));
           setChartData(mapped);
         }
       })
@@ -62,7 +58,7 @@ export default function SourceVolumeChart() {
         Daily Message Volume by Source
       </h3>
       <p className="text-xs text-gray-400 mb-4">
-        Daily collection by source (KB, stacked lines) — last 30 days
+        Daily collection (% of peak per source) — last 30 days
       </p>
       <ResponsiveContainer width="100%" height={isMobile ? 240 : 300}>
         <ComposedChart
@@ -77,65 +73,24 @@ export default function SourceVolumeChart() {
             interval={isMobile ? 6 : 3}
           />
           <YAxis
+            domain={[0, 100]}
             width={isMobile ? 35 : 50}
             tick={{ fontSize: isMobile ? 9 : 11 }}
-            label={isMobile ? undefined : { value: "KB", position: "insideTopLeft", offset: -5, fontSize: 11 }}
+            label={isMobile ? undefined : { value: "%", position: "insideTopLeft", offset: -5, fontSize: 11 }}
           />
           <Tooltip
             contentStyle={{ fontSize: 12 }}
             labelFormatter={(label) => formatDate(String(label))}
             formatter={(value, name) => {
               const v = Number(value);
-              const n = String(name);
-              const labels: Record<string, string> = {
-                emailStack: "Email (total)",
-                switStack: "Swit (total)",
-                zaloStack: "Zalo",
-              };
-              return [`${v.toLocaleString()} KB`, labels[n] || n];
+              const labels: Record<string, string> = { zalo: "Zalo", swit: "Swit", email: "Email" };
+              return [`${v.toFixed(1)}%`, labels[String(name)] || String(name)];
             }}
           />
-          <Legend
-            wrapperStyle={{ fontSize: isMobile ? 10 : 11 }}
-            formatter={(value: string) => {
-              const labels: Record<string, string> = {
-                emailStack: "Email",
-                switStack: "Swit",
-                zaloStack: "Zalo",
-              };
-              return labels[value] || value;
-            }}
-          />
-          {/* Bottom layer: Zalo only */}
-          <Line
-            type="monotone"
-            dataKey="zaloStack"
-            stroke={COLORS.zalo}
-            strokeWidth={2}
-            dot={false}
-            activeDot={{ r: 4 }}
-            name="zaloStack"
-          />
-          {/* Middle layer: Zalo + Swit */}
-          <Line
-            type="monotone"
-            dataKey="switStack"
-            stroke={COLORS.swit}
-            strokeWidth={2}
-            dot={false}
-            activeDot={{ r: 4 }}
-            name="switStack"
-          />
-          {/* Top layer: Zalo + Swit + Email */}
-          <Line
-            type="monotone"
-            dataKey="emailStack"
-            stroke={COLORS.email}
-            strokeWidth={2}
-            dot={false}
-            activeDot={{ r: 4 }}
-            name="emailStack"
-          />
+          <Legend wrapperStyle={{ fontSize: isMobile ? 10 : 11 }} />
+          <Line type="monotone" dataKey="zalo" stroke={COLORS.zalo} strokeWidth={2} dot={false} activeDot={{ r: 4 }} name="zalo" />
+          <Line type="monotone" dataKey="swit" stroke={COLORS.swit} strokeWidth={2} dot={false} activeDot={{ r: 4 }} name="swit" />
+          <Line type="monotone" dataKey="email" stroke={COLORS.email} strokeWidth={2} dot={false} activeDot={{ r: 4 }} name="email" />
         </ComposedChart>
       </ResponsiveContainer>
     </div>
