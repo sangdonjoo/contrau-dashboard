@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import {
   Line,
   XAxis,
@@ -31,6 +32,36 @@ const LABELS: Record<string, string> = {
 
 export default function CompanyVolumeChart() {
   const isMobile = useIsMobile();
+  const [chartData, setChartData] = useState(dailyCompanyData);
+
+  useEffect(() => {
+    fetch("/api/company/volume/total?days=30")
+      .then(r => r.json())
+      .then(j => {
+        if (Array.isArray(j.data) && j.data.length > 0) {
+          // API returns r0/r1 counts; map to stacked lines format
+          const mapped = j.data.map((d: Record<string, string | number>) => {
+            const r0 = Number(d.r0 ?? 0);
+            const r1 = Number(d.r1 ?? 0);
+            return {
+              date: String(d.date),
+              hq: r0,
+              shrimp: r1,
+              bsfl: 0,
+              microalgae: 0,
+              bmd: 0,
+              hqStack: r0,
+              shrimpStack: r0 + r1,
+              bsflStack: r0 + r1,
+              microalgaeStack: r0 + r1,
+              bmdStack: r0 + r1,
+            };
+          });
+          setChartData(mapped);
+        }
+      })
+      .catch(() => { /* keep mock fallback */ });
+  }, []);
 
   const formatDate = (dateStr: string) => {
     if (!dateStr) return "";
@@ -48,7 +79,7 @@ export default function CompanyVolumeChart() {
       </p>
       <ResponsiveContainer width="100%" height={isMobile ? 240 : 300}>
         <ComposedChart
-          data={dailyCompanyData}
+          data={chartData}
           margin={isMobile ? { top: 5, right: 5, bottom: 5, left: -10 } : { top: 5, right: 20, bottom: 5, left: 0 }}
         >
           <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />

@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import {
   Line,
   XAxis,
@@ -21,11 +22,38 @@ const COLORS = {
 
 export default function SourceVolumeChart() {
   const isMobile = useIsMobile();
+  const [chartData, setChartData] = useState(dailySourceData);
+
+  useEffect(() => {
+    fetch("/api/company/volume/source?days=30")
+      .then(r => r.json())
+      .then(j => {
+        if (Array.isArray(j.data) && j.data.length > 0) {
+          // API returns binary presence (0/1); map to stacked lines format
+          const mapped = j.data.map((d: Record<string, string | number>) => {
+            const zalo = Number(d.zalo ?? 0);
+            const swit = Number(d.swit ?? 0);
+            const email = Number(d.gmail ?? 0);
+            return {
+              date: String(d.date),
+              zalo,
+              swit,
+              email,
+              zaloStack: zalo,
+              switStack: zalo + swit,
+              emailStack: zalo + swit + email,
+            };
+          });
+          setChartData(mapped);
+        }
+      })
+      .catch(() => { /* keep mock fallback */ });
+  }, []);
 
   const formatDate = (dateStr: string) => {
     if (!dateStr) return "";
     const parts = dateStr.split("-");
-    return `${parts[1]}/${parts[2]}`;
+    return parts.length >= 3 ? `${parts[1]}/${parts[2]}` : dateStr;
   };
 
   return (
@@ -38,7 +66,7 @@ export default function SourceVolumeChart() {
       </p>
       <ResponsiveContainer width="100%" height={isMobile ? 240 : 300}>
         <ComposedChart
-          data={dailySourceData}
+          data={chartData}
           margin={isMobile ? { top: 5, right: 5, bottom: 5, left: -10 } : { top: 5, right: 20, bottom: 5, left: 0 }}
         >
           <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
