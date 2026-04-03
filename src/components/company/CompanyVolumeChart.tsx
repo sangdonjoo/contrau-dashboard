@@ -11,53 +11,31 @@ import {
   Legend,
   ComposedChart,
 } from "recharts";
-import { dailyCompanyData } from "@/data/company-mock";
+import { dailyCompanyActivityData } from "@/data/company-mock";
 import { useIsMobile } from "@/lib/useIsMobile";
 
 const COLORS = {
-  hq: "#6b7280",
-  shrimp: "#22c55e",
-  bsfl: "#8b5cf6",
-  microalgae: "#06b6d4",
-  bmd: "#f59e0b",
+  slg: "#06b6d4",
+  bmd: "#22c55e",
+  others: "#6b7280",
 };
 
 const LABELS: Record<string, string> = {
-  hqStack: "HQ",
-  shrimpStack: "Shrimp",
-  bsflStack: "BSFL",
-  microalgaeStack: "Microalgae",
-  bmdStack: "BMD",
+  slg: "Microalgae (SLG)",
+  bmd: "BMD",
+  others: "Others",
 };
 
 export default function CompanyVolumeChart() {
   const isMobile = useIsMobile();
-  const [chartData, setChartData] = useState(dailyCompanyData);
+  const [chartData, setChartData] = useState(dailyCompanyActivityData);
 
   useEffect(() => {
-    fetch("/api/company/volume/total?days=30")
+    fetch("/api/company/activity?days=30")
       .then(r => r.json())
       .then(j => {
         if (Array.isArray(j.data) && j.data.length > 0) {
-          // API returns r0/r1 counts; map to stacked lines format
-          const mapped = j.data.map((d: Record<string, string | number>) => {
-            const r0 = Number(d.r0 ?? 0);
-            const r1 = Number(d.r1 ?? 0);
-            return {
-              date: String(d.date),
-              hq: r0,
-              shrimp: r1,
-              bsfl: 0,
-              microalgae: 0,
-              bmd: 0,
-              hqStack: r0,
-              shrimpStack: r0 + r1,
-              bsflStack: r0 + r1,
-              microalgaeStack: r0 + r1,
-              bmdStack: r0 + r1,
-            };
-          });
-          setChartData(mapped);
+          setChartData(j.data);
         }
       })
       .catch(() => { /* keep mock fallback */ });
@@ -66,16 +44,16 @@ export default function CompanyVolumeChart() {
   const formatDate = (dateStr: string) => {
     if (!dateStr) return "";
     const parts = dateStr.split("-");
-    return `${parts[1]}/${parts[2]}`;
+    return parts.length >= 3 ? `${parts[1]}/${parts[2]}` : dateStr;
   };
 
   return (
     <div className="rounded-xl border border-gray-200 bg-white p-3 sm:p-5 shadow-sm">
       <h3 className="text-sm font-semibold text-gray-700 mb-1">
-        Daily Message Volume by Company
+        Daily Activity Index by Company
       </h3>
       <p className="text-xs text-gray-400 mb-4">
-        Daily collection by company (KB, stacked lines) — last 30 days
+        Zalo + Swit × 3 per company — last 30 days
       </p>
       <ResponsiveContainer width="100%" height={isMobile ? 240 : 300}>
         <ComposedChart
@@ -92,27 +70,23 @@ export default function CompanyVolumeChart() {
           <YAxis
             width={isMobile ? 35 : 50}
             tick={{ fontSize: isMobile ? 9 : 11 }}
-            label={isMobile ? undefined : { value: "KB", position: "insideTopLeft", offset: -5, fontSize: 11 }}
+            label={isMobile ? undefined : { value: "idx", position: "insideTopLeft", offset: -5, fontSize: 11 }}
           />
           <Tooltip
             contentStyle={{ fontSize: 12 }}
             labelFormatter={(label) => formatDate(String(label))}
-            formatter={(value, name) => {
-              const v = Number(value);
-              const n = String(name);
-              return [`${v.toLocaleString()} KB`, LABELS[n] || n];
-            }}
+            formatter={(value, name) => [
+              Number(value).toFixed(0),
+              LABELS[String(name)] || String(name),
+            ]}
           />
           <Legend
             wrapperStyle={{ fontSize: isMobile ? 10 : 11 }}
             formatter={(value: string) => LABELS[value] || value}
           />
-          {/* Stacked from bottom to top: HQ → Shrimp → BSFL → Microalgae → BMD */}
-          <Line type="monotone" dataKey="hqStack" stroke={COLORS.hq} strokeWidth={2} dot={false} activeDot={{ r: 4 }} name="hqStack" />
-          <Line type="monotone" dataKey="shrimpStack" stroke={COLORS.shrimp} strokeWidth={2} dot={false} activeDot={{ r: 4 }} name="shrimpStack" />
-          <Line type="monotone" dataKey="bsflStack" stroke={COLORS.bsfl} strokeWidth={2} dot={false} activeDot={{ r: 4 }} name="bsflStack" />
-          <Line type="monotone" dataKey="microalgaeStack" stroke={COLORS.microalgae} strokeWidth={2} dot={false} activeDot={{ r: 4 }} name="microalgaeStack" />
-          <Line type="monotone" dataKey="bmdStack" stroke={COLORS.bmd} strokeWidth={2} dot={false} activeDot={{ r: 4 }} name="bmdStack" />
+          <Line type="monotone" dataKey="slg" stroke={COLORS.slg} strokeWidth={2} dot={false} activeDot={{ r: 4 }} name="slg" />
+          <Line type="monotone" dataKey="bmd" stroke={COLORS.bmd} strokeWidth={2} dot={false} activeDot={{ r: 4 }} name="bmd" />
+          <Line type="monotone" dataKey="others" stroke={COLORS.others} strokeWidth={2} dot={false} activeDot={{ r: 4 }} name="others" />
         </ComposedChart>
       </ResponsiveContainer>
     </div>

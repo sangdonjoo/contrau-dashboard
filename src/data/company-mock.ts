@@ -107,20 +107,19 @@ export interface DailySourceKB {
   emailStack: number;
 }
 
-// --- Chart 2: Daily message KB by company (30 days) ---
+// --- Chart 2: Daily Activity Index by company (30 days) ---
+export interface DailyCompanyActivity {
+  date: string;
+  slg: number;     // Solagron / Star Algae (미세조류)
+  bmd: number;     // BMD Shrimp
+  others: number;  // Entoflow, HQ, general
+}
+
+/** @deprecated kept for type compat — use DailyCompanyActivity */
 export interface DailyCompanyKB {
   date: string;
-  hq: number;
-  shrimp: number;
-  bsfl: number;
-  microalgae: number;
-  bmd: number;
-  // cumulative stacked
-  hqStack: number;
-  shrimpStack: number;
-  bsflStack: number;
-  microalgaeStack: number;
-  bmdStack: number;
+  hq: number; shrimp: number; bsfl: number; microalgae: number; bmd: number;
+  hqStack: number; shrimpStack: number; bsflStack: number; microalgaeStack: number; bmdStack: number;
 }
 
 // Deterministic pseudo-random
@@ -196,5 +195,26 @@ function generateDailyCompanyData(): DailyCompanyKB[] {
   return data;
 }
 
+function generateDailyCompanyActivityData(): DailyCompanyActivity[] {
+  const rand = seededRand(99);
+  const data: DailyCompanyActivity[] = [];
+  const now = new Date();
+  now.setHours(now.getHours() + 7);
+  for (let i = 30; i >= 1; i--) {
+    const d = new Date(now);
+    d.setDate(d.getDate() - i);
+    const date = d.toISOString().slice(0, 10);
+    const wf = ([0, 6].includes(d.getDay())) ? 0.3 : 1;
+    data.push({
+      date,
+      slg:    Math.round((60 + rand() * 80) * wf),
+      bmd:    Math.round((10 + rand() * 30) * wf),
+      others: Math.round((20 + rand() * 40) * wf),
+    });
+  }
+  return data;
+}
+
 export const dailySourceData = generateDailySourceData();
 export const dailyCompanyData = generateDailyCompanyData();
+export const dailyCompanyActivityData = generateDailyCompanyActivityData();
