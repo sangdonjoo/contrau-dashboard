@@ -32,14 +32,11 @@ export default function SourceVolumeChart() {
       .then(j => {
         if (Array.isArray(j.data) && j.data.length > 0) {
           const raw = j.data as Record<string, string | number>[];
-          const zaloMax = Math.max(...raw.map(d => Number(d.zalo ?? 0)), 1);
-          const switMax = Math.max(...raw.map(d => Number(d.swit ?? 0)), 1);
-          const emailMax = Math.max(...raw.map(d => Number(d.gmail ?? 0)), 1);
           const mapped: ChartItem[] = raw.map(d => ({
             date: String(d.date),
-            zalo: Math.round((Number(d.zalo ?? 0) / zaloMax) * 80 * 10) / 10,
-            swit: Math.round((Number(d.swit ?? 0) / switMax) * 80 * 10) / 10,
-            email: Math.round((Number(d.gmail ?? 0) / emailMax) * 80 * 10) / 10,
+            zalo: Number(d.zalo ?? 0),
+            swit: Number(d.swit ?? 0),
+            email: Number(d.gmail ?? 0),
           }));
           setChartData(mapped);
         }
@@ -60,7 +57,7 @@ export default function SourceVolumeChart() {
         Daily Message Volume by Source
       </h3>
       <p className="text-xs text-gray-400 mb-4">
-        Daily collection (% of peak per source) — last 30 days
+        Daily text volume by channel (chars) — last 30 days
       </p>
       {loading ? (
         <div className="flex items-center justify-center" style={{ height: isMobile ? 240 : 300 }}>
@@ -80,10 +77,9 @@ export default function SourceVolumeChart() {
               interval={isMobile ? 6 : 3}
             />
             <YAxis
-              domain={[0, 100]}
               width={isMobile ? 35 : 50}
               tick={{ fontSize: isMobile ? 9 : 11 }}
-              label={isMobile ? undefined : { value: "%", position: "insideTopLeft", offset: -5, fontSize: 11 }}
+              label={isMobile ? undefined : { value: "chars", position: "insideTopLeft", offset: -5, fontSize: 10 }}
             />
             <Tooltip
               contentStyle={{ fontSize: 12 }}
@@ -91,7 +87,7 @@ export default function SourceVolumeChart() {
               formatter={(value, name) => {
                 const v = Number(value);
                 const labels: Record<string, string> = { zalo: "Zalo", swit: "Swit", email: "Email" };
-                return [`${v.toFixed(1)}%`, labels[String(name)] || String(name)];
+                return [v.toLocaleString() + " chars", labels[String(name)] || String(name)];
               }}
             />
             <Legend wrapperStyle={{ fontSize: isMobile ? 10 : 11 }} />
