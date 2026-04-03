@@ -68,10 +68,7 @@ export default function PeoplePage() {
             key={user.profile.id}
             className="flex items-center gap-4 bg-white rounded-xl border border-gray-200 shadow-sm px-5 py-4 hover:shadow-md hover:border-blue-200 transition-all"
           >
-            <div className="flex items-center gap-3 w-28 shrink-0">
-              <div className="w-8 h-8 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center text-xs font-semibold text-gray-500">
-                {user.profile.id === 'others' ? '?' : user.profile.nameEn[0]}
-              </div>
+            <div className="flex items-center w-28 shrink-0">
               <span className="text-sm font-semibold text-gray-800">{user.profile.nameEn}</span>
             </div>
             <OverlappingBar value7d={user.total7d} value30d={user.total30d} max30d={max30d} />
