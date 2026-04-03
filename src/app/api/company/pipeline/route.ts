@@ -1,74 +1,77 @@
 import { NextResponse } from 'next/server';
-import path from 'path';
-import fs from 'fs';
 
-const SSOT_PATH = process.env.SSOT_PATH ?? path.join(process.cwd(), '..', 'contrau-ssot');
-
-function vnDate(daysAgo = 0): string {
-  const d = new Date();
-  d.setUTCHours(d.getUTCHours() + 7); // UTC→VN
-  d.setUTCDate(d.getUTCDate() - daysAgo);
-  return d.toISOString().slice(0, 10);
+interface PipelineRow {
+  stage: string;
+  date: string;
+  status: string;
+  label: string | null;
+  reason: string | null;
 }
 
 export async function GET() {
   try {
-    const r0Dir = path.join(SSOT_PATH, '01_company', '01_raw', 'R0');
-    const r1Dir = path.join(SSOT_PATH, '01_company', '01_raw', 'R1');
-    const wDir  = path.join(SSOT_PATH, '01_company', '02_digest', 'W');
-    const mDir  = path.join(SSOT_PATH, '01_company', '02_digest', 'M');
-    const qDir  = path.join(SSOT_PATH, '01_company', '02_digest', 'Q');
-    const snapshotFile = path.join(SSOT_PATH, '01_company', '03_snapshot', 'COMPANY_SNAPSHOT.md');
+    const supabaseUrl = process.env.SUPABASE_URL;
+    const supabaseKey = process.env.SUPABASE_ANON_KEY;
 
-    if (!fs.existsSync(r0Dir)) {
+    if (!supabaseUrl || !supabaseKey) {
       return NextResponse.json({ available: false });
     }
 
-    // R0/R1: 최근 5일 상태
-    const channels = ['zalo', 'swit', 'gmail'];
-    const r0Days = Array.from({ length: 5 }, (_, i) => {
-      const date = vnDate(i + 1);
-      const exists = channels.some(ch => fs.existsSync(path.join(r0Dir, `${date}_${ch}_R0.md`)));
-      return { date, status: exists ? 'green' : 'red' as const };
-    });
+    const res = await fetch(
+      `${supabaseUrl}/rest/v1/pipeline_status?select=stage,date,status,label,reason`,
+      {
+        headers: {
+          apikey: supabaseKey,
+          Authorization: `Bearer ${supabaseKey}`,
+        },
+        cache: 'no-store',
+      }
+    );
 
-    const r1Days = Array.from({ length: 5 }, (_, i) => {
-      const date = vnDate(i + 1);
-      const r1Exists = fs.existsSync(path.join(r1Dir, `${date}_R1.md`));
-      const r0Exists = r0Days[i].status === 'green';
-      const status = r1Exists ? 'green' : (r0Exists ? 'yellow' : 'red');
-      return { date, status: status as 'green' | 'yellow' | 'red', reason: !r1Exists && r0Exists ? 'R0 collected, R1 pending' : !r1Exists ? 'No R0/R1 collected' : undefined };
-    });
+    if (!res.ok) {
+      return NextResponse.json({ available: false });
+    }
 
-    // W: 최신 파일 존재 여부
-    const wFiles = fs.existsSync(wDir) ? fs.readdirSync(wDir).filter(f => f.endsWith('_W.md')) : [];
-    const latestW = wFiles.sort().at(-1)?.replace('_W.md', '') ?? '';
-    const wStatus = wFiles.length > 0 ? 'green' : 'red';
+    const rows: PipelineRow[] = await res.json();
 
-    // M: 최신 파일 존재 여부
-    const mFiles = fs.existsSync(mDir) ? fs.readdirSync(mDir).filter(f => f.endsWith('_M.md')) : [];
-    const latestM = mFiles.sort().at(-1)?.replace('_M.md', '') ?? '';
-    const mStatus = mFiles.length > 0 ? 'green' : 'red';
+    const r0Rows = rows
+      .filter((r) => r.stage === 'r0')
+      .sort((a, b) => a.date.localeCompare(b.date))
+      .slice(-5);
 
-    // Q: 최신 파일 존재 여부
-    const qFiles = fs.existsSync(qDir) ? fs.readdirSync(qDir).filter(f => f.endsWith('_Q.md')) : [];
-    const latestQ = qFiles.sort().at(-1)?.replace('_Q.md', '') ?? '';
-    const qStatus = qFiles.length > 0 ? 'green' : 'red';
+    if (r0Rows.length === 0) {
+      return NextResponse.json({ available: false });
+    }
 
-    // Snapshot
-    const snapshotExists = fs.existsSync(snapshotFile);
-    const snapshotDays = Array.from({ length: 5 }, (_, i) => ({
-      date: vnDate(i + 1),
-      status: (i === 0 ? (snapshotExists ? 'green' : 'red') : 'green') as 'green' | 'red',
-    }));
+    const r0Days = r0Rows.map((r) => ({ date: r.date, status: r.status }));
+
+    const r1Days = rows
+      .filter((r) => r.stage === 'r1')
+      .sort((a, b) => a.date.localeCompare(b.date))
+      .slice(-5)
+      .map((r) => ({
+        date: r.date,
+        status: r.status as 'green' | 'yellow' | 'red',
+        ...(r.reason ? { reason: r.reason } : {}),
+      }));
+
+    const wRow = rows.find((r) => r.stage === 'w' && r.date === 'latest');
+    const mRow = rows.find((r) => r.stage === 'm' && r.date === 'latest');
+    const qRow = rows.find((r) => r.stage === 'q' && r.date === 'latest');
+
+    const snapshotDays = rows
+      .filter((r) => r.stage === 'snapshot')
+      .sort((a, b) => a.date.localeCompare(b.date))
+      .slice(-5)
+      .map((r) => ({ date: r.date, status: r.status }));
 
     return NextResponse.json({
       available: true,
       r0Days,
       r1Days,
-      w: { status: wStatus, label: latestW },
-      m: { status: mStatus, label: latestM },
-      q: { status: qStatus, label: latestQ },
+      w: wRow ? { status: wRow.status, label: wRow.label ?? '' } : { status: 'red', label: '' },
+      m: mRow ? { status: mRow.status, label: mRow.label ?? '' } : { status: 'red', label: '' },
+      q: qRow ? { status: qRow.status, label: qRow.label ?? '' } : { status: 'red', label: '' },
       snapshotDays,
     });
   } catch (err) {
