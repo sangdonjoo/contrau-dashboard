@@ -1,7 +1,7 @@
 [
   {"id":"sangdon","nameKo":"상돈","nameEn":"Sangdon","plan":"max","superBotId":"eco-super-sangdon","contextWindow":200000},
-  {"id":"jihyun","nameKo":"지현","nameEn":"Jihyun","plan":"premium","superBotId":"eco-super-jihyun","contextWindow":200000},
-  {"id":"vicky","nameKo":"비키","nameEn":"Vicky","plan":"premium","superBotId":"eco-super-vicky","contextWindow":200000},
+  {"id":"jihyun","nameKo":"지현","nameEn":"Jihyun","plan":"standard","superBotId":"eco-super-jihyun","contextWindow":200000},
+  {"id":"vicky","nameKo":"비키","nameEn":"Vicky","plan":"standard","superBotId":"eco-super-vicky","contextWindow":200000},
   {"id":"nhi","nameKo":"Nhi","nameEn":"Nhi","plan":"standard","superBotId":"eco-super-nhi","contextWindow":200000},
   {"id":"charlie","nameKo":"찰리","nameEn":"Charlie","plan":"standard","superBotId":"eco-super-charlie","contextWindow":200000},
   {"id":"youngin","nameKo":"영인","nameEn":"Youngin","plan":"standard","superBotId":"eco-super-youngin","contextWindow":200000}

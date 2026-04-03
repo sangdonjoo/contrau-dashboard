@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from 'react'
+import BotActivityChart from "@/components/BotActivityChart"
 import { fetchTokenUsers, formatTokenCount } from '@/api/people-tokens'
 import type { TokenUser } from '@/api/people/types'
 
@@ -80,6 +81,11 @@ export default function PeoplePage() {
           </div>
         ))}
       </div>
+      <section className="mt-8">
+        <h2 className="text-lg font-semibold text-gray-900 mb-3">Bot Activity (30 days)</h2>
+        <p className="text-xs text-gray-400 mb-4">Messages sent + received per bot per day</p>
+        <BotActivityChart />
+      </section>
     </div>
   )
 }
