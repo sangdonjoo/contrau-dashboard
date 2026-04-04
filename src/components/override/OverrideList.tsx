@@ -142,7 +142,7 @@ export default function OverrideList() {
           <p className="text-[11px] text-gray-400">
             PL finalizes v1→v2 with AI → CEO feedback → confirmed. Immutable after confirmation.
           </p>
-          <p className="text-[11px] text-gray-400">데이터 없음</p>
+          <p className="text-[11px] text-gray-400">No data available</p>
         </div>
       )}
 
@@ -152,7 +152,7 @@ export default function OverrideList() {
           <p className="text-[11px] text-gray-400">
             Important tasks assigned by People L1-3. Executed via Telegram bot or terminal.
           </p>
-          <p className="text-[11px] text-gray-400">데이터 없음</p>
+          <p className="text-[11px] text-gray-400">No data available</p>
         </div>
       )}
     </div>

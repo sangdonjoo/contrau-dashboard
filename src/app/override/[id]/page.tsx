@@ -175,7 +175,7 @@ export default function DeepDiveDetailPage() {
             <ReactMarkdown components={mdComponents} remarkPlugins={[remarkGfm]}>{dd.aiSummary}</ReactMarkdown>
           </div>
         ) : (
-          <p className="text-sm text-gray-400 italic">추후 추가 예정</p>
+          <p className="text-sm text-gray-400 italic">To be added</p>
         )}
       </div>
     </div>
