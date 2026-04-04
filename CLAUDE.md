@@ -60,4 +60,4 @@ src/
 ## 관련 레포
 
 - SSOT: `contrau-ssot/` (데이터 소스)
-- 봇 허브: `contrau-bot-hub/` (브로커, 봇 시스템)
+- 봇 허브: `contrau-bots/` (브로커, 봇 시스템)
