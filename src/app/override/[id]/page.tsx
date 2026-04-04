@@ -174,8 +174,10 @@ export default function DeepDiveDetailPage() {
           <div className="space-y-0">
             <ReactMarkdown components={mdComponents} remarkPlugins={[remarkGfm]}>{dd.aiSummary}</ReactMarkdown>
           </div>
+        ) : dd.status === 'closed' ? (
+          <p className="text-sm text-gray-400 italic">No record available.</p>
         ) : (
-          <p className="text-sm text-gray-400 italic">To be added</p>
+          <p className="text-sm text-gray-400 italic">Interview is currently in progress. Full record will be available upon completion.</p>
         )}
       </div>
     </div>
