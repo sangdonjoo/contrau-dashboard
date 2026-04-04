@@ -25,11 +25,11 @@ interface DeepDiveDetail {
 const mdComponents = {
   h1: ({children}: {children: React.ReactNode}) => <h1 className="text-sm font-bold text-gray-800 mt-5 mb-2 first:mt-0">{children}</h1>,
   h2: ({children}: {children: React.ReactNode}) => <h2 className="text-[11px] font-bold uppercase tracking-widest text-gray-400 mt-5 mb-2 first:mt-0 pb-1 border-b border-gray-100">{children}</h2>,
-  h3: ({children}: {children: React.ReactNode}) => <h3 className="text-[12px] font-semibold text-gray-700 mt-3 mb-1">{children}</h3>,
-  p: ({children}: {children: React.ReactNode}) => <p className="text-[13px] text-gray-700 leading-relaxed mb-2 last:mb-0">{children}</p>,
+  h3: ({children}: {children: React.ReactNode}) => <h3 className="text-[13px] font-bold text-gray-900 mt-6 mb-2 pb-1 border-b border-gray-100 first:mt-0">{children}</h3>,
+  p: ({children}: {children: React.ReactNode}) => <p className="text-[13px] text-gray-700 leading-[1.7] mb-3 last:mb-0">{children}</p>,
   ul: ({children}: {children: React.ReactNode}) => <ul className="list-disc list-outside ml-4 space-y-0.5 mb-2 last:mb-0">{children}</ul>,
   ol: ({children}: {children: React.ReactNode}) => <ol className="list-decimal list-outside ml-4 space-y-0.5 mb-2 last:mb-0">{children}</ol>,
-  li: ({children}: {children: React.ReactNode}) => <li className="text-[13px] text-gray-700 leading-relaxed">{children}</li>,
+  li: ({children}: {children: React.ReactNode}) => <li className="text-[13px] text-gray-700 leading-[1.7]">{children}</li>,
   strong: ({children}: {children: React.ReactNode}) => <strong className="font-semibold text-gray-900">{children}</strong>,
   em: ({children}: {children: React.ReactNode}) => <em className="italic text-gray-500">{children}</em>,
   hr: () => <hr className="border-gray-100 my-4" />,
@@ -159,9 +159,9 @@ export default function DeepDiveDetailPage() {
       )}
 
       {/* AI Summary */}
-      <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm space-y-2">
-        <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wide">
-          AI Summary
+      <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm space-y-3">
+        <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest">
+          Interview Full Record
         </p>
         {dd.aiSummary ? (
           <div className="space-y-0">
