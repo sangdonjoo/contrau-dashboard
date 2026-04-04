@@ -57,10 +57,10 @@ export default function CompanyVolumeChart() {
   return (
     <div className="rounded-xl border border-gray-200 bg-white p-3 sm:p-5 shadow-sm">
       <h3 className="text-sm font-semibold text-gray-700 mb-1">
-        Daily Activity Index by Company
+        Message Volume by Company
       </h3>
       <p className="text-xs text-gray-400 mb-4">
-        Daily text volume by company (chars) — last 30 days
+        Daily text message count by company (text only) — last 30 days
       </p>
       {loading ? (
         <div className="flex items-center justify-center" style={{ height: isMobile ? 240 : 300 }}>
@@ -82,13 +82,13 @@ export default function CompanyVolumeChart() {
             <YAxis
               width={isMobile ? 35 : 50}
               tick={{ fontSize: isMobile ? 9 : 11 }}
-              label={isMobile ? undefined : { value: "chars", position: "insideTopLeft", offset: -5, fontSize: 10 }}
+              label={isMobile ? undefined : { value: "건", position: "insideTopLeft", offset: -5, fontSize: 10 }}
             />
             <Tooltip
               contentStyle={{ fontSize: 12 }}
               labelFormatter={(label) => formatDate(String(label))}
               formatter={(value, name) => [
-                Number(value).toLocaleString() + " chars",
+                Number(value).toLocaleString() + " 건",
                 LABELS[String(name)] || String(name),
               ]}
             />

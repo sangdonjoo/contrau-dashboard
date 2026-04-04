@@ -57,7 +57,7 @@ export default function SourceVolumeChart() {
         Daily Message Volume by Source
       </h3>
       <p className="text-xs text-gray-400 mb-4">
-        Daily text volume by channel (chars) — last 30 days
+        Daily text message count (text body only) — last 30 days
       </p>
       {loading ? (
         <div className="flex items-center justify-center" style={{ height: isMobile ? 240 : 300 }}>
@@ -79,7 +79,7 @@ export default function SourceVolumeChart() {
             <YAxis
               width={isMobile ? 35 : 50}
               tick={{ fontSize: isMobile ? 9 : 11 }}
-              label={isMobile ? undefined : { value: "chars", position: "insideTopLeft", offset: -5, fontSize: 10 }}
+              label={isMobile ? undefined : { value: "건", position: "insideTopLeft", offset: -5, fontSize: 10 }}
             />
             <Tooltip
               contentStyle={{ fontSize: 12 }}
@@ -87,7 +87,7 @@ export default function SourceVolumeChart() {
               formatter={(value, name) => {
                 const v = Number(value);
                 const labels: Record<string, string> = { zalo: "Zalo", swit: "Swit", email: "Email" };
-                return [v.toLocaleString() + " chars", labels[String(name)] || String(name)];
+                return [v.toLocaleString() + " 건", labels[String(name)] || String(name)];
               }}
             />
             <Legend wrapperStyle={{ fontSize: isMobile ? 10 : 11 }} />
