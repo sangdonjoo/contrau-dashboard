@@ -80,7 +80,7 @@ export async function GET() {
 
     const rows: DeepDiveRow[] = await res.json();
 
-    const data: DeepDive[] = rows.map((row) => {
+    const toDeepDive = (row: DeepDiveRow): DeepDive => {
       const issuedBy = row.issued_by ?? '';
       const interviewee = row.interviewee ?? '';
       return {
@@ -96,7 +96,17 @@ export async function GET() {
         createdAt: row.created_at?.slice(0, 10) ?? '',
         filePath: '',
       };
-    });
+    };
+
+    const active = rows
+      .filter(r => r.status !== 'closed')
+      .sort((a, b) => (b.created_at ?? '').localeCompare(a.created_at ?? ''));
+
+    const closed = rows
+      .filter(r => r.status === 'closed')
+      .sort((a, b) => (b.created_at ?? '').localeCompare(a.created_at ?? ''));
+
+    const data: DeepDive[] = [...active, ...closed].map(toDeepDive);
 
     return NextResponse.json({ available: true, data });
   } catch (err) {
