@@ -24,23 +24,28 @@ interface DeepDiveDetail {
 }
 
 const mdComponents = {
-  h1: ({children}: {children: React.ReactNode}) => <h1 className="text-sm font-bold text-gray-800 mt-5 mb-2 first:mt-0">{children}</h1>,
-  h2: ({children}: {children: React.ReactNode}) => <h2 className="text-[11px] font-bold uppercase tracking-widest text-gray-400 mt-5 mb-2 first:mt-0 pb-1 border-b border-gray-100">{children}</h2>,
-  h3: ({children}: {children: React.ReactNode}) => <h3 className="text-[13px] font-bold text-gray-900 mt-6 mb-2 pb-1 border-b border-gray-100 first:mt-0">{children}</h3>,
-  p: ({children}: {children: React.ReactNode}) => <p className="text-[13px] text-gray-700 leading-[1.7] mb-3 last:mb-0">{children}</p>,
-  ul: ({children}: {children: React.ReactNode}) => <ul className="list-disc list-outside ml-4 space-y-0.5 mb-2 last:mb-0">{children}</ul>,
-  ol: ({children}: {children: React.ReactNode}) => <ol className="list-decimal list-outside ml-4 space-y-0.5 mb-2 last:mb-0">{children}</ol>,
-  li: ({children}: {children: React.ReactNode}) => <li className="text-[13px] text-gray-700 leading-[1.7]">{children}</li>,
+  h1: ({children}: {children: React.ReactNode}) => <h1 className="text-xl font-bold text-gray-900 mt-8 mb-3 first:mt-0">{children}</h1>,
+  h2: ({children}: {children: React.ReactNode}) => <h2 className="text-[11px] font-bold uppercase tracking-widest text-gray-400 mt-8 mb-3 first:mt-0 pb-1.5 border-b-2 border-gray-100">{children}</h2>,
+  h3: ({children}: {children: React.ReactNode}) => <h3 className="text-base font-semibold text-gray-900 mt-8 mb-3 pl-3 border-l-[3px] border-green-400 first:mt-0">{children}</h3>,
+  p: ({children}: {children: React.ReactNode}) => <p className="text-[14px] text-gray-700 leading-[1.8] mb-4 last:mb-0">{children}</p>,
+  ul: ({children}: {children: React.ReactNode}) => <ul className="list-disc list-outside ml-4 space-y-1.5 mb-4 last:mb-0">{children}</ul>,
+  ol: ({children}: {children: React.ReactNode}) => <ol className="list-decimal list-outside ml-4 space-y-1.5 mb-4 last:mb-0">{children}</ol>,
+  li: ({children}: {children: React.ReactNode}) => <li className="text-[14px] text-gray-700 leading-[1.8]">{children}</li>,
   strong: ({children}: {children: React.ReactNode}) => <strong className="font-semibold text-gray-900">{children}</strong>,
   em: ({children}: {children: React.ReactNode}) => <em className="italic text-gray-500">{children}</em>,
-  hr: () => <hr className="border-gray-100 my-4" />,
-  code: ({children}: {children: React.ReactNode}) => <code className="text-[11px] bg-gray-100 px-1 py-0.5 rounded font-mono text-gray-600">{children}</code>,
-  blockquote: ({children}: {children: React.ReactNode}) => <blockquote className="border-l-2 border-gray-200 pl-3 text-[13px] text-gray-500 italic my-2">{children}</blockquote>,
-  table: ({children}: {children: React.ReactNode}) => <div className="overflow-x-auto my-3"><table className="text-[12px] w-full border-collapse">{children}</table></div>,
+  hr: () => <hr className="border-gray-100 my-6" />,
+  code: ({children}: {children: React.ReactNode}) => <code className="text-[12px] bg-emerald-50 text-emerald-700 px-1.5 py-0.5 rounded font-mono">{children}</code>,
+  pre: ({children}: {children: React.ReactNode}) => (
+    <pre className="bg-gray-900 text-green-300 text-[12px] font-mono rounded-lg p-4 my-4 overflow-x-auto leading-[1.7] whitespace-pre-wrap">
+      {children}
+    </pre>
+  ),
+  blockquote: ({children}: {children: React.ReactNode}) => <blockquote className="border-l-4 border-green-200 pl-4 text-[14px] text-gray-500 italic my-4 bg-gray-50 py-2 rounded-r">{children}</blockquote>,
+  table: ({children}: {children: React.ReactNode}) => <div className="overflow-x-auto my-4"><table className="w-full border-collapse text-[13px]">{children}</table></div>,
   thead: ({children}: {children: React.ReactNode}) => <thead className="bg-gray-50">{children}</thead>,
-  th: ({children}: {children: React.ReactNode}) => <th className="text-left text-[11px] font-semibold text-gray-500 px-3 py-1.5 border border-gray-200">{children}</th>,
-  td: ({children}: {children: React.ReactNode}) => <td className="text-[12px] text-gray-700 px-3 py-1.5 border border-gray-200">{children}</td>,
-  tr: ({children}: {children: React.ReactNode}) => <tr className="even:bg-gray-50">{children}</tr>,
+  th: ({children}: {children: React.ReactNode}) => <th className="text-left text-[11px] font-semibold text-gray-500 px-4 py-2 border-b-2 border-gray-200">{children}</th>,
+  td: ({children}: {children: React.ReactNode}) => <td className="text-[13px] text-gray-700 px-4 py-2.5 border-b border-gray-100">{children}</td>,
+  tr: ({children}: {children: React.ReactNode}) => <tr className="hover:bg-gray-50 transition-colors">{children}</tr>,
 };
 
 const statusMap: Record<DDStatus, { label: string; color: string }> = {
@@ -85,7 +90,7 @@ export default function DeepDiveDetailPage() {
 
   if (loading) {
     return (
-      <div className="max-w-3xl mx-auto px-4 py-6">
+      <div className="max-w-2xl mx-auto px-4 py-6">
         <p className="text-sm text-gray-400">Loading...</p>
       </div>
     );
@@ -93,7 +98,7 @@ export default function DeepDiveDetailPage() {
 
   if (error || !dd) {
     return (
-      <div className="max-w-3xl mx-auto px-4 py-6">
+      <div className="max-w-2xl mx-auto px-4 py-6">
         <p className="text-sm text-gray-500">Deep dive not found.</p>
         <button onClick={() => router.back()} className="mt-3 text-xs text-green-600 hover:underline">
           ← Back
@@ -105,7 +110,7 @@ export default function DeepDiveDetailPage() {
   const status = statusMap[dd.status];
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-6 space-y-5">
+    <div className="max-w-2xl mx-auto px-4 py-6 space-y-5">
       {/* Header */}
       <div className="flex items-center gap-2">
         <button
@@ -117,7 +122,7 @@ export default function DeepDiveDetailPage() {
       </div>
 
       {/* Meta card */}
-      <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm space-y-3">
+      <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm space-y-3">
         <div className="flex items-start justify-between gap-2 flex-wrap">
           <div className="space-y-1 min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
@@ -129,7 +134,7 @@ export default function DeepDiveDetailPage() {
                 {dd.domain}
               </span>
             </div>
-            <p className="text-base font-semibold text-gray-900 leading-snug">{dd.title}</p>
+            <p className="text-lg font-semibold text-gray-900 leading-snug">{dd.title}</p>
           </div>
           <span className="text-[11px] text-gray-400 shrink-0">{dd.createdAt}</span>
         </div>
@@ -149,8 +154,8 @@ export default function DeepDiveDetailPage() {
 
       {/* Meta Interview (background + key questions) — shown if present */}
       {dd.metaInterview && (
-        <div className="rounded-xl border border-amber-100 bg-amber-50 p-4 space-y-1">
-          <p className="text-[11px] font-semibold text-amber-700 uppercase tracking-wide">
+        <div className="rounded-xl border border-amber-100 bg-amber-50 p-5 space-y-3">
+          <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-amber-600">
             Interview Background
           </p>
           <div className="space-y-0">
@@ -159,11 +164,12 @@ export default function DeepDiveDetailPage() {
         </div>
       )}
 
-      {/* AI Summary */}
-      <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm space-y-3">
+      {/* Interview Full Record */}
+      <div className="rounded-xl border border-gray-200 bg-white px-6 py-7 shadow-sm space-y-4">
         <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest">
           Interview Full Record
         </p>
+        <hr className="border-gray-100 mb-6" />
         {dd.aiSummary ? (
           <div className="space-y-0">
             <ReactMarkdown components={mdComponents} remarkPlugins={[remarkGfm]}>{dd.aiSummary}</ReactMarkdown>
