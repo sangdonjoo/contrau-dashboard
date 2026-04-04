@@ -1,19 +1,24 @@
 import { NextResponse } from 'next/server';
 
+type DDStatus = 'pending' | 'in_progress' | 'submitted';
+
 interface DeepDiveRow {
   id: string;
   interviewee: string | null;
   issued_by: string | null;
   status: string | null;
   trigger: string | null;
-  trigger_ref: string | null;
   domain: string | null;
-  channel: string | null;
-  started_at: string | null;
-  ended_at: string | null;
   ai_summary: string | null;
   meta_interview: string | null;
   created_at: string | null;
+}
+
+const KNOWN_STATUSES = new Set<DDStatus>(['pending', 'in_progress', 'submitted']);
+
+function toStatus(raw: string | null): DDStatus {
+  if (raw && KNOWN_STATUSES.has(raw as DDStatus)) return raw as DDStatus;
+  return 'pending';
 }
 
 export async function GET(
@@ -47,28 +52,27 @@ export async function GET(
 
     const rows: DeepDiveRow[] = await res.json();
     if (rows.length === 0) {
-      return NextResponse.json({ error: 'Not found' }, { status: 404 });
+      return NextResponse.json({ error: 'not found' }, { status: 404 });
     }
 
     const row = rows[0];
-    const statusMap: Record<string, 'pending' | 'in_progress' | 'submitted'> = {
-      closed: 'submitted', open: 'pending', in_progress: 'in_progress',
-    };
+    const issuedBy = row.issued_by ?? '';
+    const interviewee = row.interviewee ?? '';
 
     return NextResponse.json({
       id: row.id,
-      issuedBy: row.issued_by || 'System',
-      issuedByLevel: 1,
-      interviewee: (row.interviewee || 'Unknown').split(' ')[0],
-      intervieweeLevel: 2,
-      title: row.trigger || `Interview ${row.id}`,
-      description: row.trigger_ref || row.trigger || '',
-      status: statusMap[row.status || ''] || 'pending',
-      domain: row.domain || 'company',
-      createdAt: row.created_at || '',
-      aiSummary: row.ai_summary || '',
-      metaInterview: row.meta_interview || '',
-      filePath: `07_context-override/pull-interview/interviews/${row.id}.md`,
+      issuedBy,
+      issuedByLevel: issuedBy === 'charlie' ? 1 : 3,
+      interviewee,
+      intervieweeLevel: interviewee.includes('charlie') ? 1 : 3,
+      title: row.trigger ?? '',
+      description: '',
+      status: toStatus(row.status),
+      domain: row.domain ?? '',
+      createdAt: row.created_at?.slice(0, 10) ?? '',
+      aiSummary: row.ai_summary ?? '',
+      metaInterview: row.meta_interview ?? '',
+      filePath: '',
     });
   } catch (err) {
     return NextResponse.json({ error: String(err) }, { status: 500 });

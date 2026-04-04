@@ -154,7 +154,7 @@ export default function DeepDiveDetailPage() {
             <ReactMarkdown>{dd.aiSummary}</ReactMarkdown>
           </div>
         ) : (
-          <p className="text-sm text-gray-400 italic">Summary not yet available.</p>
+          <p className="text-sm text-gray-400 italic">추후 추가 예정</p>
         )}
       </div>
     </div>
