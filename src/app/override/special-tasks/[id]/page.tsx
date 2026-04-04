@@ -27,6 +27,33 @@ interface SpecialTaskDetail {
   stepsTotal: number;
 }
 
+interface LocalLog {
+  id: string;
+  author: string;
+  authorLevel: number;
+  createdAt: string;
+  content: string;
+}
+
+const LEVEL_MAP: [string, number][] = [
+  ['sangdon', 1],
+  ['jihyun', 2], ['yoo jihyun', 2],
+  ['nhi', 2], ['ly hoang man nhi', 2],
+  ['vicky', 2], ['nguyen thi tuong vi', 2],
+  ['charlie', 3], ['nguyen van cu', 3],
+  ['youngin', 3], ['seo youngin', 3],
+  ['quynh', 3], ['to thi ngoc quynh', 3],
+];
+
+function localPersonLevel(name: string): number {
+  const lower = name.toLowerCase();
+  let best = 4;
+  for (const [key, lvl] of LEVEL_MAP) {
+    if (lower.includes(key)) best = Math.min(best, lvl);
+  }
+  return best;
+}
+
 const mdComponents = {
   h1: ({children}: {children?: React.ReactNode}) => <h1 className="text-xl font-bold text-gray-900 mt-8 mb-3 first:mt-0">{children}</h1>,
   h2: ({children}: {children?: React.ReactNode}) => <h2 className="text-[11px] font-bold uppercase tracking-widest text-gray-400 mt-8 mb-3 first:mt-0 pb-1.5 border-b-2 border-gray-100">{children}</h2>,
@@ -81,6 +108,14 @@ export default function SpecialTaskDetailPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
+  // Step local state
+  const [localDone, setLocalDone] = useState<Record<string, boolean>>({});
+
+  // Activity log local state
+  const [logName, setLogName] = useState("");
+  const [logText, setLogText] = useState("");
+  const [localLogs, setLocalLogs] = useState<LocalLog[]>([]);
+
   useEffect(() => {
     fetch(`/api/special-tasks/${id}`)
       .then(res => {
@@ -113,6 +148,30 @@ export default function SpecialTaskDetailPage() {
 
   const status = statusMap[task.status];
 
+  const isDone = (step: TaskStep) => localDone[step.id] ?? step.done;
+  const handleStepClick = (step: TaskStep) => {
+    if (isDone(step)) return;
+    setLocalDone(prev => ({ ...prev, [step.id]: true }));
+  };
+
+  const handleAddLog = () => {
+    const name = logName.trim();
+    const content = logText.trim();
+    if (!name || !content) return;
+    const now = new Date();
+    const createdAt = now.toISOString().slice(0, 16).replace('T', ' ');
+    setLocalLogs(prev => [{
+      id: `local-${Date.now()}`,
+      author: name,
+      authorLevel: localPersonLevel(name),
+      createdAt,
+      content,
+    }, ...prev]);
+    setLogText("");
+  };
+
+  const allLogs = [...localLogs, ...task.logs];
+
   return (
     <div className="max-w-2xl mx-auto px-4 py-6 space-y-5">
       {/* Back */}
@@ -124,20 +183,17 @@ export default function SpecialTaskDetailPage() {
 
       {/* Meta card */}
       <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm space-y-3">
-        <div className="flex items-start justify-between gap-2 flex-wrap">
-          <div className="space-y-1 min-w-0">
-            <div className="flex items-center gap-2 flex-wrap">
-              <code className="text-xs font-mono text-gray-500">{task.id}</code>
-              <span className={`text-[10px] px-1.5 py-0.5 rounded ${status.color}`}>
-                {status.label}
-              </span>
-            </div>
-            <p className="text-lg font-semibold text-gray-900 leading-snug">{task.title}</p>
-          </div>
-          <div className="flex items-center gap-2 shrink-0">
+        <div className="space-y-1 min-w-0">
+          <div className="flex items-center gap-2 flex-wrap">
+            <code className="text-xs font-mono text-gray-500">{task.id}</code>
+            <span className={`text-[10px] px-1.5 py-0.5 rounded ${status.color}`}>
+              {status.label}
+            </span>
+            <span className="flex-1" />
             <span className="text-[11px] text-gray-400">{task.createdAt}</span>
             <CopyButton id={task.id} />
           </div>
+          <p className="text-lg font-semibold text-gray-900 leading-snug">{task.title}</p>
         </div>
 
         <div className="flex items-center gap-2 text-[11px] text-gray-500 flex-wrap">
@@ -197,14 +253,20 @@ export default function SpecialTaskDetailPage() {
           <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest">Steps</p>
           <hr className="border-gray-100" />
           <ol className="space-y-2">
-            {task.steps.map((step) => (
-              <li key={step.id} className="flex items-start gap-3">
-                <span className={`mt-0.5 shrink-0 w-4 h-4 rounded-full border-2 flex items-center justify-center text-[9px] ${
-                  step.done ? 'bg-green-400 border-green-400 text-white' : 'border-gray-300'
+            {task.steps.map((step, idx) => (
+              <li
+                key={step.id}
+                className="flex items-start gap-3 cursor-pointer group"
+                onClick={() => handleStepClick(step)}
+              >
+                <span className={`mt-0.5 shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center text-[9px] font-bold transition-colors ${
+                  isDone(step)
+                    ? 'bg-green-400 border-green-400 text-white'
+                    : 'border-gray-300 text-gray-400 group-hover:border-green-300'
                 }`}>
-                  {step.done ? '✓' : ''}
+                  {isDone(step) ? '✓' : idx + 1}
                 </span>
-                <span className={`text-[14px] leading-[1.7] ${step.done ? 'text-gray-400 line-through' : 'text-gray-700'}`}>
+                <span className={`text-[14px] leading-[1.7] ${isDone(step) ? 'text-gray-400 line-through' : 'text-gray-700'}`}>
                   {step.description}
                 </span>
               </li>
@@ -213,13 +275,39 @@ export default function SpecialTaskDetailPage() {
         </div>
       )}
 
-      {/* Logs */}
-      {task.logs.length > 0 && (
-        <div className="rounded-xl border border-gray-200 bg-white px-6 py-7 shadow-sm space-y-4">
-          <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest">Activity Log</p>
-          <hr className="border-gray-100" />
-          <div className="space-y-3">
-            {task.logs.map((log) => (
+      {/* Activity Log — always shown */}
+      <div className="rounded-xl border border-gray-200 bg-white px-6 py-7 shadow-sm space-y-4">
+        <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest">Activity Log</p>
+        <hr className="border-gray-100" />
+
+        {/* Input form */}
+        <div className="space-y-2">
+          <input
+            type="text"
+            placeholder="Your name"
+            value={logName}
+            onChange={e => setLogName(e.target.value)}
+            className="w-full text-[13px] border border-gray-200 rounded-lg px-3 py-1.5 text-gray-700 placeholder-gray-300 focus:outline-none focus:border-green-300"
+          />
+          <textarea
+            placeholder="Add an update..."
+            value={logText}
+            onChange={e => setLogText(e.target.value)}
+            rows={2}
+            className="w-full text-[13px] border border-gray-200 rounded-lg px-3 py-1.5 text-gray-700 placeholder-gray-300 focus:outline-none focus:border-green-300 resize-none"
+          />
+          <button
+            onClick={handleAddLog}
+            disabled={!logName.trim() || !logText.trim()}
+            className="text-[12px] px-3 py-1.5 rounded-lg bg-green-500 text-white hover:bg-green-600 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          >
+            Add entry
+          </button>
+        </div>
+
+        {allLogs.length > 0 && (
+          <div className="space-y-3 pt-1">
+            {allLogs.map((log) => (
               <div key={log.id} className="flex gap-3">
                 <div className="shrink-0 pt-0.5">
                   <LevelBadge level={log.authorLevel} />
@@ -235,8 +323,12 @@ export default function SpecialTaskDetailPage() {
               </div>
             ))}
           </div>
-        </div>
-      )}
+        )}
+
+        {allLogs.length === 0 && (
+          <p className="text-[12px] text-gray-300 italic">No activity yet.</p>
+        )}
+      </div>
     </div>
   );
 }
