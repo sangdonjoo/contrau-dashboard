@@ -5,9 +5,11 @@ export type STStatus = 'pending' | 'in_progress' | 'completed';
 export interface SpecialTaskRow {
   id: string;
   title: string | null;
-  what: string | null;
-  why: string | null;
+  description: string | null;  // "what"
+  reason: string | null;       // "why"
   criteria: string | null;
+  measurement: string | null;
+  domain: string | null;
   assigned_by: string | null;
   assignee: string | null;
   status: string | null;
@@ -19,9 +21,11 @@ export interface SpecialTaskRow {
 export interface SpecialTask {
   id: string;
   title: string;
-  what: string;
-  why: string;
+  description: string;
+  reason: string;
   criteria: string;
+  measurement: string;
+  domain: string;
   assignedBy: string;
   assignedByLevel: number;
   assignee: string;
@@ -64,9 +68,11 @@ export function rowToTask(row: SpecialTaskRow): SpecialTask {
   return {
     id: row.id,
     title: row.title ?? '',
-    what: row.what ?? '',
-    why: row.why ?? '',
+    description: row.description ?? '',
+    reason: row.reason ?? '',
     criteria: row.criteria ?? '',
+    measurement: row.measurement ?? '',
+    domain: row.domain ?? '',
     assignedBy,
     assignedByLevel: personLevel(assignedBy),
     assignee,
@@ -87,10 +93,8 @@ export async function GET() {
       return NextResponse.json({ available: false, data: [] });
     }
 
-    // Active tasks: created_at ASC; completed tasks: completed_at DESC
-    // Fetch all and sort client-side for simplicity
     const res = await fetch(
-      `${supabaseUrl}/rest/v1/special_tasks?select=id,title,what,why,criteria,assigned_by,assignee,status,progress,created_at,completed_at`,
+      `${supabaseUrl}/rest/v1/special_tasks?select=id,title,description,reason,criteria,measurement,domain,assigned_by,assignee,status,progress,created_at,completed_at`,
       {
         headers: {
           apikey: supabaseKey,
@@ -119,5 +123,111 @@ export async function GET() {
     return NextResponse.json({ available: true, data });
   } catch (err) {
     return NextResponse.json({ available: false, data: [], error: String(err) });
+  }
+}
+
+interface CreateSTBody {
+  title: string;
+  description: string;
+  reason: string;
+  criteria: string;
+  measurement: string;
+  assigned_to: string;
+  assigned_by: string;
+  domain: string;
+  steps: string[];
+}
+
+async function generateID(supabaseUrl: string, supabaseKey: string): Promise<string> {
+  const today = new Date().toISOString().slice(0, 10).replace(/-/g, ''); // YYYYMMDD
+  const prefix = `ST-${today}`;
+
+  const res = await fetch(
+    `${supabaseUrl}/rest/v1/special_tasks?id=like.${encodeURIComponent(prefix + '%')}&select=id`,
+    {
+      headers: {
+        apikey: supabaseKey,
+        Authorization: `Bearer ${supabaseKey}`,
+      },
+      cache: 'no-store',
+    }
+  );
+
+  const existing: { id: string }[] = res.ok ? await res.json() : [];
+  const next = (existing.length + 1).toString().padStart(3, '0');
+  return `${prefix}-${next}`;
+}
+
+export async function POST(req: Request) {
+  try {
+    const supabaseUrl = process.env.SUPABASE_URL;
+    const supabaseKey = process.env.SUPABASE_SERVICE_KEY ?? process.env.SUPABASE_ANON_KEY;
+
+    if (!supabaseUrl || !supabaseKey) {
+      return NextResponse.json({ error: 'Not configured' }, { status: 500 });
+    }
+
+    const body: CreateSTBody = await req.json();
+
+    if (!body.title || !body.assigned_to || !body.assigned_by) {
+      return NextResponse.json({ error: 'title, assigned_to, assigned_by are required' }, { status: 400 });
+    }
+
+    const id = await generateID(supabaseUrl, supabaseKey);
+    const headers = {
+      apikey: supabaseKey,
+      Authorization: `Bearer ${supabaseKey}`,
+      'Content-Type': 'application/json',
+      Prefer: 'return=minimal',
+    };
+
+    // INSERT task
+    const taskRes = await fetch(`${supabaseUrl}/rest/v1/special_tasks`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        id,
+        title: body.title,
+        description: body.description ?? '',
+        reason: body.reason ?? '',
+        criteria: body.criteria ?? '',
+        measurement: body.measurement ?? '',
+        domain: body.domain ?? '',
+        assigned_by: body.assigned_by,
+        assignee: body.assigned_to,
+        status: 'pending',
+        progress: 0,
+      }),
+    });
+
+    if (!taskRes.ok) {
+      const errText = await taskRes.text();
+      return NextResponse.json({ error: `task insert failed: ${errText}` }, { status: 500 });
+    }
+
+    // INSERT steps (batch)
+    if (body.steps && body.steps.length > 0) {
+      const stepRows = body.steps.map((desc, i) => ({
+        task_id: id,
+        step_order: i + 1,
+        description: desc,
+        done: false,
+      }));
+
+      const stepsRes = await fetch(`${supabaseUrl}/rest/v1/task_steps`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(stepRows),
+      });
+
+      if (!stepsRes.ok) {
+        // Task was created; log step failure but don't roll back
+        console.error(`task ${id} created but steps insert failed: ${await stepsRes.text()}`);
+      }
+    }
+
+    return NextResponse.json({ id, status: 'active' }, { status: 201 });
+  } catch (err) {
+    return NextResponse.json({ error: String(err) }, { status: 500 });
   }
 }

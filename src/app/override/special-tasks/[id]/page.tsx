@@ -10,8 +10,8 @@ import type { TaskStep, TaskLog } from "@/app/api/special-tasks/[id]/route";
 interface SpecialTaskDetail {
   id: string;
   title: string;
-  what: string;
-  why: string;
+  description: string;
+  reason: string;
   criteria: string;
   assignedBy: string;
   assignedByLevel: number;
@@ -168,18 +168,18 @@ export default function SpecialTaskDetailPage() {
       </div>
 
       {/* What / Why / Criteria */}
-      {(task.what || task.why || task.criteria) && (
+      {(task.description || task.reason || task.criteria) && (
         <div className="rounded-xl border border-gray-200 bg-white px-6 py-7 shadow-sm space-y-6">
-          {task.what && (
+          {task.description && (
             <div className="space-y-2">
               <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-gray-400">What</p>
-              <ReactMarkdown components={mdComponents} remarkPlugins={[remarkGfm]}>{task.what}</ReactMarkdown>
+              <ReactMarkdown components={mdComponents} remarkPlugins={[remarkGfm]}>{task.description}</ReactMarkdown>
             </div>
           )}
-          {task.why && (
+          {task.reason && (
             <div className="space-y-2">
               <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-gray-400">Why</p>
-              <ReactMarkdown components={mdComponents} remarkPlugins={[remarkGfm]}>{task.why}</ReactMarkdown>
+              <ReactMarkdown components={mdComponents} remarkPlugins={[remarkGfm]}>{task.reason}</ReactMarkdown>
             </div>
           )}
           {task.criteria && (
