@@ -28,6 +28,27 @@ interface DeepDive {
 
 const KNOWN_STATUSES = new Set<DDStatus>(['pending', 'in_progress', 'submitted']);
 
+// Name → level lookup (case-insensitive substring match)
+// L1: CEO/Founder, L2: Director/Chief, L3: PL/Factory Manager, L4: Staff, L5: Operator
+const LEVEL_MAP: [string, number][] = [
+  ['sangdon', 1],
+  ['jihyun', 2], ['yoo jihyun', 2],
+  ['nhi', 2], ['ly hoang man nhi', 2],
+  ['vicky', 2], ['nguyen thi tuong vi', 2],
+  ['charlie', 3], ['nguyen van cu', 3],
+  ['youngin', 3], ['seo youngin', 3],
+  ['quynh', 3], ['to thi ngoc quynh', 3],
+];
+
+function personLevel(name: string): number {
+  const lower = name.toLowerCase();
+  let best = 4;
+  for (const [key, lvl] of LEVEL_MAP) {
+    if (lower.includes(key)) best = Math.min(best, lvl);
+  }
+  return best;
+}
+
 function toStatus(raw: string | null): DDStatus {
   if (raw && KNOWN_STATUSES.has(raw as DDStatus)) return raw as DDStatus;
   return 'pending';
@@ -65,9 +86,9 @@ export async function GET() {
       return {
         id: row.id,
         issuedBy,
-        issuedByLevel: issuedBy === 'charlie' ? 1 : 3,
+        issuedByLevel: personLevel(issuedBy),
         interviewee,
-        intervieweeLevel: interviewee.includes('charlie') ? 1 : 3,
+        intervieweeLevel: personLevel(interviewee),
         title: row.trigger ?? '',
         description: '',
         status: toStatus(row.status),
