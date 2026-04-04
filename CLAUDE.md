@@ -1,6 +1,6 @@
 # Contrau Dashboard (contrau-dashboard)
 
-> **프로젝트 정체성:** 이 레포의 로컬 폴더명은 `contrau-shrimp-dashboard`이지만, 공식 이름은 **contrau-dashboard**다.
+> **프로젝트 정체성:** 이 레포의 로컬 폴더명은 `contrau-dashboard`이지만, 공식 이름은 **contrau-dashboard**다.
 > GitHub: `sangdonjoo/contrau-dashboard` | 라이브: **dashboard.contrau.eco** (Vercel 배포)
 
 Contrau 전사 대시보드 — Company / Accounting / People / Shrimp / Algae / Override 6개 도메인 통합.
