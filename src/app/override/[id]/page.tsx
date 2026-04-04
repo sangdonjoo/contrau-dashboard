@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 type DDStatus = "pending" | "in_progress" | "submitted" | "closed";
 
@@ -153,7 +154,7 @@ export default function DeepDiveDetailPage() {
             Interview Background
           </p>
           <div className="space-y-0">
-            <ReactMarkdown components={mdComponents}>{dd.metaInterview}</ReactMarkdown>
+            <ReactMarkdown components={mdComponents} remarkPlugins={[remarkGfm]}>{dd.metaInterview}</ReactMarkdown>
           </div>
         </div>
       )}
@@ -165,7 +166,7 @@ export default function DeepDiveDetailPage() {
         </p>
         {dd.aiSummary ? (
           <div className="space-y-0">
-            <ReactMarkdown components={mdComponents}>{dd.aiSummary}</ReactMarkdown>
+            <ReactMarkdown components={mdComponents} remarkPlugins={[remarkGfm]}>{dd.aiSummary}</ReactMarkdown>
           </div>
         ) : (
           <p className="text-sm text-gray-400 italic">추후 추가 예정</p>
