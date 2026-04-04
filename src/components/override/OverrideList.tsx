@@ -6,8 +6,15 @@ import {
   ddStatusMap,
   type DeepDive,
 } from "@/data/override-mock";
+import type { SpecialTask, STStatus } from "@/app/api/special-tasks/route";
 
 type Tab = "deep-dive" | "monthly-plan" | "special-task";
+
+const stStatusMap: Record<STStatus, { label: string; color: string }> = {
+  pending:     { label: "Pending",     color: "bg-gray-100 text-gray-600" },
+  in_progress: { label: "In Progress", color: "bg-yellow-50 text-yellow-700" },
+  completed:   { label: "Completed",   color: "bg-green-50 text-green-700" },
+};
 
 function CopyButton({ id }: { id: string }) {
   const [copied, setCopied] = useState(false);
@@ -47,22 +54,25 @@ export default function OverrideList() {
   const [tab, setTab] = useState<Tab>("deep-dive");
   const [deepDives, setDeepDives] = useState<DeepDive[]>([]);
   const [ddLoading, setDdLoading] = useState(true);
+  const [specialTasks, setSpecialTasks] = useState<SpecialTask[]>([]);
+  const [stLoading, setStLoading] = useState(true);
 
   useEffect(() => {
     fetch('/api/deep-dives')
       .then(res => res.json())
-      .then(data => {
-        if (data.available) {
-          setDeepDives(data.data);
-        }
-      })
+      .then(data => { if (data.available) setDeepDives(data.data); })
       .finally(() => setDdLoading(false));
+
+    fetch('/api/special-tasks')
+      .then(res => res.json())
+      .then(data => { if (data.available) setSpecialTasks(data.data); })
+      .finally(() => setStLoading(false));
   }, []);
 
   const tabs: { key: Tab; label: string; count: number }[] = [
     { key: "deep-dive", label: "Deep Dive", count: deepDives.length },
     { key: "monthly-plan", label: "Monthly Plan", count: 0 },
-    { key: "special-task", label: "Special Task", count: 0 },
+    { key: "special-task", label: "Special Task", count: specialTasks.length },
   ];
 
   return (
@@ -150,9 +160,56 @@ export default function OverrideList() {
       {tab === "special-task" && (
         <div className="space-y-2">
           <p className="text-[11px] text-gray-400">
-            Important tasks assigned by People L1-3. Executed via Telegram bot or terminal.
+            Important tasks assigned by People L1-2. Progress tracked in real-time.
           </p>
-          <p className="text-[11px] text-gray-400">No data available</p>
+          {stLoading ? (
+            <p className="text-[11px] text-gray-400">Loading...</p>
+          ) : specialTasks.length === 0 ? (
+            <p className="text-[11px] text-gray-400">No special tasks found.</p>
+          ) : specialTasks.map((st) => {
+            const status = stStatusMap[st.status];
+            return (
+              <Link key={st.id} href={`/override/special-tasks/${st.id}`} className="block rounded-lg border border-gray-200 bg-white p-3 shadow-sm hover:border-gray-300 hover:shadow-md transition-all">
+                <div className="flex items-start gap-2">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1 flex-wrap">
+                      <code className="text-[11px] font-mono text-gray-500">{st.id}</code>
+                      <span className={`text-[10px] px-1.5 py-0.5 rounded ${status.color}`}>
+                        {status.label}
+                      </span>
+                    </div>
+                    <p className="text-sm text-gray-800 font-medium leading-snug mb-1.5 truncate">
+                      {st.title}
+                    </p>
+                    {/* Progress bar */}
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <div className="flex-1 h-1 bg-gray-100 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-green-400 rounded-full transition-all"
+                          style={{ width: `${st.progress}%` }}
+                        />
+                      </div>
+                      <span className="text-[10px] text-gray-400 shrink-0">{st.progress}%</span>
+                    </div>
+                    <div className="flex items-center gap-3 text-[11px] text-gray-400">
+                      <span className="flex items-center gap-1">
+                        <LevelBadge level={st.assignedByLevel} />
+                        {st.assignedBy}
+                      </span>
+                      <span className="text-gray-300">→</span>
+                      <span className="flex items-center gap-1">
+                        <LevelBadge level={st.assigneeLevel} />
+                        {st.assignee}
+                      </span>
+                      <span className="text-gray-300">|</span>
+                      <span>{st.createdAt}</span>
+                    </div>
+                  </div>
+                  <CopyButton id={st.id} />
+                </div>
+              </Link>
+            );
+          })}
         </div>
       )}
     </div>
