@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { pipelineStatus as mockPipelineStatus, pipelineDates as mockPipelineDates, type PipelineStageInfo } from "@/data/company-mock";
+import { type PipelineStageInfo } from "@/data/company-mock";
 
 const statusColor: Record<string, string> = {
   green: "bg-green-500",
@@ -23,6 +23,7 @@ type ExpandedKey = { stage: string; dayIndex?: number } | null;
 export default function PipelineStatus() {
   const [expanded, setExpanded] = useState<ExpandedKey>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [pipelineStatus, setPipelineStatus] = useState<PipelineStageInfo[]>([]);
   const [apiDates, setApiDates] = useState({ w: '', m: '', q: '' });
 
@@ -31,8 +32,6 @@ export default function PipelineStatus() {
       .then(res => res.json())
       .then(data => {
         if (!data.available) {
-          setPipelineStatus(mockPipelineStatus);
-          setApiDates({ w: mockPipelineDates.w, m: mockPipelineDates.m, q: mockPipelineDates.q });
           setLoading(false);
           return;
         }
@@ -49,8 +48,7 @@ export default function PipelineStatus() {
         setLoading(false);
       })
       .catch(() => {
-        setPipelineStatus(mockPipelineStatus);
-        setApiDates({ w: mockPipelineDates.w, m: mockPipelineDates.m, q: mockPipelineDates.q });
+        setError(true);
         setLoading(false);
       });
   }, []);
@@ -93,32 +91,43 @@ export default function PipelineStatus() {
 
   const info = getExpandedInfo();
 
+  const wrapCard = (children: React.ReactNode) => (
+    <div className="rounded-xl border border-gray-200 bg-white p-4 sm:p-5 shadow-sm">
+      <h3 className="text-sm font-semibold text-gray-700 mb-1">Pipeline Status</h3>
+      <p className="text-xs text-gray-400 mb-4">SSOT pipeline status — Vietnam time (UTC+7), yesterday</p>
+      {children}
+    </div>
+  );
+
   if (loading) {
-    return (
-      <div className="rounded-xl border border-gray-200 bg-white p-4 sm:p-5 shadow-sm">
-        <h3 className="text-sm font-semibold text-gray-700 mb-1">Pipeline Status</h3>
-        <p className="text-xs text-gray-400 mb-4">SSOT pipeline status — Vietnam time (UTC+7), yesterday</p>
-        <div className="flex items-start gap-3 sm:gap-4 flex-wrap">
-          {["R0","R1","W","M","Q","Snapshot"].map(s => (
-            <div key={s} className="flex flex-col items-center gap-1.5">
-              <span className="text-xs font-semibold text-gray-700">{s}</span>
-              <div className="flex items-center gap-1">
-                <div className="w-2.5 h-2.5 rounded-full bg-gray-200 animate-pulse" />
-              </div>
+    return wrapCard(
+      <div className="flex items-start gap-3 sm:gap-4 flex-wrap">
+        {["R0","R1","W","M","Q","Snapshot"].map(s => (
+          <div key={s} className="flex flex-col items-center gap-1.5">
+            <span className="text-xs font-semibold text-gray-700">{s}</span>
+            <div className="flex items-center gap-1">
+              <div className="w-2.5 h-2.5 rounded-full bg-gray-200 animate-pulse" />
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
     );
   }
 
-  return (
-    <div className="rounded-xl border border-gray-200 bg-white p-4 sm:p-5 shadow-sm">
-      <h3 className="text-sm font-semibold text-gray-700 mb-1">Pipeline Status</h3>
-      <p className="text-xs text-gray-400 mb-4">
-        SSOT pipeline status — Vietnam time (UTC+7), yesterday
-      </p>
+  if (error) {
+    return wrapCard(
+      <p className="text-xs text-red-400">데이터를 불러오지 못했습니다.</p>
+    );
+  }
 
+  if (pipelineStatus.length === 0) {
+    return wrapCard(
+      <p className="text-xs text-gray-400">데이터 없음</p>
+    );
+  }
+
+  return wrapCard(
+    <>
       <div className="flex items-start gap-3 sm:gap-4 flex-wrap">
         {pipelineStatus.map((s) => (
           <div key={s.stage} className="flex flex-col items-center gap-1.5">
@@ -192,6 +201,6 @@ export default function PipelineStatus() {
           <span className="font-semibold">{info.label}:</span> {info.reason}
         </div>
       )}
-    </div>
+    </>
   );
 }

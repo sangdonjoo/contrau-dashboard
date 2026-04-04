@@ -3,13 +3,8 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
-  monthlyPlans,
-  specialTasks,
   ddStatusMap,
-  mpStatusMap,
-  tkStatusMap,
   type DeepDive,
-  type MonthlyPlan,
 } from "@/data/override-mock";
 
 type Tab = "deep-dive" | "monthly-plan" | "special-task";
@@ -48,65 +43,6 @@ function LevelBadge({ level }: { level: number }) {
   );
 }
 
-
-function ProgressBar({ progress }: { progress: number }) {
-  return (
-    <div className="flex items-center gap-2 min-w-[100px]">
-      <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-        <div
-          className="h-full bg-blue-500 rounded-full transition-all"
-          style={{ width: `${progress}%` }}
-        />
-      </div>
-      <span className="text-[10px] text-gray-500 w-8 text-right">{progress}%</span>
-    </div>
-  );
-}
-
-const MP_STEPS: { key: MonthlyPlan["status"]; label: string }[] = [
-  { key: "ai_draft", label: "AI Draft" },
-  { key: "pl_review", label: "PL Review" },
-  { key: "pl_confirmed", label: "PL Confirm" },
-  { key: "ceo_review", label: "CEO Review" },
-  { key: "ceo_feedback", label: "CEO Feedback" },
-  { key: "final", label: "Final" },
-  { key: "confirmed", label: "Confirmed" },
-];
-
-function PlanStepBar({ currentStatus }: { currentStatus: MonthlyPlan["status"] }) {
-  const currentIdx = MP_STEPS.findIndex((s) => s.key === currentStatus);
-  return (
-    <div className="flex items-center flex-wrap gap-y-1 mt-2">
-      {MP_STEPS.map((step, i) => {
-        const isDone = i < currentIdx;
-        const isActive = i === currentIdx;
-        return (
-          <span key={step.key} className="flex items-center">
-            <span
-              className={[
-                "text-[9px] font-medium px-1.5 py-0.5 rounded",
-                isActive
-                  ? "bg-green-100 text-green-700 border border-green-300"
-                  : isDone
-                  ? "bg-gray-100 text-gray-400"
-                  : "text-gray-300",
-              ].join(" ")}
-            >
-              {isDone && "✓ "}
-              {step.label}
-            </span>
-            {i < MP_STEPS.length - 1 && (
-              <span className={`text-[9px] px-0.5 ${i < currentIdx ? "text-gray-300" : "text-gray-200"}`}>
-                →
-              </span>
-            )}
-          </span>
-        );
-      })}
-    </div>
-  );
-}
-
 export default function OverrideList() {
   const [tab, setTab] = useState<Tab>("deep-dive");
   const [deepDives, setDeepDives] = useState<DeepDive[]>([]);
@@ -125,8 +61,8 @@ export default function OverrideList() {
 
   const tabs: { key: Tab; label: string; count: number }[] = [
     { key: "deep-dive", label: "Deep Dive", count: deepDives.length },
-    { key: "monthly-plan", label: "~Monthly Plan", count: monthlyPlans.length },
-    { key: "special-task", label: "~Special Task", count: specialTasks.length },
+    { key: "monthly-plan", label: "Monthly Plan", count: 0 },
+    { key: "special-task", label: "Special Task", count: 0 },
   ];
 
   return (
@@ -206,46 +142,7 @@ export default function OverrideList() {
           <p className="text-[11px] text-gray-400">
             PL finalizes v1→v2 with AI → CEO feedback → confirmed. Immutable after confirmation.
           </p>
-          {monthlyPlans.map((mp) => {
-            const status = mpStatusMap[mp.status];
-            return (
-              <div key={mp.id} className="rounded-lg border border-gray-200 bg-white p-3 shadow-sm">
-                <div className="flex items-start gap-2">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1 flex-wrap">
-                      <code className="text-[11px] font-mono text-gray-500">{mp.id}</code>
-                      <span className={`text-[10px] px-1.5 py-0.5 rounded ${status.color}`}>
-                        {status.label}
-                      </span>
-                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-gray-50 text-gray-500">
-                        {mp.version}
-                      </span>
-                    </div>
-                    <p className="text-sm text-gray-800 font-medium leading-snug mb-1 truncate">
-                      {mp.title}
-                    </p>
-                    <div className="flex items-center gap-3 text-[11px] text-gray-400">
-                      <span className="flex items-center gap-1">
-                        <LevelBadge level={mp.plLevel} />
-                        {mp.plName}
-                      </span>
-                      <span className="text-gray-300">↔</span>
-                      <span className="flex items-center gap-1">
-                        <LevelBadge level={1} />
-                        CEO
-                      </span>
-                      <span className="text-gray-300">|</span>
-                      <span>{mp.projectLabel}</span>
-                      <span className="text-gray-300">|</span>
-                      <span>{mp.period}</span>
-                    </div>
-                    <PlanStepBar currentStatus={mp.status} />
-                  </div>
-                  <CopyButton id={mp.id} />
-                </div>
-              </div>
-            );
-          })}
+          <p className="text-[11px] text-gray-400">데이터 없음</p>
         </div>
       )}
 
@@ -255,45 +152,7 @@ export default function OverrideList() {
           <p className="text-[11px] text-gray-400">
             Important tasks assigned by People L1-3. Executed via Telegram bot or terminal.
           </p>
-          {specialTasks.map((tk) => {
-            const status = tkStatusMap[tk.status];
-            return (
-              <div key={tk.id} className="rounded-lg border border-gray-200 bg-white p-3 shadow-sm">
-                <div className="flex items-start gap-2">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1 flex-wrap">
-                      <code className="text-[11px] font-mono text-gray-500">{tk.id}</code>
-                      <span className={`text-[10px] px-1.5 py-0.5 rounded ${status.color}`}>
-                        {status.label}
-                      </span>
-                    </div>
-                    <p className="text-sm text-gray-800 font-medium leading-snug mb-1 truncate">
-                      {tk.title}
-                    </p>
-                    <div className="flex items-center gap-3 text-[11px] text-gray-400">
-                      <span className="flex items-center gap-1">
-                        <LevelBadge level={tk.issuedByLevel} />
-                        {tk.issuedBy}
-                      </span>
-                      <span className="text-gray-300">→</span>
-                      <span className="flex items-center gap-1">
-                        <LevelBadge level={tk.assigneeLevel} />
-                        {tk.assignee}
-                      </span>
-                      <span className="text-gray-300">|</span>
-                      <span>{tk.createdAt}</span>
-                    </div>
-                    {tk.status === "in_progress" && (
-                      <div className="mt-2">
-                        <ProgressBar progress={tk.progress} />
-                      </div>
-                    )}
-                  </div>
-                  <CopyButton id={tk.id} />
-                </div>
-              </div>
-            );
-          })}
+          <p className="text-[11px] text-gray-400">데이터 없음</p>
         </div>
       )}
     </div>
