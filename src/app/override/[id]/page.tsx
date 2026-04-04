@@ -24,28 +24,28 @@ interface DeepDiveDetail {
 }
 
 const mdComponents = {
-  h1: ({children}: {children: React.ReactNode}) => <h1 className="text-xl font-bold text-gray-900 mt-8 mb-3 first:mt-0">{children}</h1>,
-  h2: ({children}: {children: React.ReactNode}) => <h2 className="text-[11px] font-bold uppercase tracking-widest text-gray-400 mt-8 mb-3 first:mt-0 pb-1.5 border-b-2 border-gray-100">{children}</h2>,
-  h3: ({children}: {children: React.ReactNode}) => <h3 className="text-base font-semibold text-gray-900 mt-8 mb-3 pl-3 border-l-[3px] border-green-400 first:mt-0">{children}</h3>,
-  p: ({children}: {children: React.ReactNode}) => <p className="text-[14px] text-gray-700 leading-[1.8] mb-4 last:mb-0">{children}</p>,
-  ul: ({children}: {children: React.ReactNode}) => <ul className="list-disc list-outside ml-4 space-y-1.5 mb-4 last:mb-0">{children}</ul>,
-  ol: ({children}: {children: React.ReactNode}) => <ol className="list-decimal list-outside ml-4 space-y-1.5 mb-4 last:mb-0">{children}</ol>,
-  li: ({children}: {children: React.ReactNode}) => <li className="text-[14px] text-gray-700 leading-[1.8]">{children}</li>,
-  strong: ({children}: {children: React.ReactNode}) => <strong className="font-semibold text-gray-900">{children}</strong>,
-  em: ({children}: {children: React.ReactNode}) => <em className="italic text-gray-500">{children}</em>,
+  h1: ({children}: {children?: React.ReactNode}) => <h1 className="text-xl font-bold text-gray-900 mt-8 mb-3 first:mt-0">{children}</h1>,
+  h2: ({children}: {children?: React.ReactNode}) => <h2 className="text-[11px] font-bold uppercase tracking-widest text-gray-400 mt-8 mb-3 first:mt-0 pb-1.5 border-b-2 border-gray-100">{children}</h2>,
+  h3: ({children}: {children?: React.ReactNode}) => <h3 className="text-base font-semibold text-gray-900 mt-8 mb-3 pl-3 border-l-[3px] border-green-400 first:mt-0">{children}</h3>,
+  p: ({children}: {children?: React.ReactNode}) => <p className="text-[14px] text-gray-700 leading-[1.8] mb-4 last:mb-0">{children}</p>,
+  ul: ({children}: {children?: React.ReactNode}) => <ul className="list-disc list-outside ml-4 space-y-1.5 mb-4 last:mb-0">{children}</ul>,
+  ol: ({children}: {children?: React.ReactNode}) => <ol className="list-decimal list-outside ml-4 space-y-1.5 mb-4 last:mb-0">{children}</ol>,
+  li: ({children}: {children?: React.ReactNode}) => <li className="text-[14px] text-gray-700 leading-[1.8]">{children}</li>,
+  strong: ({children}: {children?: React.ReactNode}) => <strong className="font-semibold text-gray-900">{children}</strong>,
+  em: ({children}: {children?: React.ReactNode}) => <em className="italic text-gray-500">{children}</em>,
   hr: () => <hr className="border-gray-100 my-6" />,
-  code: ({children}: {children: React.ReactNode}) => <code className="text-[12px] bg-emerald-50 text-emerald-700 px-1.5 py-0.5 rounded font-mono">{children}</code>,
-  pre: ({children}: {children: React.ReactNode}) => (
+  code: ({children}: {children?: React.ReactNode}) => <code className="text-[12px] bg-emerald-50 text-emerald-700 px-1.5 py-0.5 rounded font-mono">{children}</code>,
+  pre: ({children}: {children?: React.ReactNode}) => (
     <pre className="bg-gray-900 text-green-300 text-[12px] font-mono rounded-lg p-4 my-4 overflow-x-auto leading-[1.7] whitespace-pre-wrap">
       {children}
     </pre>
   ),
-  blockquote: ({children}: {children: React.ReactNode}) => <blockquote className="border-l-4 border-green-200 pl-4 text-[14px] text-gray-500 italic my-4 bg-gray-50 py-2 rounded-r">{children}</blockquote>,
-  table: ({children}: {children: React.ReactNode}) => <div className="overflow-x-auto my-4"><table className="w-full border-collapse text-[13px]">{children}</table></div>,
-  thead: ({children}: {children: React.ReactNode}) => <thead className="bg-gray-50">{children}</thead>,
-  th: ({children}: {children: React.ReactNode}) => <th className="text-left text-[11px] font-semibold text-gray-500 px-4 py-2 border-b-2 border-gray-200">{children}</th>,
-  td: ({children}: {children: React.ReactNode}) => <td className="text-[13px] text-gray-700 px-4 py-2.5 border-b border-gray-100">{children}</td>,
-  tr: ({children}: {children: React.ReactNode}) => <tr className="hover:bg-gray-50 transition-colors">{children}</tr>,
+  blockquote: ({children}: {children?: React.ReactNode}) => <blockquote className="border-l-4 border-green-200 pl-4 text-[14px] text-gray-500 italic my-4 bg-gray-50 py-2 rounded-r">{children}</blockquote>,
+  table: ({children}: {children?: React.ReactNode}) => <div className="overflow-x-auto my-4"><table className="w-full border-collapse text-[13px]">{children}</table></div>,
+  thead: ({children}: {children?: React.ReactNode}) => <thead className="bg-gray-50">{children}</thead>,
+  th: ({children}: {children?: React.ReactNode}) => <th className="text-left text-[11px] font-semibold text-gray-500 px-4 py-2 border-b-2 border-gray-200">{children}</th>,
+  td: ({children}: {children?: React.ReactNode}) => <td className="text-[13px] text-gray-700 px-4 py-2.5 border-b border-gray-100">{children}</td>,
+  tr: ({children}: {children?: React.ReactNode}) => <tr className="hover:bg-gray-50 transition-colors">{children}</tr>,
 };
 
 const statusMap: Record<DDStatus, { label: string; color: string }> = {
