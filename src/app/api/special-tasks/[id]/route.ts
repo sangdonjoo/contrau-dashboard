@@ -41,7 +41,7 @@ export async function GET(
         { headers, cache: 'no-store' }
       ),
       fetch(
-        `${supabaseUrl}/rest/v1/task_steps?task_id=eq.${encodeURIComponent(id)}&select=id,order,description,done&order=order.asc`,
+        `${supabaseUrl}/rest/v1/task_steps?task_id=eq.${encodeURIComponent(id)}&select=id,order:step_order,description,done&order=step_order.asc`,
         { headers, cache: 'no-store' }
       ),
       fetch(
