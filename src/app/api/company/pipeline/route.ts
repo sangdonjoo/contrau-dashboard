@@ -8,6 +8,20 @@ interface PipelineRow {
   reason: string | null;
 }
 
+function getVNDateRange(days: number): string[] {
+  const now = new Date();
+  // VN = UTC+7, yesterday in VN time
+  const vnNow = new Date(now.getTime() + 7 * 60 * 60 * 1000);
+  vnNow.setUTCDate(vnNow.getUTCDate() - 1); // yesterday
+  const dates: string[] = [];
+  for (let i = days - 1; i >= 0; i--) {
+    const d = new Date(vnNow);
+    d.setUTCDate(d.getUTCDate() - i);
+    dates.push(d.toISOString().slice(0, 10)); // YYYY-MM-DD
+  }
+  return dates;
+}
+
 export async function GET() {
   try {
     const supabaseUrl = process.env.SUPABASE_URL;
@@ -34,36 +48,37 @@ export async function GET() {
 
     const rows: PipelineRow[] = await res.json();
 
-    const r0Rows = rows
-      .filter((r) => r.stage === 'r0')
-      .sort((a, b) => a.date.localeCompare(b.date))
-      .slice(-5);
-
-    if (r0Rows.length === 0) {
+    if (rows.length === 0) {
       return NextResponse.json({ available: false });
     }
 
-    const r0Days = r0Rows.map((r) => ({ date: r.date, status: r.status }));
+    const dateRange = getVNDateRange(5);
 
-    const r1Days = rows
-      .filter((r) => r.stage === 'r1')
-      .sort((a, b) => a.date.localeCompare(b.date))
-      .slice(-5)
-      .map((r) => ({
-        date: r.date,
-        status: r.status as 'green' | 'yellow' | 'red',
-        ...(r.reason ? { reason: r.reason } : {}),
-      }));
+    const r0RowMap = new Map(rows.filter(r => r.stage === 'r0').map(r => [r.date, r]));
+    const r0Days = dateRange.map(date => {
+      const r = r0RowMap.get(date);
+      return { date, status: r ? r.status : 'red' };
+    });
+
+    const r1RowMap = new Map(rows.filter(r => r.stage === 'r1').map(r => [r.date, r]));
+    const r1Days = dateRange.map(date => {
+      const r = r1RowMap.get(date);
+      return {
+        date,
+        status: (r ? r.status : 'red') as 'green' | 'yellow' | 'red',
+        ...(r?.reason ? { reason: r.reason } : {}),
+      };
+    });
 
     const wRow = rows.find((r) => r.stage === 'w' && r.date === 'latest');
     const mRow = rows.find((r) => r.stage === 'm' && r.date === 'latest');
     const qRow = rows.find((r) => r.stage === 'q' && r.date === 'latest');
 
-    const snapshotDays = rows
-      .filter((r) => r.stage === 'snapshot')
-      .sort((a, b) => a.date.localeCompare(b.date))
-      .slice(-5)
-      .map((r) => ({ date: r.date, status: r.status }));
+    const snapshotRowMap = new Map(rows.filter(r => r.stage === 'snapshot').map(r => [r.date, r]));
+    const snapshotDays = dateRange.map(date => {
+      const r = snapshotRowMap.get(date);
+      return { date, status: r ? r.status : 'red' };
+    });
 
     return NextResponse.json({
       available: true,

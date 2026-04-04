@@ -22,14 +22,20 @@ type ExpandedKey = { stage: string; dayIndex?: number } | null;
 
 export default function PipelineStatus() {
   const [expanded, setExpanded] = useState<ExpandedKey>(null);
-  const [pipelineStatus, setPipelineStatus] = useState<PipelineStageInfo[]>(mockPipelineStatus);
-  const [apiDates, setApiDates] = useState({ w: mockPipelineDates.w, m: mockPipelineDates.m, q: mockPipelineDates.q });
+  const [loading, setLoading] = useState(true);
+  const [pipelineStatus, setPipelineStatus] = useState<PipelineStageInfo[]>([]);
+  const [apiDates, setApiDates] = useState({ w: '', m: '', q: '' });
 
   useEffect(() => {
     fetch('/api/company/pipeline')
       .then(res => res.json())
       .then(data => {
-        if (!data.available) return;
+        if (!data.available) {
+          setPipelineStatus(mockPipelineStatus);
+          setApiDates({ w: mockPipelineDates.w, m: mockPipelineDates.m, q: mockPipelineDates.q });
+          setLoading(false);
+          return;
+        }
         const stages: PipelineStageInfo[] = [
           { stage: "R0", status: data.r0Days.some((d: { status: string }) => d.status !== 'green') ? 'red' : 'green', days: data.r0Days },
           { stage: "R1", status: data.r1Days.some((d: { status: string }) => d.status === 'red') ? 'red' : data.r1Days.some((d: { status: string }) => d.status === 'yellow') ? 'yellow' : 'green', days: data.r1Days },
@@ -40,8 +46,13 @@ export default function PipelineStatus() {
         ];
         setPipelineStatus(stages);
         setApiDates({ w: data.w.label, m: data.m.label, q: data.q.label });
+        setLoading(false);
       })
-      .catch(() => { /* keep mock fallback */ });
+      .catch(() => {
+        setPipelineStatus(mockPipelineStatus);
+        setApiDates({ w: mockPipelineDates.w, m: mockPipelineDates.m, q: mockPipelineDates.q });
+        setLoading(false);
+      });
   }, []);
 
   function singleDateLabel(stage: string): string {
@@ -81,6 +92,25 @@ export default function PipelineStatus() {
   };
 
   const info = getExpandedInfo();
+
+  if (loading) {
+    return (
+      <div className="rounded-xl border border-gray-200 bg-white p-4 sm:p-5 shadow-sm">
+        <h3 className="text-sm font-semibold text-gray-700 mb-1">Pipeline Status</h3>
+        <p className="text-xs text-gray-400 mb-4">SSOT pipeline status — Vietnam time (UTC+7), yesterday</p>
+        <div className="flex items-start gap-3 sm:gap-4 flex-wrap">
+          {["R0","R1","W","M","Q","Snapshot"].map(s => (
+            <div key={s} className="flex flex-col items-center gap-1.5">
+              <span className="text-xs font-semibold text-gray-700">{s}</span>
+              <div className="flex items-center gap-1">
+                <div className="w-2.5 h-2.5 rounded-full bg-gray-200 animate-pulse" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="rounded-xl border border-gray-200 bg-white p-4 sm:p-5 shadow-sm">
