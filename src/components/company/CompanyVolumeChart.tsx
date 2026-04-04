@@ -2,14 +2,14 @@
 
 import { useEffect, useState } from "react";
 import {
-  Line,
+  Area,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
   Legend,
-  ComposedChart,
+  AreaChart,
 } from "recharts";
 import { useIsMobile } from "@/lib/useIsMobile";
 
@@ -41,7 +41,8 @@ export default function CompanyVolumeChart() {
       .then(r => r.json())
       .then(j => {
         if (Array.isArray(j.data) && j.data.length > 0) {
-          setChartData(j.data);
+          const filtered = j.data.filter((d: { date: string }) => d.date !== '2026-03-08');
+          setChartData(filtered);
         }
       })
       .catch(() => {})
@@ -57,10 +58,10 @@ export default function CompanyVolumeChart() {
   return (
     <div className="rounded-xl border border-gray-200 bg-white p-3 sm:p-5 shadow-sm">
       <h3 className="text-sm font-semibold text-gray-700 mb-1">
-        Message Volume by Company
+        Daily Message Volume by Company
       </h3>
       <p className="text-xs text-gray-400 mb-4">
-        Daily text message count by company (text only) — last 30 days
+        Daily text content volume (chars, attachments excluded) — last 30 days
       </p>
       {loading ? (
         <div className="flex items-center justify-center" style={{ height: isMobile ? 240 : 300 }}>
@@ -68,7 +69,7 @@ export default function CompanyVolumeChart() {
         </div>
       ) : (
         <ResponsiveContainer width="100%" height={isMobile ? 240 : 300}>
-          <ComposedChart
+          <AreaChart
             data={chartData}
             margin={isMobile ? { top: 5, right: 5, bottom: 5, left: -10 } : { top: 5, right: 20, bottom: 5, left: 0 }}
           >
@@ -96,12 +97,12 @@ export default function CompanyVolumeChart() {
               wrapperStyle={{ fontSize: isMobile ? 10 : 11 }}
               formatter={(value: string) => LABELS[value] || value}
             />
-            <Line type="monotone" dataKey="microalgae" stroke={COLORS.microalgae} strokeWidth={2} dot={false} activeDot={{ r: 4 }} name="microalgae" />
-            <Line type="monotone" dataKey="bsfl" stroke={COLORS.bsfl} strokeWidth={2} dot={false} activeDot={{ r: 4 }} name="bsfl" />
-            <Line type="monotone" dataKey="shrimp" stroke={COLORS.shrimp} strokeWidth={2} dot={false} activeDot={{ r: 4 }} name="shrimp" />
-            <Line type="monotone" dataKey="bmd" stroke={COLORS.bmd} strokeWidth={2} dot={false} activeDot={{ r: 4 }} name="bmd" />
-            <Line type="monotone" dataKey="hq" stroke={COLORS.hq} strokeWidth={2} dot={false} activeDot={{ r: 4 }} name="hq" />
-          </ComposedChart>
+            <Area type="monotone" dataKey="hq" stackId="stack" stroke={COLORS.hq} fill={COLORS.hq} fillOpacity={0.3} name="hq" />
+            <Area type="monotone" dataKey="bmd" stackId="stack" stroke={COLORS.bmd} fill={COLORS.bmd} fillOpacity={0.3} name="bmd" />
+            <Area type="monotone" dataKey="shrimp" stackId="stack" stroke={COLORS.shrimp} fill={COLORS.shrimp} fillOpacity={0.3} name="shrimp" />
+            <Area type="monotone" dataKey="bsfl" stackId="stack" stroke={COLORS.bsfl} fill={COLORS.bsfl} fillOpacity={0.3} name="bsfl" />
+            <Area type="monotone" dataKey="microalgae" stackId="stack" stroke={COLORS.microalgae} fill={COLORS.microalgae} fillOpacity={0.3} name="microalgae" />
+          </AreaChart>
         </ResponsiveContainer>
       )}
     </div>

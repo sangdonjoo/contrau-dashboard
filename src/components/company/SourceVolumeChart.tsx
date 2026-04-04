@@ -2,14 +2,14 @@
 
 import { useEffect, useState } from "react";
 import {
-  Line,
+  Area,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
   Legend,
-  ComposedChart,
+  AreaChart,
 } from "recharts";
 import { useIsMobile } from "@/lib/useIsMobile";
 
@@ -32,12 +32,14 @@ export default function SourceVolumeChart() {
       .then(j => {
         if (Array.isArray(j.data) && j.data.length > 0) {
           const raw = j.data as Record<string, string | number>[];
-          const mapped: ChartItem[] = raw.map(d => ({
-            date: String(d.date),
-            zalo: Number(d.zalo ?? 0),
-            swit: Number(d.swit ?? 0),
-            email: Number(d.gmail ?? 0),
-          }));
+          const mapped: ChartItem[] = raw
+            .filter(d => d.date !== '2026-03-08')
+            .map(d => ({
+              date: String(d.date),
+              zalo: Number(d.zalo ?? 0),
+              swit: Number(d.swit ?? 0),
+              email: Number(d.gmail ?? 0),
+            }));
           setChartData(mapped);
         }
       })
@@ -57,7 +59,7 @@ export default function SourceVolumeChart() {
         Daily Message Volume by Source
       </h3>
       <p className="text-xs text-gray-400 mb-4">
-        Daily text message count (text body only) — last 30 days
+        Daily text content volume (chars, attachments excluded) — last 30 days
       </p>
       {loading ? (
         <div className="flex items-center justify-center" style={{ height: isMobile ? 240 : 300 }}>
@@ -65,7 +67,7 @@ export default function SourceVolumeChart() {
         </div>
       ) : (
         <ResponsiveContainer width="100%" height={isMobile ? 240 : 300}>
-          <ComposedChart
+          <AreaChart
             data={chartData}
             margin={isMobile ? { top: 5, right: 5, bottom: 5, left: -10 } : { top: 5, right: 20, bottom: 5, left: 0 }}
           >
@@ -91,10 +93,10 @@ export default function SourceVolumeChart() {
               }}
             />
             <Legend wrapperStyle={{ fontSize: isMobile ? 10 : 11 }} />
-            <Line type="monotone" dataKey="zalo" stroke={COLORS.zalo} strokeWidth={2} dot={false} activeDot={{ r: 4 }} name="zalo" />
-            <Line type="monotone" dataKey="swit" stroke={COLORS.swit} strokeWidth={2} dot={false} activeDot={{ r: 4 }} name="swit" />
-            <Line type="monotone" dataKey="email" stroke={COLORS.email} strokeWidth={2} dot={false} activeDot={{ r: 4 }} name="email" />
-          </ComposedChart>
+            <Area type="monotone" dataKey="email" stackId="stack" stroke={COLORS.email} fill={COLORS.email} fillOpacity={0.3} name="email" />
+            <Area type="monotone" dataKey="swit" stackId="stack" stroke={COLORS.swit} fill={COLORS.swit} fillOpacity={0.3} name="swit" />
+            <Area type="monotone" dataKey="zalo" stackId="stack" stroke={COLORS.zalo} fill={COLORS.zalo} fillOpacity={0.3} name="zalo" />
+          </AreaChart>
         </ResponsiveContainer>
       )}
     </div>
