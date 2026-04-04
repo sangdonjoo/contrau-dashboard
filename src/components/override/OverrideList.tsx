@@ -35,34 +35,6 @@ function CopyButton({ id }: { id: string }) {
   );
 }
 
-function DDCopyButton({ id, title }: { id: string; title: string }) {
-  const [state, setState] = useState<"idle" | "loading" | "copied">("idle");
-  const handleCopy = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    setState("loading");
-    try {
-      const res = await fetch(`/api/deep-dives/${id}`);
-      const data = res.ok ? await res.json() : {};
-      const meta = data.metaInterview ?? "";
-      const prompt = `[Deep Dive Interview Load]\nID: ${id}\nTitle: ${title}\n\n${meta}\n\n---\nContinue this interview from where it left off. The interview record will be saved back to the dashboard via the deep-dive reporter.`;
-      await navigator.clipboard.writeText(prompt);
-      setState("copied");
-      setTimeout(() => setState("idle"), 1500);
-    } catch {
-      setState("idle");
-    }
-  };
-  return (
-    <button
-      onClick={handleCopy}
-      className="px-1.5 py-0.5 text-[10px] rounded border border-gray-200 bg-gray-50 text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition-colors shrink-0"
-      title={`Copy interview prompt: ${id}`}
-    >
-      {state === "loading" ? "..." : state === "copied" ? "Copied!" : "Copy"}
-    </button>
-  );
-}
-
 function LevelBadge({ level }: { level: number }) {
   const colors: Record<number, string> = {
     1: "bg-red-50 text-red-700 border-red-200",
@@ -166,7 +138,7 @@ export default function OverrideList() {
                       <span>{dd.createdAt}</span>
                     </div>
                   </div>
-                  <DDCopyButton id={dd.id} title={dd.title} />
+                  <CopyButton id={dd.id} />
                 </div>
               </Link>
             );
