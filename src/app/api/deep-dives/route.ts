@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-type DDStatus = 'pending' | 'in_progress' | 'submitted';
+type DDStatus = 'pending' | 'in_progress' | 'submitted' | 'closed';
 
 interface DeepDiveRow {
   id: string;
@@ -26,7 +26,7 @@ interface DeepDive {
   filePath: string;
 }
 
-const KNOWN_STATUSES = new Set<DDStatus>(['pending', 'in_progress', 'submitted']);
+const KNOWN_STATUSES = new Set<DDStatus>(['pending', 'in_progress', 'submitted', 'closed']);
 
 // Name → level lookup (case-insensitive substring match)
 // L1: CEO/Founder, L2: Director/Chief, L3: PL/Factory Manager, L4: Staff, L5: Operator

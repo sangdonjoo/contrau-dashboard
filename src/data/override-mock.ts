@@ -180,8 +180,9 @@ export const specialTasks: SpecialTask[] = [
 // Status display helpers
 export const ddStatusMap: Record<string, { label: string; color: string }> = {
   pending: { label: "Pending", color: "bg-gray-100 text-gray-600" },
-  in_progress: { label: "In Progress", color: "bg-blue-50 text-blue-700" },
+  in_progress: { label: "In Progress", color: "bg-yellow-50 text-yellow-700" },
   submitted: { label: "Submitted", color: "bg-green-50 text-green-700" },
+  closed: { label: "Completed", color: "bg-green-50 text-green-700" },
 };
 
 export const mpStatusMap: Record<string, { label: string; color: string }> = {
