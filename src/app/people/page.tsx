@@ -48,14 +48,14 @@ export default function PeoplePage() {
   }, [])
 
   const sorted = [...people].filter(p => p.person_id !== 'others').sort((a, b) => b.score_7d - a.score_7d)
-  const max30d = Math.max(...sorted.map(p => p.score_30d), 1)
+  const max7d = Math.max(...sorted.map(p => p.score_7d), 1)
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-6">
       <header className="mb-4">
         <h1 className="text-xl font-bold text-gray-900">People — Context Contribution</h1>
         <p className="text-xs text-gray-400 mt-0.5">
-          AI 맥락 기여도 — 7d / 30d
+          AI 맥락 기여도 — 7d
           <span className="ml-3 inline-flex items-center gap-2">
             <span className="inline-block w-2 h-2 rounded-full bg-blue-500" /> context
             <span className="inline-block w-2 h-2 rounded-full bg-emerald-500" /> git
@@ -89,8 +89,7 @@ export default function PeoplePage() {
             <ContributionBar
               contextScore7d={person.context_score_7d}
               gitScore7d={person.git_score_7d}
-              score30d={person.score_30d}
-              max30d={max30d}
+              max7d={max7d}
             />
             <div className="hidden sm:flex w-24 shrink-0 justify-end">
               <StreakBadge days={person.streak_days} />
