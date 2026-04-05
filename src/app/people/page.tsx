@@ -68,7 +68,7 @@ export default function PeoplePage() {
             key={person.person_id}
             className="flex items-center gap-4 bg-white rounded-xl border border-gray-200 shadow-sm px-5 py-3.5 hover:shadow-md hover:border-emerald-200 transition-all"
           >
-            <div className="flex items-center gap-2 w-40 shrink-0">
+            <div className="flex items-center gap-2 w-28 sm:w-40 shrink-0">
               <span className="text-xs font-medium text-gray-400 w-5 text-right">
                 {person.person_id !== 'others' ? `#${idx + 1}` : ''}
               </span>
@@ -92,7 +92,7 @@ export default function PeoplePage() {
               score30d={person.score_30d}
               max30d={max30d}
             />
-            <div className="w-24 shrink-0 flex justify-end">
+            <div className="hidden sm:flex w-24 shrink-0 justify-end">
               <StreakBadge days={person.streak_days} />
             </div>
           </div>
