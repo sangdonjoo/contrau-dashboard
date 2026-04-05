@@ -11,7 +11,7 @@ import type { SpecialTask, STStatus } from "@/app/api/special-tasks/route";
 type Tab = "deep-dive" | "monthly-plan" | "special-task";
 
 const stStatusMap: Record<STStatus, { label: string; color: string }> = {
-  pending:     { label: "Pending",     color: "bg-gray-100 text-gray-600" },
+  prepared:    { label: "Prepared",    color: "bg-blue-50 text-blue-600" },
   in_progress: { label: "In Progress", color: "bg-yellow-50 text-yellow-700" },
   completed:   { label: "Completed",   color: "bg-green-50 text-green-700" },
 };

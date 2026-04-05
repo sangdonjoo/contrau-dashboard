@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import type { STStatus } from "@/app/api/special-tasks/route";
-import type { TaskStep, TaskLog } from "@/app/api/special-tasks/[id]/route";
+import type { TaskStep } from "@/app/api/special-tasks/[id]/route";
 
 interface SpecialTaskDetail {
   id: string;
@@ -22,17 +22,9 @@ interface SpecialTaskDetail {
   createdAt: string;
   completedAt: string | null;
   steps: TaskStep[];
-  logs: (TaskLog & { authorLevel: number; createdAt: string })[];
   stepsDone: number;
   stepsTotal: number;
-}
-
-interface LocalLog {
-  id: string;
-  author: string;
-  authorLevel: number;
-  createdAt: string;
-  content: string;
+  currentStepIndex: number;
 }
 
 const LEVEL_MAP: [string, number][] = [
@@ -69,7 +61,13 @@ const mdComponents = {
 };
 
 const statusMap: Record<STStatus, { label: string; color: string }> = {
-  pending:     { label: "Pending",     color: "bg-gray-100 text-gray-600" },
+  prepared:    { label: "Prepared",    color: "bg-blue-50 text-blue-600" },
+  in_progress: { label: "In Progress", color: "bg-yellow-50 text-yellow-700" },
+  completed:   { label: "Completed",   color: "bg-green-50 text-green-700" },
+};
+
+const stepStatusMap: Record<TaskStep['stepStatus'], { label: string; color: string }> = {
+  prepared:    { label: "Prepared",    color: "bg-blue-50 text-blue-500" },
   in_progress: { label: "In Progress", color: "bg-yellow-50 text-yellow-700" },
   completed:   { label: "Completed",   color: "bg-green-50 text-green-700" },
 };
@@ -89,15 +87,117 @@ function LevelBadge({ level }: { level: number }) {
   );
 }
 
-function CopyButton({ id }: { id: string }) {
+function CopyPromptButton({ id }: { id: string }) {
   const [copied, setCopied] = useState(false);
+  const prompt = `contrau-dashboard/data/special-tasks/${id}.md 를 읽고 진행 단계+진행자에 맞춰 진행해줘.`;
   return (
     <button
-      onClick={() => { navigator.clipboard.writeText(id); setCopied(true); setTimeout(() => setCopied(false), 1500); }}
+      onClick={() => {
+        navigator.clipboard.writeText(prompt);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 1500);
+      }}
       className="px-2 py-1 text-[11px] rounded border border-gray-200 bg-gray-50 text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition-colors"
     >
-      {copied ? "Copied!" : "Copy ID"}
+      {copied ? "Copied!" : "Copy Prompt"}
     </button>
+  );
+}
+
+/** Parse the first segment before " — " as the step title, rest is detail. */
+function parseStepDescription(description: string): { title: string; detail: string } {
+  const sep = description.indexOf(' — ');
+  if (sep !== -1) {
+    return { title: description.slice(0, sep).trim(), detail: description.slice(sep + 3).trim() };
+  }
+  return { title: description, detail: '' };
+}
+
+/** Step node icon based on status */
+function StepIcon({ status, order }: { status: TaskStep['stepStatus']; order: number }) {
+  if (status === 'completed') {
+    return (
+      <span className="w-6 h-6 rounded-full bg-green-400 border-2 border-green-400 flex items-center justify-center text-[9px] font-bold text-white shrink-0">
+        ✓
+      </span>
+    );
+  }
+  if (status === 'in_progress') {
+    return (
+      <span className="w-6 h-6 rounded-full bg-yellow-400 border-2 border-yellow-400 flex items-center justify-center text-[9px] font-bold text-white shrink-0">
+        {order}
+      </span>
+    );
+  }
+  return (
+    <span className="w-6 h-6 rounded-full bg-white border-2 border-gray-300 flex items-center justify-center text-[9px] font-medium text-gray-400 shrink-0">
+      {order}
+    </span>
+  );
+}
+
+/** Single relay step row */
+function RelayStep({
+  step,
+  isLast,
+  assignee,
+  assigneeLevel,
+}: {
+  step: TaskStep;
+  isLast: boolean;
+  assignee: string;
+  assigneeLevel: number;
+}) {
+  const { title, detail } = parseStepDescription(step.description);
+  const ss = stepStatusMap[step.stepStatus];
+  const isActive = step.stepStatus === 'in_progress';
+  const isDone = step.stepStatus === 'completed';
+
+  return (
+    <div className="flex gap-3">
+      {/* Timeline spine */}
+      <div className="flex flex-col items-center">
+        <StepIcon status={step.stepStatus} order={step.order} />
+        {!isLast && (
+          <div className={`w-px flex-1 mt-1 ${isDone ? 'bg-green-200' : 'bg-gray-100'}`} style={{ minHeight: '28px' }} />
+        )}
+      </div>
+
+      {/* Content */}
+      <div className={`flex-1 pb-5 min-w-0 ${isActive ? 'rounded-lg border border-yellow-200 bg-yellow-50/40 px-3 pt-2.5 pb-3 -mt-0.5' : ''}`}>
+        {/* Top row: step title + status badge */}
+        <div className="flex items-start gap-2 flex-wrap mb-1">
+          <span className={`text-[13px] font-semibold leading-snug ${isDone ? 'text-gray-400' : isActive ? 'text-gray-800' : 'text-gray-600'}`}>
+            {title}
+          </span>
+          <span className={`text-[10px] px-1.5 py-0.5 rounded ${ss.color} shrink-0`}>
+            {ss.label}
+          </span>
+        </div>
+
+        {/* Assignee */}
+        <div className="flex items-center gap-1 mb-1.5">
+          <LevelBadge level={assigneeLevel} />
+          <span className="text-[11px] text-gray-500">{assignee}</span>
+        </div>
+
+        {/* Detail text */}
+        {detail && (
+          <p className={`text-[12px] leading-[1.7] ${isDone ? 'text-gray-400' : 'text-gray-500'}`}>
+            {detail}
+          </p>
+        )}
+
+        {/* In-progress bar */}
+        {isActive && (
+          <div className="mt-2 space-y-0.5">
+            <div className="h-1 bg-yellow-100 rounded-full overflow-hidden">
+              <div className="h-full bg-yellow-400 rounded-full w-3/5" />
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
 
@@ -107,14 +207,6 @@ export default function SpecialTaskDetailPage() {
   const [task, setTask] = useState<SpecialTaskDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-
-  // Step local state
-  const [localDone, setLocalDone] = useState<Record<string, boolean>>({});
-
-  // Activity log local state
-  const [logName, setLogName] = useState("");
-  const [logText, setLogText] = useState("");
-  const [localLogs, setLocalLogs] = useState<LocalLog[]>([]);
 
   useEffect(() => {
     fetch(`/api/special-tasks/${id}`)
@@ -140,7 +232,7 @@ export default function SpecialTaskDetailPage() {
       <div className="max-w-2xl mx-auto px-4 py-6">
         <p className="text-sm text-gray-500">Special task not found.</p>
         <button onClick={() => router.back()} className="mt-3 text-xs text-green-600 hover:underline">
-          ← Back
+          Back
         </button>
       </div>
     );
@@ -148,40 +240,27 @@ export default function SpecialTaskDetailPage() {
 
   const status = statusMap[task.status];
 
-  const isDone = (step: TaskStep) => localDone[step.id] ?? step.done;
-  const handleStepClick = (step: TaskStep) => {
-    if (isDone(step)) return;
-    setLocalDone(prev => ({ ...prev, [step.id]: true }));
-  };
+  // Determine per-step assignee: parse from description or alternate between assignedBy/assignee
+  function stepAssignee(step: TaskStep): { name: string; level: number } {
+    // Heuristic: even order steps = assignedBy, odd = assignee (relay pattern)
+    // This can be refined when descriptions embed assignee info
+    const isEven = step.order % 2 === 0;
+    const name = isEven ? task!.assignedBy : task!.assignee;
+    return { name, level: localPersonLevel(name) };
+  }
 
-  const handleAddLog = () => {
-    const name = logName.trim();
-    const content = logText.trim();
-    if (!name || !content) return;
-    const now = new Date();
-    const createdAt = now.toISOString().slice(0, 16).replace('T', ' ');
-    setLocalLogs(prev => [{
-      id: `local-${Date.now()}`,
-      author: name,
-      authorLevel: localPersonLevel(name),
-      createdAt,
-      content,
-    }, ...prev]);
-    setLogText("");
-  };
-
-  const allLogs = [...localLogs, ...task.logs];
+  const bigPicture = [task.description, task.reason, task.criteria].filter(Boolean).join('\n\n');
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-6 space-y-5">
       {/* Back */}
       <div className="flex items-center gap-2">
         <button onClick={() => router.back()} className="text-xs text-gray-400 hover:text-gray-600 transition-colors">
-          ← Back
+          Back
         </button>
       </div>
 
-      {/* Meta card */}
+      {/* Header card */}
       <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm space-y-3">
         <div className="space-y-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
@@ -191,24 +270,19 @@ export default function SpecialTaskDetailPage() {
             </span>
             <span className="flex-1" />
             <span className="text-[11px] text-gray-400">{task.createdAt}</span>
-            <CopyButton id={task.id} />
+            <CopyPromptButton id={task.id} />
           </div>
           <p className="text-lg font-semibold text-gray-900 leading-snug">{task.title}</p>
         </div>
 
-        <div className="flex items-center gap-2 text-[11px] text-gray-500 flex-wrap">
-          <span className="flex items-center gap-1">
-            <LevelBadge level={task.assignedByLevel} />
-            {task.assignedBy}
-          </span>
-          <span className="text-gray-300">→</span>
-          <span className="flex items-center gap-1">
-            <LevelBadge level={task.assigneeLevel} />
-            {task.assignee}
-          </span>
+        {/* Created by */}
+        <div className="flex items-center gap-1.5 text-[11px] text-gray-500">
+          <span className="text-gray-400">Created by</span>
+          <LevelBadge level={task.assignedByLevel} />
+          <span>{task.assignedBy}</span>
         </div>
 
-        {/* Progress bar */}
+        {/* Overall progress bar */}
         <div className="space-y-1">
           <div className="flex justify-between text-[11px] text-gray-400">
             <span>Progress</span>
@@ -223,112 +297,37 @@ export default function SpecialTaskDetailPage() {
         </div>
       </div>
 
-      {/* What / Why / Criteria */}
-      {(task.description || task.reason || task.criteria) && (
-        <div className="rounded-xl border border-gray-200 bg-white px-6 py-7 shadow-sm space-y-6">
-          {task.description && (
-            <div className="space-y-2">
-              <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-gray-400">What</p>
-              <ReactMarkdown components={mdComponents} remarkPlugins={[remarkGfm]}>{task.description}</ReactMarkdown>
-            </div>
-          )}
-          {task.reason && (
-            <div className="space-y-2">
-              <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-gray-400">Why</p>
-              <ReactMarkdown components={mdComponents} remarkPlugins={[remarkGfm]}>{task.reason}</ReactMarkdown>
-            </div>
-          )}
-          {task.criteria && (
-            <div className="space-y-2">
-              <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-gray-400">Definition of Done</p>
-              <ReactMarkdown components={mdComponents} remarkPlugins={[remarkGfm]}>{task.criteria}</ReactMarkdown>
-            </div>
-          )}
+      {/* Big Picture card */}
+      {bigPicture && (
+        <div className="rounded-xl border border-gray-200 bg-white px-6 py-7 shadow-sm space-y-3">
+          <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-gray-400">Big Picture</p>
+          <ReactMarkdown components={mdComponents} remarkPlugins={[remarkGfm]}>
+            {bigPicture}
+          </ReactMarkdown>
         </div>
       )}
 
-      {/* Steps checklist */}
+      {/* Relay Steps */}
       {task.steps.length > 0 && (
         <div className="rounded-xl border border-gray-200 bg-white px-6 py-7 shadow-sm space-y-4">
-          <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest">Steps</p>
+          <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest">Relay Steps</p>
           <hr className="border-gray-100" />
-          <ol className="space-y-2">
-            {task.steps.map((step, idx) => (
-              <li
-                key={step.id}
-                className="flex items-start gap-3 cursor-pointer group"
-                onClick={() => handleStepClick(step)}
-              >
-                <span className={`mt-0.5 shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center text-[9px] font-bold transition-colors ${
-                  isDone(step)
-                    ? 'bg-green-400 border-green-400 text-white'
-                    : 'border-gray-300 text-gray-400 group-hover:border-green-300'
-                }`}>
-                  {isDone(step) ? '✓' : idx + 1}
-                </span>
-                <span className={`text-[14px] leading-[1.7] ${isDone(step) ? 'text-gray-400 line-through' : 'text-gray-700'}`}>
-                  {step.description}
-                </span>
-              </li>
-            ))}
-          </ol>
+          <div className="pt-1">
+            {task.steps.map((step, idx) => {
+              const { name, level } = stepAssignee(step);
+              return (
+                <RelayStep
+                  key={step.id}
+                  step={step}
+                  isLast={idx === task.steps.length - 1}
+                  assignee={name}
+                  assigneeLevel={level}
+                />
+              );
+            })}
+          </div>
         </div>
       )}
-
-      {/* Activity Log — always shown */}
-      <div className="rounded-xl border border-gray-200 bg-white px-6 py-7 shadow-sm space-y-4">
-        <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest">Activity Log</p>
-        <hr className="border-gray-100" />
-
-        {/* Input form */}
-        <div className="space-y-2">
-          <input
-            type="text"
-            placeholder="Your name"
-            value={logName}
-            onChange={e => setLogName(e.target.value)}
-            className="w-full text-[13px] border border-gray-200 rounded-lg px-3 py-1.5 text-gray-700 placeholder-gray-300 focus:outline-none focus:border-green-300"
-          />
-          <textarea
-            placeholder="Add an update..."
-            value={logText}
-            onChange={e => setLogText(e.target.value)}
-            rows={2}
-            className="w-full text-[13px] border border-gray-200 rounded-lg px-3 py-1.5 text-gray-700 placeholder-gray-300 focus:outline-none focus:border-green-300 resize-none"
-          />
-          <button
-            onClick={handleAddLog}
-            disabled={!logName.trim() || !logText.trim()}
-            className="text-[12px] px-3 py-1.5 rounded-lg bg-green-500 text-white hover:bg-green-600 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-          >
-            Add entry
-          </button>
-        </div>
-
-        {allLogs.length > 0 && (
-          <div className="space-y-3 pt-1">
-            {allLogs.map((log) => (
-              <div key={log.id} className="flex gap-3">
-                <div className="shrink-0 pt-0.5">
-                  <LevelBadge level={log.authorLevel} />
-                </div>
-                <div className="min-w-0 space-y-0.5">
-                  <div className="flex items-center gap-2 text-[11px]">
-                    <span className="font-medium text-gray-700">{log.author}</span>
-                    <span className="text-gray-300">·</span>
-                    <span className="text-gray-400">{log.createdAt}</span>
-                  </div>
-                  <p className="text-[13px] text-gray-600 leading-[1.7]">{log.content}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {allLogs.length === 0 && (
-          <p className="text-[12px] text-gray-300 italic">No activity yet.</p>
-        )}
-      </div>
     </div>
   );
 }

@@ -6,13 +6,8 @@ export interface TaskStep {
   order: number;
   description: string;
   done: boolean;
-}
-
-export interface TaskLog {
-  id: string;
-  created_at: string;
-  author: string;
-  content: string;
+  /** Derived on the server: 'completed' | 'in_progress' | 'prepared' */
+  stepStatus: 'completed' | 'in_progress' | 'prepared';
 }
 
 export async function GET(
@@ -34,18 +29,14 @@ export async function GET(
       Authorization: `Bearer ${supabaseKey}`,
     };
 
-    // Fetch task + steps + logs in parallel
-    const [taskRes, stepsRes, logsRes] = await Promise.all([
+    // Fetch task + steps in parallel (logs removed — progress tracked in MD)
+    const [taskRes, stepsRes] = await Promise.all([
       fetch(
         `${supabaseUrl}/rest/v1/special_tasks?id=eq.${encodeURIComponent(id)}&select=*`,
         { headers, cache: 'no-store' }
       ),
       fetch(
         `${supabaseUrl}/rest/v1/task_steps?task_id=eq.${encodeURIComponent(id)}&select=id,order:step_order,description,done&order=step_order.asc`,
-        { headers, cache: 'no-store' }
-      ),
-      fetch(
-        `${supabaseUrl}/rest/v1/task_logs?task_id=eq.${encodeURIComponent(id)}&select=id,created_at,author,content&order=created_at.desc`,
         { headers, cache: 'no-store' }
       ),
     ]);
@@ -59,22 +50,31 @@ export async function GET(
       return NextResponse.json({ error: 'not found' }, { status: 404 });
     }
 
-    const steps: TaskStep[] = stepsRes.ok ? await stepsRes.json() : [];
-    const logs: TaskLog[] = logsRes.ok ? await logsRes.json() : [];
+    const rawSteps: { id: string; order: number; description: string; done: boolean }[] =
+      stepsRes.ok ? await stepsRes.json() : [];
 
     const task = rowToTask(rows[0]);
-    const doneCount = steps.filter(s => s.done).length;
+    const doneCount = rawSteps.filter(s => s.done).length;
+
+    // Derive current step index: first step where done=false
+    const currentStepIndex = rawSteps.findIndex(s => !s.done);
+
+    // Annotate each step with derived stepStatus
+    const steps: TaskStep[] = rawSteps.map((s, idx) => ({
+      ...s,
+      stepStatus: s.done
+        ? 'completed'
+        : idx === currentStepIndex
+        ? 'in_progress'
+        : 'prepared',
+    }));
 
     return NextResponse.json({
       ...task,
       steps,
-      logs: logs.map(l => ({
-        ...l,
-        authorLevel: personLevel(l.author),
-        createdAt: l.created_at?.slice(0, 16).replace('T', ' ') ?? '',
-      })),
       stepsDone: doneCount,
       stepsTotal: steps.length,
+      currentStepIndex,
     });
   } catch (err) {
     return NextResponse.json({ error: String(err) }, { status: 500 });

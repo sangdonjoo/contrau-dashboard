@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-export type STStatus = 'pending' | 'in_progress' | 'completed';
+export type STStatus = 'prepared' | 'in_progress' | 'completed';
 
 export interface SpecialTaskRow {
   id: string;
@@ -36,7 +36,7 @@ export interface SpecialTask {
   completedAt: string | null;
 }
 
-const KNOWN_STATUSES = new Set<STStatus>(['pending', 'in_progress', 'completed']);
+const KNOWN_STATUSES = new Set<STStatus>(['prepared', 'in_progress', 'completed']);
 
 export const LEVEL_MAP: [string, number][] = [
   ['sangdon', 1],
@@ -59,7 +59,9 @@ export function personLevel(name: string): number {
 
 export function toSTStatus(raw: string | null): STStatus {
   if (raw && KNOWN_STATUSES.has(raw as STStatus)) return raw as STStatus;
-  return 'pending';
+  // legacy fallback: 'pending' maps to 'prepared'
+  if (raw === 'pending') return 'prepared';
+  return 'prepared';
 }
 
 export function rowToTask(row: SpecialTaskRow): SpecialTask {
@@ -195,7 +197,7 @@ export async function POST(req: Request) {
         domain: body.domain ?? '',
         assigned_by: body.assigned_by,
         assignee: body.assigned_to,
-        status: 'pending',
+        status: 'prepared',
         progress: 0,
       }),
     });
