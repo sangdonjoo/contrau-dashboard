@@ -47,6 +47,14 @@ function toStatus(raw: string | null): DDStatus {
   return 'pending';
 }
 
+/** Pick the English title: prefer trigger_en, but if it contains Korean chars, swap to trigger */
+function pickEnglishTitle(triggerEn: string | null, trigger: string | null): string {
+  const hasKorean = (s: string) => /[\uAC00-\uD7AF]/.test(s);
+  if (triggerEn && !hasKorean(triggerEn)) return triggerEn;
+  if (trigger && !hasKorean(trigger)) return trigger;
+  return triggerEn || trigger || '';
+}
+
 export async function GET(
   _req: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -91,7 +99,7 @@ export async function GET(
       issuedByLevel: personLevel(issuedBy),
       interviewee,
       intervieweeLevel: personLevel(interviewee),
-      title: row.trigger_en || row.trigger || '',
+      title: pickEnglishTitle(row.trigger_en, row.trigger),
       description: '',
       status: toStatus(row.status),
       domain: row.domain ?? '',
