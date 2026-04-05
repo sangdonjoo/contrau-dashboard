@@ -12,7 +12,7 @@ export default function OverridePage() {
       <header className="mb-5">
         <h1 className="text-xl font-bold text-gray-900">Context Override</h1>
         <p className="text-xs text-gray-400 mt-0.5">
-          Deep Dive · Monthly Plan · Special Task — load ticket ID in terminal to proceed
+          Deep Dive · Monthly Plan · Special Task — click Copy and paste the prompt in your terminal to proceed
         </p>
       </header>
       <OverrideList />
