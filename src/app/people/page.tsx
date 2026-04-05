@@ -55,10 +55,10 @@ export default function PeoplePage() {
       <header className="mb-4">
         <h1 className="text-xl font-bold text-gray-900">People — Context Contribution</h1>
         <p className="text-xs text-gray-400 mt-0.5">
-          AI 맥락 기여도 — 7d
+          AI-measured context contribution — 7d
           <span className="ml-3 inline-flex items-center gap-2">
-            <span className="inline-block w-2 h-2 rounded-full bg-blue-500" /> context
-            <span className="inline-block w-2 h-2 rounded-full bg-emerald-500" /> git
+            <span className="inline-block w-2 h-2 rounded-full bg-blue-500" /> context (Zalo, Telegram, interviews)
+            <span className="inline-block w-2 h-2 rounded-full bg-emerald-500" /> git (code commits, file changes)
           </span>
         </p>
       </header>
