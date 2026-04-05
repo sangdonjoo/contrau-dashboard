@@ -1,88 +1,103 @@
-"use client"
+'use client'
 
 import { useState, useEffect } from 'react'
-import BotActivityChart from "@/components/BotActivityChart"
-import { fetchTokenUsers, formatTokenCount } from '@/api/people-tokens'
-import type { TokenUser } from '@/api/people/types'
+import ContributionBar from '@/components/ContributionBar'
+import StreakBadge from '@/components/StreakBadge'
+import { fetchContributions } from '@/api/people-contributions'
+import type { ContributionPerson } from '@/api/people/contribution-types'
 
-function PlanBadge({ plan }: { plan: 'max' | 'premium' | 'standard' }) {
-  const styles = {
-    max: 'bg-purple-50 text-purple-600 border-purple-200',
-    premium: 'bg-blue-50 text-blue-600 border-blue-200',
-    standard: 'bg-gray-50 text-gray-500 border-gray-200',
-  }
-  const labels = { max: 'Max', premium: 'Premium', standard: 'Standard' }
+const PROJECT_COLORS: Record<string, string> = {
+  HQ: 'bg-gray-100 text-gray-600',
+  MicroAlgae: 'bg-emerald-50 text-emerald-600',
+  Shrimp: 'bg-orange-50 text-orange-600',
+  BSFL: 'bg-amber-50 text-amber-600',
+  Flower: 'bg-pink-50 text-pink-600',
+}
+
+function ProjectBadge({ project }: { project: string | null }) {
+  if (!project) return null
+  const style = PROJECT_COLORS[project] ?? 'bg-gray-50 text-gray-500'
   return (
-    <span className={`px-2.5 py-0.5 text-[11px] font-medium rounded-md border ${styles[plan]}`}>
-      {labels[plan]}
+    <span className={`px-1.5 py-0.5 text-[10px] font-medium rounded ${style}`}>
+      {project}
     </span>
   )
 }
 
-function OverlappingBar({ value7d, value30d, max30d }: { value7d: number; value30d: number; max30d: number }) {
-  const scale = 0.65
-  const pct30 = max30d > 0 ? (value30d / max30d) * 100 * scale : 0
-  const pct7 = max30d > 0 ? (value7d / max30d) * 100 * scale : 0
-
+function PlBadge({ pl }: { pl: number | null }) {
+  if (pl == null) return null
+  const styles: Record<number, string> = {
+    1: 'text-purple-600',
+    2: 'text-blue-600',
+    3: 'text-emerald-600',
+    4: 'text-gray-500',
+    5: 'text-gray-400',
+  }
   return (
-    <div className="flex-1 relative h-4">
-      <div className="absolute inset-0 bg-gray-100 rounded-full" />
-      <div
-        className="absolute inset-y-0 left-0 bg-blue-100 rounded-full transition-all duration-700 ease-out"
-        style={{ width: `${pct30}%` }}
-      />
-      <div
-        className="absolute inset-y-0 left-0 bg-blue-500 rounded-full transition-all duration-700 ease-out"
-        style={{ width: `${pct7}%` }}
-      />
-      <span
-        className="absolute top-1/2 -translate-y-1/2 text-[11px] font-semibold text-blue-700 whitespace-nowrap"
-        style={{ left: `calc(${pct7}% + 8px)` }}
-      >{formatTokenCount(value7d)}</span>
-      <span
-        className="absolute top-1/2 -translate-y-1/2 text-[11px] font-medium text-blue-300 whitespace-nowrap"
-        style={{ left: `calc(${pct30}% + 8px)` }}
-      >{formatTokenCount(value30d)}</span>
-    </div>
+    <span className={`text-[10px] font-medium ${styles[pl] ?? 'text-gray-400'}`}>
+      PL{pl}
+    </span>
   )
 }
 
 export default function PeoplePage() {
-  const [users, setUsers] = useState<TokenUser[]>([])
+  const [people, setPeople] = useState<ContributionPerson[]>([])
 
   useEffect(() => {
-    fetchTokenUsers().then(setUsers)
+    fetchContributions().then(setPeople)
   }, [])
 
-  const max30d = Math.max(...users.map(u => u.total30d), 1)
+  const sorted = [...people].filter(p => p.person_id !== 'others').sort((a, b) => b.score_7d - a.score_7d)
+  const max30d = Math.max(...sorted.map(p => p.score_30d), 1)
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-6">
       <header className="mb-4">
-        <h1 className="text-xl font-bold text-gray-900">People</h1>
-        <p className="text-xs text-gray-400 mt-0.5">Claude token usage — 7d / 30d</p>
+        <h1 className="text-xl font-bold text-gray-900">People — Context Contribution</h1>
+        <p className="text-xs text-gray-400 mt-0.5">
+          AI 맥락 기여도 — 7d / 30d
+          <span className="ml-3 inline-flex items-center gap-2">
+            <span className="inline-block w-2 h-2 rounded-full bg-blue-500" /> context
+            <span className="inline-block w-2 h-2 rounded-full bg-emerald-500" /> git
+          </span>
+        </p>
       </header>
       <div className="space-y-2">
-        {users.map(user => (
+        {sorted.map((person, idx) => (
           <div
-            key={user.profile.id}
-            className="flex items-center gap-4 bg-white rounded-xl border border-gray-200 shadow-sm px-5 py-4 hover:shadow-md hover:border-blue-200 transition-all"
+            key={person.person_id}
+            className="flex items-center gap-4 bg-white rounded-xl border border-gray-200 shadow-sm px-5 py-3.5 hover:shadow-md hover:border-emerald-200 transition-all"
           >
-            <div className="flex items-center w-28 shrink-0">
-              <span className="text-sm font-semibold text-gray-800">{user.profile.nameEn}</span>
+            <div className="flex items-center gap-2 w-40 shrink-0">
+              <span className="text-xs font-medium text-gray-400 w-5 text-right">
+                {person.person_id !== 'others' ? `#${idx + 1}` : ''}
+              </span>
+              <div className="flex flex-col">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-sm font-semibold text-gray-800">{person.name_en}</span>
+                  <PlBadge pl={person.pl} />
+                </div>
+                <div className="flex items-center gap-1.5 mt-0.5">
+                  <ProjectBadge project={person.project} />
+                  <span className="text-[10px] text-gray-400">
+                    {person.event_count_7d} events
+                    {person.promoted_count_7d > 0 && ` / ${person.promoted_count_7d} R1`}
+                  </span>
+                </div>
+              </div>
             </div>
-            <OverlappingBar value7d={user.total7d} value30d={user.total30d} max30d={max30d} />
-            <div className="w-20 shrink-0 flex justify-end">
-              <PlanBadge plan={user.profile.plan} />
+            <ContributionBar
+              contextScore7d={person.context_score_7d}
+              gitScore7d={person.git_score_7d}
+              score30d={person.score_30d}
+              max30d={max30d}
+            />
+            <div className="w-24 shrink-0 flex justify-end">
+              <StreakBadge days={person.streak_days} />
             </div>
           </div>
         ))}
       </div>
-      <section className="mt-8">
-        <h2 className="text-lg font-semibold text-gray-900 mb-3">Bot Activity (30 days)</h2>
-        <p className="text-xs text-gray-400 mb-4">Messages sent + received per bot per day</p>
-        <BotActivityChart />
-      </section>
     </div>
   )
 }

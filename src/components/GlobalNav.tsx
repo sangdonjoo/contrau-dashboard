@@ -5,13 +5,12 @@ import { usePathname } from "next/navigation";
 
 const navItems = [
   { href: "/company", label: "Company" },
-  { href: "/accounting", label: "~Accounting" },
   { href: "/people", label: "People" },
+  { href: "/accounting", label: "~Accounting" },
+  { href: "/override", label: "Context" },
   { href: "divider", label: "" },
   { href: "/shrimp", label: "~Shrimp" },
   { href: "/spirulina", label: "~Algae" },
-  { href: "divider2", label: "" },
-  { href: "/override", label: "Override" },
 ];
 
 export default function GlobalNav() {
