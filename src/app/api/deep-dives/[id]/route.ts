@@ -11,6 +11,12 @@ interface DeepDiveRow {
   domain: string | null;
   ai_summary: string | null;
   meta_interview: string | null;
+  ai_summary_ko: string | null;
+  ai_summary_en: string | null;
+  ai_summary_vi: string | null;
+  meta_interview_ko: string | null;
+  meta_interview_en: string | null;
+  meta_interview_vi: string | null;
   created_at: string | null;
 }
 
@@ -91,6 +97,12 @@ export async function GET(
       createdAt: row.created_at?.slice(0, 10) ?? '',
       aiSummary: row.ai_summary ?? '',
       metaInterview: row.meta_interview ?? '',
+      aiSummaryKo: row.ai_summary_ko ?? '',
+      aiSummaryEn: row.ai_summary_en ?? '',
+      aiSummaryVi: row.ai_summary_vi ?? '',
+      metaInterviewKo: row.meta_interview_ko ?? '',
+      metaInterviewEn: row.meta_interview_en ?? '',
+      metaInterviewVi: row.meta_interview_vi ?? '',
       filePath: '',
     });
   } catch (err) {

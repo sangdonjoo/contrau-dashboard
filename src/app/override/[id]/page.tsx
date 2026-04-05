@@ -6,6 +6,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 type DDStatus = "pending" | "in_progress" | "submitted" | "closed";
+type Lang = "en" | "ko" | "vi";
 
 interface DeepDiveDetail {
   id: string;
@@ -20,8 +21,16 @@ interface DeepDiveDetail {
   createdAt: string;
   aiSummary: string;
   metaInterview: string;
+  aiSummaryKo: string;
+  aiSummaryEn: string;
+  aiSummaryVi: string;
+  metaInterviewKo: string;
+  metaInterviewEn: string;
+  metaInterviewVi: string;
   filePath: string;
 }
+
+const LANG_LABELS: Record<Lang, string> = { en: "EN", ko: "한국어", vi: "Tiếng Việt" };
 
 const mdComponents = {
   h1: ({children}: {children?: React.ReactNode}) => <h1 className="text-xl font-bold text-gray-900 mt-8 mb-3 first:mt-0">{children}</h1>,
@@ -70,12 +79,48 @@ function LevelBadge({ level }: { level: number }) {
   );
 }
 
+function LangToggle({ lang, onChange }: { lang: Lang; onChange: (l: Lang) => void }) {
+  const langs: Lang[] = ["en", "ko", "vi"];
+  return (
+    <div className="inline-flex rounded-lg border border-gray-200 overflow-hidden">
+      {langs.map((l) => (
+        <button
+          key={l}
+          onClick={() => onChange(l)}
+          className={`px-2.5 py-1 text-[11px] font-medium transition-colors ${
+            lang === l
+              ? "bg-green-600 text-white"
+              : "bg-white text-gray-500 hover:bg-gray-50"
+          }`}
+        >
+          {LANG_LABELS[l]}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function getLocalizedContent(dd: DeepDiveDetail, lang: Lang) {
+  const aiMap: Record<Lang, string> = {
+    en: dd.aiSummaryEn || dd.aiSummary,
+    ko: dd.aiSummaryKo || dd.aiSummary,
+    vi: dd.aiSummaryVi || dd.aiSummary,
+  };
+  const metaMap: Record<Lang, string> = {
+    en: dd.metaInterviewEn || dd.metaInterview,
+    ko: dd.metaInterviewKo || dd.metaInterview,
+    vi: dd.metaInterviewVi || dd.metaInterview,
+  };
+  return { aiSummary: aiMap[lang], metaInterview: metaMap[lang] };
+}
+
 export default function DeepDiveDetailPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
   const [dd, setDd] = useState<DeepDiveDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [lang, setLang] = useState<Lang>("en");
 
   useEffect(() => {
     fetch(`/api/deep-dives/${id}`)
@@ -108,6 +153,7 @@ export default function DeepDiveDetailPage() {
   }
 
   const status = statusMap[dd.status];
+  const content = getLocalizedContent(dd, lang);
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-6 space-y-5">
@@ -121,7 +167,7 @@ export default function DeepDiveDetailPage() {
         </button>
       </div>
 
-      {/* Meta card */}
+      {/* Meta card — language-independent */}
       <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm space-y-3">
         <div className="flex items-start justify-between gap-2 flex-wrap">
           <div className="space-y-1 min-w-0">
@@ -136,7 +182,10 @@ export default function DeepDiveDetailPage() {
             </div>
             <p className="text-lg font-semibold text-gray-900 leading-snug">{dd.title}</p>
           </div>
-          <span className="text-[11px] text-gray-400 shrink-0">{dd.createdAt}</span>
+          <div className="flex items-center gap-3 shrink-0">
+            <LangToggle lang={lang} onChange={setLang} />
+            <span className="text-[11px] text-gray-400">{dd.createdAt}</span>
+          </div>
         </div>
 
         <div className="flex items-center gap-2 text-[11px] text-gray-500 flex-wrap">
@@ -152,27 +201,27 @@ export default function DeepDiveDetailPage() {
         </div>
       </div>
 
-      {/* Meta Interview (background + key questions) — shown if present */}
-      {dd.metaInterview && (
+      {/* Meta Interview (background + key questions) — localized */}
+      {content.metaInterview && (
         <div className="rounded-xl border border-amber-100 bg-amber-50 p-5 space-y-3">
           <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-amber-600">
             Interview Background
           </p>
           <div className="space-y-0">
-            <ReactMarkdown components={mdComponents} remarkPlugins={[remarkGfm]}>{dd.metaInterview}</ReactMarkdown>
+            <ReactMarkdown components={mdComponents} remarkPlugins={[remarkGfm]}>{content.metaInterview}</ReactMarkdown>
           </div>
         </div>
       )}
 
-      {/* Interview Full Record */}
+      {/* Interview Full Record — localized */}
       <div className="rounded-xl border border-gray-200 bg-white px-6 py-7 shadow-sm space-y-4">
         <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest">
           Interview Full Record
         </p>
         <hr className="border-gray-100 mb-6" />
-        {dd.aiSummary ? (
+        {content.aiSummary ? (
           <div className="space-y-0">
-            <ReactMarkdown components={mdComponents} remarkPlugins={[remarkGfm]}>{dd.aiSummary}</ReactMarkdown>
+            <ReactMarkdown components={mdComponents} remarkPlugins={[remarkGfm]}>{content.aiSummary}</ReactMarkdown>
           </div>
         ) : dd.status === 'closed' ? (
           <p className="text-sm text-gray-400 italic">No record available.</p>
