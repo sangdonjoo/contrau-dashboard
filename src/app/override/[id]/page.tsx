@@ -182,10 +182,7 @@ export default function DeepDiveDetailPage() {
             </div>
             <p className="text-lg font-semibold text-gray-900 leading-snug">{dd.title}</p>
           </div>
-          <div className="flex items-center gap-3 shrink-0">
-            <LangToggle lang={lang} onChange={setLang} />
-            <span className="text-[11px] text-gray-400">{dd.createdAt}</span>
-          </div>
+          <span className="text-[11px] text-gray-400 shrink-0">{dd.createdAt}</span>
         </div>
 
         <div className="flex items-center gap-2 text-[11px] text-gray-500 flex-wrap">
@@ -199,6 +196,11 @@ export default function DeepDiveDetailPage() {
             {dd.interviewee}
           </span>
         </div>
+      </div>
+
+      {/* Language toggle — between meta card and content */}
+      <div className="flex justify-end">
+        <LangToggle lang={lang} onChange={setLang} />
       </div>
 
       {/* Meta Interview (background + key questions) — localized */}

@@ -8,6 +8,7 @@ interface DeepDiveRow {
   issued_by: string | null;
   status: string | null;
   trigger: string | null;
+  trigger_en: string | null;
   domain: string | null;
   created_at: string | null;
 }
@@ -64,7 +65,7 @@ export async function GET() {
     }
 
     const res = await fetch(
-      `${supabaseUrl}/rest/v1/deep_dives?select=id,interviewee,issued_by,status,trigger,domain,created_at&order=created_at.desc`,
+      `${supabaseUrl}/rest/v1/deep_dives?select=id,interviewee,issued_by,status,trigger,trigger_en,domain,created_at&order=created_at.desc`,
       {
         headers: {
           apikey: supabaseKey,
@@ -89,7 +90,7 @@ export async function GET() {
         issuedByLevel: personLevel(issuedBy),
         interviewee,
         intervieweeLevel: personLevel(interviewee),
-        title: row.trigger ?? '',
+        title: row.trigger_en || row.trigger || '',
         description: '',
         status: toStatus(row.status),
         domain: row.domain ?? '',

@@ -8,6 +8,7 @@ interface DeepDiveRow {
   issued_by: string | null;
   status: string | null;
   trigger: string | null;
+  trigger_en: string | null;
   domain: string | null;
   ai_summary: string | null;
   meta_interview: string | null;
@@ -90,7 +91,7 @@ export async function GET(
       issuedByLevel: personLevel(issuedBy),
       interviewee,
       intervieweeLevel: personLevel(interviewee),
-      title: row.trigger ?? '',
+      title: row.trigger_en || row.trigger || '',
       description: '',
       status: toStatus(row.status),
       domain: row.domain ?? '',
