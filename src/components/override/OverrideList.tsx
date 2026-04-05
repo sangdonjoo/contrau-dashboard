@@ -16,11 +16,11 @@ const stStatusMap: Record<STStatus, { label: string; color: string }> = {
   completed:   { label: "Completed",   color: "bg-green-50 text-green-700" },
 };
 
-function CopyButton({ id }: { id: string }) {
+function CopyPromptButton({ prompt }: { prompt: string }) {
   const [copied, setCopied] = useState(false);
   const handleCopy = (e: React.MouseEvent) => {
     e.preventDefault();
-    navigator.clipboard.writeText(id);
+    navigator.clipboard.writeText(prompt);
     setCopied(true);
     setTimeout(() => setCopied(false), 1500);
   };
@@ -28,11 +28,19 @@ function CopyButton({ id }: { id: string }) {
     <button
       onClick={handleCopy}
       className="px-1.5 py-0.5 text-[10px] rounded border border-gray-200 bg-gray-50 text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition-colors shrink-0"
-      title={`Copy ticket: ${id}`}
+      title="Copy prompt for terminal"
     >
       {copied ? "Copied!" : "Copy"}
     </button>
   );
+}
+
+function ddPrompt(id: string): string {
+  return `contrau-ssot/07_context-override/pull-interview/interviews/ 아래에서 ${id}.md 를 찾아 읽고 인터뷰를 진행해줘.`;
+}
+
+function stPrompt(id: string): string {
+  return `contrau-dashboard/data/special-tasks/${id}.md 를 읽고 진행 단계+진행자에 맞춰 진행해줘.`;
 }
 
 function LevelBadge({ level }: { level: number }) {
@@ -138,7 +146,7 @@ export default function OverrideList() {
                       <span>{dd.createdAt}</span>
                     </div>
                   </div>
-                  <CopyButton id={dd.id} />
+                  <CopyPromptButton prompt={ddPrompt(dd.id)} />
                 </div>
               </Link>
             );
@@ -205,7 +213,7 @@ export default function OverrideList() {
                       <span>{st.createdAt}</span>
                     </div>
                   </div>
-                  <CopyButton id={st.id} />
+                  <CopyPromptButton prompt={stPrompt(st.id)} />
                 </div>
               </Link>
             );
