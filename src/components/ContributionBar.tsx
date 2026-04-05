@@ -10,7 +10,7 @@ interface ContributionBarProps {
 }
 
 export default function ContributionBar({ contextScore7d, gitScore7d, score30d, max30d }: ContributionBarProps) {
-  const scale = 0.65
+  const scale = 0.85
   const total7d = contextScore7d + gitScore7d
 
   // 선형 스케일
