@@ -7,6 +7,31 @@ import remarkGfm from "remark-gfm";
 import type { STStatus } from "@/app/api/special-tasks/route";
 import type { TaskStep } from "@/app/api/special-tasks/[id]/route";
 
+type Lang = "en" | "ko" | "vi";
+
+const LANG_LABELS: Record<Lang, string> = { en: "EN", ko: "한국어", vi: "Tiếng Việt" };
+
+function LangToggle({ lang, onChange }: { lang: Lang; onChange: (l: Lang) => void }) {
+  const langs: Lang[] = ["en", "ko", "vi"];
+  return (
+    <div className="inline-flex rounded-lg border border-gray-200 overflow-hidden">
+      {langs.map((l) => (
+        <button
+          key={l}
+          onClick={() => onChange(l)}
+          className={`px-2.5 py-1 text-[11px] font-medium transition-colors ${
+            lang === l
+              ? "bg-green-600 text-white"
+              : "bg-white text-gray-500 hover:bg-gray-50"
+          }`}
+        >
+          {LANG_LABELS[l]}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 interface SpecialTaskDetail {
   id: string;
   title: string;
@@ -207,6 +232,7 @@ export default function SpecialTaskDetailPage() {
   const [task, setTask] = useState<SpecialTaskDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [lang, setLang] = useState<Lang>("en");
 
   useEffect(() => {
     fetch(`/api/special-tasks/${id}`)
@@ -297,6 +323,11 @@ export default function SpecialTaskDetailPage() {
         </div>
       </div>
 
+      {/* Language toggle */}
+      <div className="flex justify-end">
+        <LangToggle lang={lang} onChange={setLang} />
+      </div>
+
       {/* Big Picture card */}
       {bigPicture && (
         <div className="rounded-xl border border-gray-200 bg-white px-6 py-7 shadow-sm space-y-3">
@@ -304,13 +335,25 @@ export default function SpecialTaskDetailPage() {
           <ReactMarkdown components={mdComponents} remarkPlugins={[remarkGfm]}>
             {bigPicture}
           </ReactMarkdown>
+          {lang !== "ko" && (
+            <p className="text-[11px] text-gray-400 italic mt-2">
+              {lang === "en" ? "English translation coming soon." : "Bản dịch tiếng Việt sắp có."}
+            </p>
+          )}
         </div>
       )}
 
       {/* Relay Steps */}
       {task.steps.length > 0 && (
         <div className="rounded-xl border border-gray-200 bg-white px-6 py-7 shadow-sm space-y-4">
-          <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest">Relay Steps</p>
+          <div className="flex items-center justify-between">
+            <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest">Relay Steps</p>
+            {lang !== "ko" && (
+              <span className="text-[10px] text-gray-400 italic">
+                {lang === "en" ? "English translation coming soon." : "Bản dịch tiếng Việt sắp có."}
+              </span>
+            )}
+          </div>
           <hr className="border-gray-100" />
           <div className="pt-1">
             {task.steps.map((step, idx) => {

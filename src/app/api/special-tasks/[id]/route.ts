@@ -58,13 +58,16 @@ export async function GET(
 
     // Derive current step index: first step where done=false
     const currentStepIndex = rawSteps.findIndex(s => !s.done);
+    const taskStatus = task.status;
 
     // Annotate each step with derived stepStatus
+    // If overall task is 'prepared', all steps are 'prepared'
+    // Only mark current step as 'in_progress' when overall task is 'in_progress'
     const steps: TaskStep[] = rawSteps.map((s, idx) => ({
       ...s,
       stepStatus: s.done
         ? 'completed'
-        : idx === currentStepIndex
+        : taskStatus === 'in_progress' && idx === currentStepIndex
         ? 'in_progress'
         : 'prepared',
     }));
