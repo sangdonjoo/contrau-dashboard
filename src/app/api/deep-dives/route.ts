@@ -63,29 +63,43 @@ function pickEnglishTitle(triggerEn: string | null, trigger: string | null): str
   return triggerEn || trigger || '';
 }
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
     const supabaseUrl = process.env.SUPABASE_URL;
     const supabaseKey = process.env.SUPABASE_ANON_KEY;
 
     if (!supabaseUrl || !supabaseKey) {
-      return NextResponse.json({ available: false, data: [] });
+      return NextResponse.json({ available: false, items: [], total: 0, hasMore: false });
     }
 
+    const { searchParams } = new URL(request.url);
+    const limit = Math.max(1, parseInt(searchParams.get('limit') ?? '10', 10));
+    const offset = Math.max(0, parseInt(searchParams.get('offset') ?? '0', 10));
+
+    const rangeEnd = offset + limit - 1;
+
     const res = await fetch(
-      `${supabaseUrl}/rest/v1/deep_dives?select=id,interviewee,issued_by,status,trigger,trigger_en,domain,created_at&order=created_at.desc`,
+      `${supabaseUrl}/rest/v1/deep_dives?select=id,interviewee,issued_by,status,trigger,trigger_en,domain,created_at&order=created_at.desc,id.desc`,
       {
         headers: {
           apikey: supabaseKey,
           Authorization: `Bearer ${supabaseKey}`,
+          Range: `${offset}-${rangeEnd}`,
+          'Range-Unit': 'items',
+          Prefer: 'count=exact',
         },
         cache: 'no-store',
       }
     );
 
     if (!res.ok) {
-      return NextResponse.json({ available: false, data: [] });
+      return NextResponse.json({ available: false, items: [], total: 0, hasMore: false });
     }
+
+    // Content-Range: items 0-9/42
+    const contentRange = res.headers.get('Content-Range') ?? '';
+    const totalMatch = contentRange.match(/\/(\d+)$/);
+    const total = totalMatch ? parseInt(totalMatch[1], 10) : 0;
 
     const rows: DeepDiveRow[] = await res.json();
 
@@ -107,18 +121,11 @@ export async function GET() {
       };
     };
 
-    const active = rows
-      .filter(r => r.status !== 'closed')
-      .sort((a, b) => (b.created_at ?? '').localeCompare(a.created_at ?? ''));
+    const items: DeepDive[] = rows.map(toDeepDive);
+    const hasMore = offset + items.length < total;
 
-    const closed = rows
-      .filter(r => r.status === 'closed')
-      .sort((a, b) => (b.created_at ?? '').localeCompare(a.created_at ?? ''));
-
-    const data: DeepDive[] = [...active, ...closed].map(toDeepDive);
-
-    return NextResponse.json({ available: true, data });
+    return NextResponse.json({ available: true, items, total, hasMore });
   } catch (err) {
-    return NextResponse.json({ available: false, data: [], error: String(err) });
+    return NextResponse.json({ available: false, items: [], total: 0, hasMore: false, error: String(err) });
   }
 }

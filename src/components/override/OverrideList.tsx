@@ -58,17 +58,28 @@ function LevelBadge({ level }: { level: number }) {
   );
 }
 
+const DD_PAGE_SIZE = 10;
+
 export default function OverrideList() {
   const [tab, setTab] = useState<Tab>("deep-dive");
   const [deepDives, setDeepDives] = useState<DeepDive[]>([]);
   const [ddLoading, setDdLoading] = useState(true);
+  const [ddLoadingMore, setDdLoadingMore] = useState(false);
+  const [ddHasMore, setDdHasMore] = useState(false);
+  const [ddOffset, setDdOffset] = useState(0);
   const [specialTasks, setSpecialTasks] = useState<SpecialTask[]>([]);
   const [stLoading, setStLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/api/deep-dives')
+    fetch(`/api/deep-dives?limit=${DD_PAGE_SIZE}&offset=0`)
       .then(res => res.json())
-      .then(data => { if (data.available) setDeepDives(data.data); })
+      .then(data => {
+        if (data.available) {
+          setDeepDives(data.items);
+          setDdHasMore(data.hasMore);
+          setDdOffset(data.items.length);
+        }
+      })
       .finally(() => setDdLoading(false));
 
     fetch('/api/special-tasks')
@@ -76,6 +87,20 @@ export default function OverrideList() {
       .then(data => { if (data.available) setSpecialTasks(data.data); })
       .finally(() => setStLoading(false));
   }, []);
+
+  function loadMoreDeepDives() {
+    setDdLoadingMore(true);
+    fetch(`/api/deep-dives?limit=${DD_PAGE_SIZE}&offset=${ddOffset}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.available) {
+          setDeepDives(prev => [...prev, ...data.items]);
+          setDdHasMore(data.hasMore);
+          setDdOffset(prev => prev + data.items.length);
+        }
+      })
+      .finally(() => setDdLoadingMore(false));
+  }
 
   const tabs: { key: Tab; label: string; count: number }[] = [
     { key: "deep-dive", label: "Deep Dive", count: deepDives.length },
@@ -151,6 +176,15 @@ export default function OverrideList() {
               </Link>
             );
           })}
+          {ddHasMore && (
+            <button
+              onClick={loadMoreDeepDives}
+              disabled={ddLoadingMore}
+              className="w-full py-2 text-xs text-gray-500 border border-gray-200 rounded-lg bg-gray-50 hover:bg-gray-100 hover:text-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {ddLoadingMore ? "Loading..." : "Load More"}
+            </button>
+          )}
         </div>
       )}
 
