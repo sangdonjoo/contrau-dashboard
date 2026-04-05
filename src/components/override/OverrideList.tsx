@@ -36,11 +36,11 @@ function CopyPromptButton({ prompt }: { prompt: string }) {
 }
 
 function ddPrompt(id: string): string {
-  return `contrau-ssot/07_context-override/pull-interview/interviews/ 아래에서 ${id}.md 를 찾아 읽고 인터뷰를 진행해줘.`;
+  return `Find and read ${id}.md under contrau-ssot/07_context-override/pull-interview/interviews/ and proceed with the interview.`;
 }
 
 function stPrompt(id: string): string {
-  return `contrau-dashboard/data/special-tasks/${id}.md 를 읽고 진행 단계+진행자에 맞춰 진행해줘.`;
+  return `Read contrau-dashboard/data/special-tasks/${id}.md and proceed according to the current step and assignee.`;
 }
 
 function LevelBadge({ level }: { level: number }) {

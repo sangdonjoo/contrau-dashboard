@@ -38,6 +38,9 @@ interface SpecialTaskDetail {
   description: string;
   reason: string;
   criteria: string;
+  descriptionEn: string;
+  descriptionKo: string;
+  descriptionVi: string;
   assignedBy: string;
   assignedByLevel: number;
   assignee: string;
@@ -114,7 +117,7 @@ function LevelBadge({ level }: { level: number }) {
 
 function CopyPromptButton({ id }: { id: string }) {
   const [copied, setCopied] = useState(false);
-  const prompt = `contrau-dashboard/data/special-tasks/${id}.md 를 읽고 진행 단계+진행자에 맞춰 진행해줘.`;
+  const prompt = `Read contrau-dashboard/data/special-tasks/${id}.md and proceed according to the current step and assignee.`;
   return (
     <button
       onClick={() => {
@@ -275,7 +278,13 @@ export default function SpecialTaskDetailPage() {
     return { name, level: localPersonLevel(name) };
   }
 
-  const bigPicture = [task.description, task.reason, task.criteria].filter(Boolean).join('\n\n');
+  function getBigPicture(l: Lang): string {
+    if (l === 'en') return task!.descriptionEn || task!.description;
+    if (l === 'ko') return task!.descriptionKo || task!.description;
+    if (l === 'vi') return task!.descriptionVi || '';
+    return task!.description;
+  }
+  const bigPicture = getBigPicture(lang);
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-6 space-y-5">
@@ -335,11 +344,6 @@ export default function SpecialTaskDetailPage() {
           <ReactMarkdown components={mdComponents} remarkPlugins={[remarkGfm]}>
             {bigPicture}
           </ReactMarkdown>
-          {lang !== "ko" && (
-            <p className="text-[11px] text-gray-400 italic mt-2">
-              {lang === "en" ? "English translation coming soon." : "Bản dịch tiếng Việt sắp có."}
-            </p>
-          )}
         </div>
       )}
 
@@ -348,11 +352,6 @@ export default function SpecialTaskDetailPage() {
         <div className="rounded-xl border border-gray-200 bg-white px-6 py-7 shadow-sm space-y-4">
           <div className="flex items-center justify-between">
             <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest">Relay Steps</p>
-            {lang !== "ko" && (
-              <span className="text-[10px] text-gray-400 italic">
-                {lang === "en" ? "English translation coming soon." : "Bản dịch tiếng Việt sắp có."}
-              </span>
-            )}
           </div>
           <hr className="border-gray-100" />
           <div className="pt-1">

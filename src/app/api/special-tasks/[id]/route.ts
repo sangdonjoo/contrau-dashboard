@@ -74,6 +74,11 @@ export async function GET(
 
     return NextResponse.json({
       ...task,
+      // Explicit i18n aliases for Big Picture content
+      // description = EN (reporter default), reason = KO, criteria = VI
+      descriptionEn: task.description,
+      descriptionKo: task.reason,
+      descriptionVi: task.criteria,
       steps,
       stepsDone: doneCount,
       stepsTotal: steps.length,
