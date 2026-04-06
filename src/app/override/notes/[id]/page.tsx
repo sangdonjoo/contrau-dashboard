@@ -63,23 +63,29 @@ function LevelBadge({ level }: { level: number }) {
   );
 }
 
-function LangToggle({ lang, onChange }: { lang: Lang; onChange: (l: Lang) => void }) {
+function LangToggle({ lang, onChange, available }: { lang: Lang; onChange: (l: Lang) => void; available: Set<Lang> }) {
   const langs: Lang[] = ["en", "ko", "vi"];
   return (
     <div className="inline-flex rounded-lg border border-gray-200 overflow-hidden">
-      {langs.map((l) => (
-        <button
-          key={l}
-          onClick={() => onChange(l)}
-          className={`px-2.5 py-1 text-[11px] font-medium transition-colors ${
-            lang === l
-              ? "bg-green-600 text-white"
-              : "bg-white text-gray-500 hover:bg-gray-50"
-          }`}
-        >
-          {LANG_LABELS[l]}
-        </button>
-      ))}
+      {langs.map((l) => {
+        const disabled = !available.has(l);
+        return (
+          <button
+            key={l}
+            onClick={() => !disabled && onChange(l)}
+            disabled={disabled}
+            className={`px-2.5 py-1 text-[11px] font-medium transition-colors ${
+              disabled
+                ? "bg-gray-50 text-gray-300 cursor-not-allowed"
+                : lang === l
+                ? "bg-green-600 text-white"
+                : "bg-white text-gray-500 hover:bg-gray-50"
+            }`}
+          >
+            {LANG_LABELS[l]}
+          </button>
+        );
+      })}
     </div>
   );
 }
@@ -127,6 +133,9 @@ export default function NoteDetailPage() {
     ko: note.contentKo,
     vi: note.contentVi,
   };
+  const availableLangs = new Set<Lang>(
+    (["en", "ko", "vi"] as Lang[]).filter((l) => contentMap[l]?.trim())
+  );
   const content = contentMap[lang] || note.contentEn;
 
   return (
@@ -173,7 +182,7 @@ export default function NoteDetailPage() {
 
       {/* Language toggle */}
       <div className="flex justify-end">
-        <LangToggle lang={lang} onChange={setLang} />
+        <LangToggle lang={lang} onChange={setLang} available={availableLangs} />
       </div>
 
       {/* Content card */}
