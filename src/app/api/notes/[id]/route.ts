@@ -1,8 +1,17 @@
 import { NextResponse } from 'next/server';
 
-interface GitHubFileContent {
-  content: string;
-  encoding: string;
+interface NoteRow {
+  id: string;
+  title: string | null;
+  title_en: string | null;
+  author: string | null;
+  readers: string | null;
+  lang: string | null;
+  tags: string[] | null;
+  created_at: string | null;
+  content_en: string | null;
+  content_ko: string | null;
+  content_vi: string | null;
 }
 
 // Name → level lookup (case-insensitive substring match)
@@ -26,40 +35,6 @@ function personLevel(name: string): number {
   return best;
 }
 
-function parseFrontmatter(raw: string): { meta: Record<string, string | string[]>; body: string } {
-  const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---/);
-  if (!match) return { meta: {}, body: raw };
-  const body = raw.slice(match[0].length).trim();
-  const meta: Record<string, string | string[]> = {};
-  for (const line of match[1].split('\n')) {
-    const kv = line.match(/^(\w+):\s*(.*)$/);
-    if (kv) {
-      let val = kv[2].trim();
-      if (val.startsWith('[') && val.endsWith(']')) {
-        meta[kv[1]] = val.slice(1, -1).split(',').map(s => s.trim().replace(/^["']|["']$/g, ''));
-      } else {
-        meta[kv[1]] = val.replace(/^["']|["']$/g, '');
-      }
-    }
-  }
-  return { meta, body };
-}
-
-function parseLangSections(body: string): Record<string, string> {
-  const sections: Record<string, string> = {};
-  const parts = body.split(/<!--\s*lang:(\w+)\s*-->/);
-  // parts: ['before', 'en', 'en content', 'ko', 'ko content', ...]
-  for (let i = 1; i < parts.length; i += 2) {
-    sections[parts[i]] = parts[i + 1]?.trim() ?? '';
-  }
-  return sections;
-}
-
-function extractHeading(content: string): string {
-  const heading = content.match(/^##\s+(.+)$/m);
-  return heading ? heading[1].trim() : '';
-}
-
 export async function GET(
   _req: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -67,56 +42,50 @@ export async function GET(
   const { id } = await params;
 
   try {
-    const token = process.env.GITHUB_TOKEN;
-    if (!token) {
+    const supabaseUrl = process.env.SUPABASE_URL;
+    const supabaseKey = process.env.SUPABASE_ANON_KEY;
+
+    if (!supabaseUrl || !supabaseKey) {
       return NextResponse.json({ error: 'Not configured' }, { status: 500 });
     }
 
-    const repo = process.env.SSOT_REPO ?? 'sangdonjoo/contrau-ssot';
-    const fileUrl = `https://api.github.com/repos/${repo}/contents/01_company/01_raw/notes/${id}.md`;
+    const res = await fetch(
+      `${supabaseUrl}/rest/v1/notes?id=eq.${encodeURIComponent(id)}&select=*`,
+      {
+        headers: {
+          apikey: supabaseKey,
+          Authorization: `Bearer ${supabaseKey}`,
+        },
+        cache: 'no-store',
+      }
+    );
 
-    const res = await fetch(fileUrl, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: 'application/vnd.github+json',
-      },
-      cache: 'no-store',
-    });
+    if (!res.ok) {
+      return NextResponse.json({ error: 'Supabase error' }, { status: 500 });
+    }
 
-    if (res.status === 404) {
+    const rows: NoteRow[] = await res.json();
+
+    if (!rows.length) {
       return NextResponse.json({ error: 'not found' }, { status: 404 });
     }
 
-    if (!res.ok) {
-      return NextResponse.json({ error: 'GitHub API error' }, { status: 500 });
-    }
-
-    const file: GitHubFileContent = await res.json();
-    const raw = Buffer.from(file.content, 'base64').toString('utf-8');
-
-    const { meta, body } = parseFrontmatter(raw);
-    const sections = parseLangSections(body);
-
-    const contentEn = sections['en'] ?? '';
-    const contentKo = sections['ko'] ?? '';
-    const contentVi = sections['vi'] ?? '';
-
-    const author = typeof meta.author === 'string' ? meta.author : '';
-    const fmTitle = typeof meta.title === 'string' ? meta.title : '';
-    const enTitle = extractHeading(contentEn) || fmTitle;
+    const row = rows[0];
+    const author = row.author ?? '';
+    const title = row.title_en || row.title || '';
 
     return NextResponse.json({
-      id: typeof meta.id === 'string' ? meta.id : id,
-      title: enTitle,
+      id: row.id,
+      title,
       author,
       authorLevel: personLevel(author),
-      readers: typeof meta.readers === 'string' ? meta.readers : 'all',
-      lang: typeof meta.lang === 'string' ? meta.lang : 'ko',
-      tags: Array.isArray(meta.tags) ? meta.tags : [],
-      created: typeof meta.created === 'string' ? meta.created : '',
-      contentEn,
-      contentKo,
-      contentVi,
+      readers: row.readers ?? 'all',
+      lang: row.lang ?? 'ko',
+      tags: row.tags ?? [],
+      created: row.created_at?.slice(0, 10) ?? '',
+      contentEn: row.content_en ?? '',
+      contentKo: row.content_ko ?? '',
+      contentVi: row.content_vi ?? '',
     });
   } catch (err) {
     return NextResponse.json({ error: String(err) }, { status: 500 });

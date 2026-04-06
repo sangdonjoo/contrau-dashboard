@@ -1,9 +1,14 @@
 import { NextResponse } from 'next/server';
 
-interface GitHubFileEntry {
-  name: string;
-  download_url: string | null;
-  type: string;
+interface NoteRow {
+  id: string;
+  title: string | null;
+  title_en: string | null;
+  author: string | null;
+  readers: string | null;
+  lang: string | null;
+  tags: string[] | null;
+  created_at: string | null;
 }
 
 interface NoteItem {
@@ -38,87 +43,48 @@ function personLevel(name: string): number {
   return best;
 }
 
-function parseFrontmatter(raw: string): { meta: Record<string, string | string[]>; body: string } {
-  const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---/);
-  if (!match) return { meta: {}, body: raw };
-  const body = raw.slice(match[0].length).trim();
-  const meta: Record<string, string | string[]> = {};
-  for (const line of match[1].split('\n')) {
-    const kv = line.match(/^(\w+):\s*(.*)$/);
-    if (kv) {
-      let val = kv[2].trim();
-      if (val.startsWith('[') && val.endsWith(']')) {
-        meta[kv[1]] = val.slice(1, -1).split(',').map(s => s.trim().replace(/^["']|["']$/g, ''));
-      } else {
-        meta[kv[1]] = val.replace(/^["']|["']$/g, '');
-      }
-    }
-  }
-  return { meta, body };
-}
-
-function extractEnTitle(body: string): string {
-  const enMatch = body.match(/<!--\s*lang:en\s*-->([\s\S]*?)(?=<!--\s*lang:\w+\s*-->|$)/);
-  if (!enMatch) return '';
-  const heading = enMatch[1].match(/^##\s+(.+)$/m);
-  return heading ? heading[1].trim() : '';
-}
-
 export async function GET() {
   try {
-    const token = process.env.GITHUB_TOKEN;
-    if (!token) {
+    const supabaseUrl = process.env.SUPABASE_URL;
+    const supabaseKey = process.env.SUPABASE_ANON_KEY;
+
+    if (!supabaseUrl || !supabaseKey) {
       return NextResponse.json({ available: false, items: [] });
     }
 
-    const repo = process.env.SSOT_REPO ?? 'sangdonjoo/contrau-ssot';
-    const dirUrl = `https://api.github.com/repos/${repo}/contents/01_company/01_raw/notes`;
+    const res = await fetch(
+      `${supabaseUrl}/rest/v1/notes?select=id,title,title_en,author,readers,lang,tags,created_at&order=created_at.desc`,
+      {
+        headers: {
+          apikey: supabaseKey,
+          Authorization: `Bearer ${supabaseKey}`,
+        },
+        cache: 'no-store',
+      }
+    );
 
-    const dirRes = await fetch(dirUrl, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: 'application/vnd.github+json',
-      },
-      cache: 'no-store',
+    if (!res.ok) {
+      return NextResponse.json({ available: false, items: [] });
+    }
+
+    const rows: NoteRow[] = await res.json();
+
+    const items: NoteItem[] = rows.map((row) => {
+      const author = row.author ?? '';
+      const title = row.title_en || row.title || '';
+      return {
+        id: row.id,
+        title,
+        author,
+        authorLevel: personLevel(author),
+        readers: row.readers ?? 'all',
+        lang: row.lang ?? 'ko',
+        tags: row.tags ?? [],
+        created: row.created_at?.slice(0, 10) ?? '',
+      };
     });
 
-    if (!dirRes.ok) {
-      return NextResponse.json({ available: false, items: [] });
-    }
-
-    const entries: GitHubFileEntry[] = await dirRes.json();
-    const noteFiles = entries.filter(
-      e => e.type === 'file' && /^NOTE-.*\.md$/.test(e.name)
-    );
-
-    const raw_items = await Promise.all(
-      noteFiles.map(async (entry): Promise<NoteItem | null> => {
-        if (!entry.download_url) return null;
-        const contentRes = await fetch(entry.download_url, { cache: 'no-store' });
-        if (!contentRes.ok) return null;
-        const raw = await contentRes.text();
-        const { meta, body } = parseFrontmatter(raw);
-
-        const id = typeof meta.id === 'string' ? meta.id : entry.name.replace(/\.md$/, '');
-        const author = typeof meta.author === 'string' ? meta.author : '';
-        const readers = typeof meta.readers === 'string' ? meta.readers : 'all';
-        const lang = typeof meta.lang === 'string' ? meta.lang : 'ko';
-        const tags = Array.isArray(meta.tags) ? meta.tags : [];
-        const created = typeof meta.created === 'string' ? meta.created : '';
-        const fmTitle = typeof meta.title === 'string' ? meta.title : '';
-
-        const enTitle = extractEnTitle(body);
-        const title = enTitle || fmTitle;
-
-        return { id, title, author, authorLevel: personLevel(author), readers, lang, tags, created };
-      })
-    );
-
-    const validItems = raw_items
-      .filter((item): item is NoteItem => item !== null)
-      .sort((a, b) => b.created.localeCompare(a.created));
-
-    return NextResponse.json({ available: true, items: validItems });
+    return NextResponse.json({ available: true, items });
   } catch (err) {
     return NextResponse.json({ available: false, items: [], error: String(err) });
   }
