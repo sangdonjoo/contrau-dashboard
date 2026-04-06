@@ -8,7 +8,18 @@ import {
 } from "@/data/override-mock";
 import type { SpecialTask, STStatus } from "@/app/api/special-tasks/route";
 
-type Tab = "deep-dive" | "monthly-plan" | "special-task";
+type Tab = "deep-dive" | "monthly-plan" | "special-task" | "note";
+
+interface NoteItem {
+  id: string;
+  title: string;
+  author: string;
+  authorLevel: number;
+  readers: string;
+  lang: string;
+  tags: string[];
+  created: string;
+}
 
 const stStatusMap: Record<STStatus, { label: string; color: string }> = {
   prepared:    { label: "Prepared",    color: "bg-blue-50 text-blue-600" },
@@ -69,6 +80,8 @@ export default function OverrideList() {
   const [ddOffset, setDdOffset] = useState(0);
   const [specialTasks, setSpecialTasks] = useState<SpecialTask[]>([]);
   const [stLoading, setStLoading] = useState(true);
+  const [notes, setNotes] = useState<NoteItem[]>([]);
+  const [noteLoading, setNoteLoading] = useState(true);
 
   useEffect(() => {
     fetch(`/api/deep-dives?limit=${DD_PAGE_SIZE}&offset=0`)
@@ -86,6 +99,11 @@ export default function OverrideList() {
       .then(res => res.json())
       .then(data => { if (data.available) setSpecialTasks(data.data); })
       .finally(() => setStLoading(false));
+
+    fetch('/api/notes')
+      .then(res => res.json())
+      .then(data => { if (data.available) setNotes(data.items); })
+      .finally(() => setNoteLoading(false));
   }, []);
 
   function loadMoreDeepDives() {
@@ -106,6 +124,7 @@ export default function OverrideList() {
     { key: "deep-dive", label: "Deep Dive", count: deepDives.length },
     { key: "monthly-plan", label: "Monthly Plan", count: 0 },
     { key: "special-task", label: "Special Task", count: specialTasks.length },
+    { key: "note", label: "Note", count: notes.length },
   ];
 
   return (
@@ -252,6 +271,49 @@ export default function OverrideList() {
               </Link>
             );
           })}
+        </div>
+      )}
+      {/* Note list */}
+      {tab === "note" && (
+        <div className="space-y-2">
+          <p className="text-[11px] text-gray-400">
+            Management notes authored by leadership. English content shown by default.
+          </p>
+          {noteLoading ? (
+            <p className="text-[11px] text-gray-400">Loading...</p>
+          ) : notes.length === 0 ? (
+            <p className="text-[11px] text-gray-400">No notes found.</p>
+          ) : notes.map((note) => (
+            <Link key={note.id} href={`/override/notes/${note.id}`} className="block rounded-lg border border-gray-200 bg-white p-3 shadow-sm hover:border-gray-300 hover:shadow-md transition-all">
+              <div className="flex items-start gap-2">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-1 flex-wrap">
+                    <code className="text-[11px] font-mono text-gray-500">{note.id}</code>
+                    <span className={`text-[10px] px-1.5 py-0.5 rounded ${
+                      note.readers === 'all'
+                        ? 'bg-green-50 text-green-600'
+                        : 'bg-amber-50 text-amber-600'
+                    }`}>
+                      {note.readers === 'all' ? 'Public' : note.readers}
+                    </span>
+                  </div>
+                  <p className="text-sm text-gray-800 font-medium leading-snug mb-1 truncate">
+                    {note.title}
+                  </p>
+                  <div className="flex items-center gap-3 text-[11px] text-gray-400">
+                    <span className="flex items-center gap-1">
+                      <LevelBadge level={note.authorLevel} />
+                      {note.author}
+                    </span>
+                    <span className="text-gray-300">|</span>
+                    <span>{note.tags.length > 0 ? note.tags.join(', ') : '-'}</span>
+                    <span className="text-gray-300">|</span>
+                    <span>{note.created}</span>
+                  </div>
+                </div>
+              </div>
+            </Link>
+          ))}
         </div>
       )}
     </div>
