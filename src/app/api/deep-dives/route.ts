@@ -63,6 +63,13 @@ function pickEnglishTitle(triggerEn: string | null, trigger: string | null): str
   return triggerEn || trigger || '';
 }
 
+const STATUS_ORDER: Record<DDStatus, number> = {
+  in_progress: 0,
+  pending: 1,
+  submitted: 2,
+  closed: 3,
+};
+
 export async function GET(request: Request) {
   try {
     const supabaseUrl = process.env.SUPABASE_URL;
@@ -76,17 +83,12 @@ export async function GET(request: Request) {
     const limit = Math.max(1, parseInt(searchParams.get('limit') ?? '10', 10));
     const offset = Math.max(0, parseInt(searchParams.get('offset') ?? '0', 10));
 
-    const rangeEnd = offset + limit - 1;
-
     const res = await fetch(
       `${supabaseUrl}/rest/v1/deep_dives?select=id,interviewee,issued_by,status,trigger,trigger_en,domain,created_at&order=created_at.desc,id.desc`,
       {
         headers: {
           apikey: supabaseKey,
           Authorization: `Bearer ${supabaseKey}`,
-          Range: `${offset}-${rangeEnd}`,
-          'Range-Unit': 'items',
-          Prefer: 'count=exact',
         },
         cache: 'no-store',
       }
@@ -95,11 +97,6 @@ export async function GET(request: Request) {
     if (!res.ok) {
       return NextResponse.json({ available: false, items: [], total: 0, hasMore: false });
     }
-
-    // Content-Range: items 0-9/42
-    const contentRange = res.headers.get('Content-Range') ?? '';
-    const totalMatch = contentRange.match(/\/(\d+)$/);
-    const total = totalMatch ? parseInt(totalMatch[1], 10) : 0;
 
     const rows: DeepDiveRow[] = await res.json();
 
@@ -121,10 +118,22 @@ export async function GET(request: Request) {
       };
     };
 
-    const items: DeepDive[] = rows.map(toDeepDive);
-    const hasMore = offset + items.length < total;
+    const allItems: DeepDive[] = rows.map(toDeepDive);
 
-    return NextResponse.json({ available: true, items, total, hasMore });
+    // Sort: active statuses (in_progress, pending) first by created_at DESC,
+    // then completed statuses (submitted, closed) by created_at DESC
+    const sorted = allItems.sort((a, b) => {
+      const groupA = STATUS_ORDER[a.status] <= 1 ? 0 : 1;
+      const groupB = STATUS_ORDER[b.status] <= 1 ? 0 : 1;
+      if (groupA !== groupB) return groupA - groupB;
+      return b.createdAt.localeCompare(a.createdAt) || b.id.localeCompare(a.id);
+    });
+
+    const total = sorted.length;
+    const paginated = sorted.slice(offset, offset + limit);
+    const hasMore = offset + paginated.length < total;
+
+    return NextResponse.json({ available: true, items: paginated, total, hasMore });
   } catch (err) {
     return NextResponse.json({ available: false, items: [], total: 0, hasMore: false, error: String(err) });
   }
