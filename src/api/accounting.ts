@@ -61,6 +61,7 @@ export async function fetchAllTransactions(filters?: FilterState & { keyword?: s
     limit: 200,
     offset: 0,
     type: filters?.type !== 'all' ? filters?.type : undefined,
+    subsidiary: filters?.subsidiary !== 'all' ? filters?.subsidiary : undefined,
     keyword: filters?.keyword,
   }
   const response = await fetchFromApi(params)
@@ -68,7 +69,6 @@ export async function fetchAllTransactions(filters?: FilterState & { keyword?: s
 
   let result = response.items
   if (filters) {
-    if (filters.subsidiary !== 'all') result = result.filter(t => t.subsidiary === filters.subsidiary)
     if (filters.threshold !== 'all') result = result.filter(t => matchesThreshold(t.amount, filters.threshold))
   }
   return result

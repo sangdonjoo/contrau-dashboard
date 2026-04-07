@@ -90,15 +90,33 @@ export async function GET(request: Request) {
     const limit = Math.max(1, parseInt(searchParams.get('limit') ?? '50', 10));
     const offset = Math.max(0, parseInt(searchParams.get('offset') ?? '0', 10));
     const typeFilter = searchParams.get('type');
+    const subsidiaryFilter = searchParams.get('subsidiary');
     const keyword = searchParams.get('keyword');
     const dateFrom = searchParams.get('dateFrom');
     const dateTo = searchParams.get('dateTo');
+
+    // Reverse map: Subsidiary → company_code[]
+    const SUBSIDIARY_COMPANY_MAP: Record<string, string[]> = {};
+    for (const [code, sub] of Object.entries(COMPANY_SUBSIDIARY_MAP)) {
+      if (!SUBSIDIARY_COMPANY_MAP[sub]) SUBSIDIARY_COMPANY_MAP[sub] = [];
+      SUBSIDIARY_COMPANY_MAP[sub].push(code);
+    }
 
     // Build Supabase REST query
     const selectFields = 'refid,company_code,voucher_type,refno,refdate,total_amount,currency_id,account_object_name,journal_memo,description,misa_synced_at';
     const params = new URLSearchParams();
     params.set('select', selectFields);
     params.set('order', 'refdate.desc,misa_synced_at.desc');
+
+    // Apply subsidiary filter → company_code
+    if (subsidiaryFilter && subsidiaryFilter !== 'all') {
+      const companyCodes = SUBSIDIARY_COMPANY_MAP[subsidiaryFilter] ?? [];
+      if (companyCodes.length === 1) {
+        params.append('company_code', `eq.${companyCodes[0]}`);
+      } else if (companyCodes.length > 1) {
+        params.append('company_code', `in.(${companyCodes.join(',')})`);
+      }
+    }
 
     // Apply date filters
     if (dateFrom) params.append('refdate', `gte.${dateFrom}`);
