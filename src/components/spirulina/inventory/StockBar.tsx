@@ -1,9 +1,9 @@
 "use client";
 
-import type { Chemical } from "@/data/spirulina-mock";
+import type { ChemicalRow } from "@/app/api/spirulina/inventory/route";
 
 interface StockBarProps {
-  chemical: Chemical;
+  chemical: ChemicalRow;
 }
 
 export default function StockBar({ chemical }: StockBarProps) {
