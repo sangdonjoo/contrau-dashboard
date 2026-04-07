@@ -10,8 +10,7 @@ interface Props {
 
 const SUBSIDIARIES: Array<{ value: Subsidiary | 'all'; label: string }> = [
   { value: 'all', label: 'All Entities' },
-  { value: 'CONTRAU_ECO', label: 'HQ' },
-  { value: 'CONTRAU_PLUS', label: 'Contrau Plus' },
+  { value: 'CONTRAU_ECO', label: 'HQ (Contrau Plus)' },
   { value: 'CONTRAU_SHRIMP', label: 'Eco Ca Mau' },
   { value: 'CONTRAU_ALGAE', label: 'Solagron' },
   { value: 'CONTRAU_BSF', label: 'Entoflow' },
