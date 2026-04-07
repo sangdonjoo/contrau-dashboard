@@ -16,7 +16,7 @@ export default function HeadcountPanel() {
   if (!data?.available) return null;
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white shadow-sm px-5 py-4 h-full">
+    <div className="rounded-xl border border-gray-200 bg-white shadow-sm px-5 py-4 mb-4">
       <p className="text-xs text-gray-400 mb-2 font-medium">Headcount</p>
       <p className="text-3xl font-bold text-gray-900">{data.total}</p>
       <p className="text-xs text-gray-400 mt-1">across {data.byCompany.length} companies</p>

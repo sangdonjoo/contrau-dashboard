@@ -65,10 +65,8 @@ export default function PeoplePage() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-6">
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
-        <HeadcountPanel />
-        <OrgChart />
-      </div>
+      <HeadcountPanel />
+      <OrgChart />
 
       <header className="mb-4">
         <div className="flex items-center justify-between">

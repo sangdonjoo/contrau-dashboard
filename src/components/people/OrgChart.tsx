@@ -180,7 +180,7 @@ const COMPANIES = ["HQ", "Solagron", "Eco CM", "Entoflow", "BMD"];
 // ── 노드 렌더러 ─────────────────────────────────────────────────
 
 function OrgNode({ node, depth = 0 }: { node: OrgNode; depth?: number }) {
-  const [open, setOpen] = useState(depth < 2);
+  const [open, setOpen] = useState(true);
   const hasChildren = node.children && node.children.length > 0;
 
   const boxColor =
@@ -196,10 +196,10 @@ function OrgNode({ node, depth = 0 }: { node: OrgNode; depth?: number }) {
       {/* 노드 박스 */}
       <button
         onClick={() => hasChildren && setOpen(o => !o)}
-        className={`border rounded-lg px-2.5 py-1.5 text-center min-w-[90px] max-w-[120px] transition-all ${boxColor} ${hasChildren ? "cursor-pointer hover:opacity-80" : "cursor-default"}`}
+        className={`border rounded-lg px-3 py-2 text-center min-w-[110px] max-w-[150px] transition-all ${boxColor} ${hasChildren ? "cursor-pointer hover:opacity-80" : "cursor-default"}`}
       >
-        <p className="text-[11px] font-semibold leading-tight truncate">{node.name}</p>
-        <p className="text-[9px] opacity-70 leading-tight mt-0.5 truncate">{node.role}</p>
+        <p className="text-xs font-semibold leading-tight">{node.name}</p>
+        <p className="text-[10px] opacity-70 leading-tight mt-0.5">{node.role}</p>
         {hasChildren && (
           <span className="text-[9px] opacity-50">{open ? "▲" : `▼ ${node.children!.length}`}</span>
         )}
@@ -239,7 +239,7 @@ export default function OrgChart() {
   const root = ORG_DATA[company];
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white shadow-sm px-5 py-4 h-full">
+    <div className="rounded-xl border border-gray-200 bg-white shadow-sm px-5 py-6 mb-6">
       {/* 헤더 */}
       <div className="flex items-center justify-between mb-3">
         <div>
