@@ -2,7 +2,11 @@ import { NextResponse } from 'next/server';
 
 // company_code → subsidiary metadata mapping
 const COMPANY_META: Record<string, { id: string; name: string; nameKo: string }> = {
-  SOLAGRON: { id: 'algae', name: 'Contrau Algae', nameKo: 'Algae' },
+  SOLAGRON: { id: 'algae', name: 'Solagron', nameKo: 'Algae' },
+  CPLUS:    { id: 'cplus', name: 'Contrau Plus', nameKo: 'C Plus' },
+  ECCM:     { id: 'eccm',  name: 'Eco Ca Mau', nameKo: 'Eco CM' },
+  ENTOFLOW: { id: 'entoflow', name: 'Entoflow', nameKo: 'BSF' },
+  CTSF:     { id: 'ctsf', name: 'Contrau Seafood', nameKo: 'Seafood' },
 };
 
 interface MonthlyRow {
@@ -33,6 +37,20 @@ interface ApiResponse {
   data: SubsidiaryFinancials[];
 }
 
+interface VoucherRow {
+  refid: string;
+  company_code: string;
+  refdate: string;
+}
+
+interface VoucherDetailRow {
+  refid: string;
+  company_code: string;
+  debit_account: string | null;
+  credit_account: string | null;
+  amount: number | string | null;
+}
+
 // Generate list of YYYY-MM strings for the last N months (newest last)
 function buildMonthRange(months: number): string[] {
   const result: string[] = [];
@@ -46,16 +64,46 @@ function buildMonthRange(months: number): string[] {
   return result;
 }
 
+// Fetch all pages from a Supabase REST endpoint (handles pagination)
+async function fetchAllPages<T>(
+  baseUrl: string,
+  headers: Record<string, string>,
+  pageSize = 1000,
+): Promise<T[]> {
+  const results: T[] = [];
+  let offset = 0;
+
+  while (true) {
+    const sep = baseUrl.includes('?') ? '&' : '?';
+    const url = `${baseUrl}${sep}limit=${pageSize}&offset=${offset}`;
+    const res = await fetch(url, { headers, cache: 'no-store' });
+
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(`Supabase REST error (${res.status}): ${text}`);
+    }
+
+    const page: T[] = await res.json();
+    results.push(...page);
+
+    if (page.length < pageSize) break; // last page
+    offset += pageSize;
+  }
+
+  return results;
+}
+
 export async function GET(request: Request): Promise<NextResponse<ApiResponse>> {
   try {
     const { searchParams } = new URL(request.url);
     const months = Math.max(1, Math.min(60, parseInt(searchParams.get('months') ?? '12', 10)));
     const companyFilter = searchParams.get('company') ?? 'all';
 
-    const supabaseUrl = process.env.SUPABASE_URL;
+    const supabaseUrl = 'https://uyvghswdreirwhflvxhm.supabase.co';
     const supabaseKey = process.env.SUPABASE_SERVICE_KEY ?? process.env.SUPABASE_ANON_KEY;
 
-    if (!supabaseUrl || !supabaseKey) {
+    if (!supabaseKey) {
+      console.error('Missing SUPABASE_SERVICE_KEY and SUPABASE_ANON_KEY');
       return NextResponse.json({ available: false, data: [] });
     }
 
@@ -67,97 +115,112 @@ export async function GET(request: Request): Promise<NextResponse<ApiResponse>> 
     const lastDay = new Date(ly, lm, 0).getDate();
     const dateTo = `${lastMonth}-${String(lastDay).padStart(2, '0')}`;
 
-    // Build company filter clause
+    // Build company code filter
     const companyCodes = companyFilter === 'all'
       ? Object.keys(COMPANY_META)
-      : [companyFilter.toUpperCase()];
+      : [companyFilter.toUpperCase()].filter(c => c in COMPANY_META);
 
-    // SQL query: join misa_voucher_details with misa_vouchers, aggregate by company + month
-    // Revenue: credit_account starts with '5' (511, 5112, 5113, 515)
-    // COGS: debit_account = '632'
-    // Financial income: credit_account = '515'
-    // Financial expense: debit_account = '635'
-    // Selling expense: debit_account starts with '641'
-    // Admin expense: debit_account starts with '642'
-    const sql = `
-      SELECT
-        vd.company_code,
-        TO_CHAR(v.refdate, 'YYYY-MM') AS month,
-        SUM(CASE WHEN vd.credit_account LIKE '5%' THEN vd.amount ELSE 0 END) AS revenue,
-        SUM(CASE WHEN vd.debit_account = '632' THEN vd.amount ELSE 0 END) AS cogs,
-        SUM(CASE WHEN vd.credit_account = '515' THEN vd.amount ELSE 0 END) AS financial_income,
-        SUM(CASE WHEN vd.debit_account = '635' THEN vd.amount ELSE 0 END) AS financial_expense,
-        SUM(CASE WHEN vd.debit_account LIKE '641%' THEN vd.amount ELSE 0 END) AS selling_expense,
-        SUM(CASE WHEN vd.debit_account LIKE '642%' THEN vd.amount ELSE 0 END) AS admin_expense
-      FROM misa_voucher_details vd
-      JOIN misa_vouchers v ON v.refid = vd.refid
-      WHERE v.refdate >= '${dateFrom}'
-        AND v.refdate <= '${dateTo}'
-        AND vd.company_code IN (${companyCodes.map(c => `'${c}'`).join(', ')})
-      GROUP BY vd.company_code, TO_CHAR(v.refdate, 'YYYY-MM')
-      ORDER BY vd.company_code, month
-    `;
-
-    // Use Supabase management API SQL endpoint
-    const mgmtRes = await fetch(
-      `https://api.supabase.com/v1/projects/uyvghswdreirwhflvxhm/database/query`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer sbp_172d709f45b40e7647c56051e428d6d549a537f4`,
-        },
-        body: JSON.stringify({ query: sql }),
-        cache: 'no-store',
-      }
-    );
-
-    if (!mgmtRes.ok) {
-      const errText = await mgmtRes.text();
-      console.error('Supabase management API error:', mgmtRes.status, errText);
-
-      // Fallback: try Supabase REST API via RPC or direct table
+    if (companyCodes.length === 0) {
       return NextResponse.json({ available: false, data: [] });
     }
 
-    // Management API returns array of row objects
-    interface RawRow {
-      company_code: string;
-      month: string;
-      revenue: string | number;
-      cogs: string | number;
-      financial_income: string | number;
-      financial_expense: string | number;
-      selling_expense: string | number;
-      admin_expense: string | number;
+    const companyIn = `(${companyCodes.join(',')})`;
+
+    const headers: Record<string, string> = {
+      apikey: supabaseKey,
+      Authorization: `Bearer ${supabaseKey}`,
+      'Content-Type': 'application/json',
+    };
+
+    // Step 1: Fetch misa_vouchers filtered by date range + company codes
+    // This gives us refid → refdate mapping
+    const vouchersUrl =
+      `${supabaseUrl}/rest/v1/misa_vouchers` +
+      `?select=refid,company_code,refdate` +
+      `&company_code=in.${companyIn}` +
+      `&refdate=gte.${dateFrom}` +
+      `&refdate=lte.${dateTo}`;
+
+    const vouchers = await fetchAllPages<VoucherRow>(vouchersUrl, headers);
+
+    if (vouchers.length === 0) {
+      // No vouchers in range — return zeros
+      const data: SubsidiaryFinancials[] = Object.entries(COMPANY_META)
+        .filter(([code]) => companyFilter === 'all' || code.toUpperCase() === companyFilter.toUpperCase())
+        .map(([, meta]) => ({
+          ...meta,
+          data: monthRange.map(month => ({ month, grossProfit: 0, operatingIncome: 0 })),
+        }));
+      return NextResponse.json({ available: true, data });
     }
 
-    const rows: RawRow[] = await mgmtRes.json();
-
-    // Group by company
-    const byCompany = new Map<string, Map<string, MonthlyRow>>();
-
-    for (const row of rows) {
-      const code = row.company_code;
-      if (!byCompany.has(code)) byCompany.set(code, new Map());
-      const companyMap = byCompany.get(code)!;
-      companyMap.set(row.month, {
-        month: row.month,
-        revenue: Number(row.revenue) || 0,
-        cogs: Number(row.cogs) || 0,
-        financialIncome: Number(row.financial_income) || 0,
-        financialExpense: Number(row.financial_expense) || 0,
-        sellingExpense: Number(row.selling_expense) || 0,
-        adminExpense: Number(row.admin_expense) || 0,
-      });
+    // Build refid → month map
+    const refidToMonth = new Map<string, string>();
+    for (const v of vouchers) {
+      // refdate is typically "YYYY-MM-DD"
+      const month = v.refdate.slice(0, 7); // "YYYY-MM"
+      refidToMonth.set(v.refid, month);
     }
 
+    // Build set of valid refids for fast lookup
+    const validRefids = new Set(refidToMonth.keys());
+
+    // Step 2: Fetch misa_voucher_details filtered by company codes
+    // We'll then join by refid to get the date
+    const detailsUrl =
+      `${supabaseUrl}/rest/v1/misa_voucher_details` +
+      `?select=refid,company_code,debit_account,credit_account,amount` +
+      `&company_code=in.${companyIn}`;
+
+    const details = await fetchAllPages<VoucherDetailRow>(detailsUrl, headers);
+
+    // Step 3: Aggregate in JS
+    // Map: companyCode → month → MonthlyRow accumulator
+    const agg = new Map<string, Map<string, MonthlyRow>>();
+
+    for (const d of details) {
+      // Skip details whose voucher is outside the date range
+      if (!validRefids.has(d.refid)) continue;
+
+      const month = refidToMonth.get(d.refid)!;
+      const code = d.company_code;
+
+      if (!agg.has(code)) agg.set(code, new Map());
+      const companyMap = agg.get(code)!;
+
+      if (!companyMap.has(month)) {
+        companyMap.set(month, {
+          month,
+          revenue: 0,
+          cogs: 0,
+          financialIncome: 0,
+          financialExpense: 0,
+          sellingExpense: 0,
+          adminExpense: 0,
+        });
+      }
+
+      const row = companyMap.get(month)!;
+      const amount = Number(d.amount) || 0;
+      const debit = d.debit_account ?? '';
+      const credit = d.credit_account ?? '';
+
+      // VAS accounting rules
+      if (credit.startsWith('5')) row.revenue += amount;          // Revenue: credit 5xx
+      if (debit === '632')        row.cogs += amount;             // COGS
+      if (credit === '515')       row.financialIncome += amount;  // Financial income
+      if (debit === '635')        row.financialExpense += amount; // Financial expense
+      if (debit.startsWith('641')) row.sellingExpense += amount;  // Selling expense
+      if (debit.startsWith('642')) row.adminExpense += amount;    // Admin expense
+    }
+
+    // Step 4: Build response
     const data: SubsidiaryFinancials[] = [];
 
     for (const [code, meta] of Object.entries(COMPANY_META)) {
       if (companyFilter !== 'all' && code.toUpperCase() !== companyFilter.toUpperCase()) continue;
 
-      const companyMap = byCompany.get(code) ?? new Map<string, MonthlyRow>();
+      const companyMap = agg.get(code) ?? new Map<string, MonthlyRow>();
 
       const monthlyData: MonthlyFinancial[] = monthRange.map(month => {
         const r = companyMap.get(month);
