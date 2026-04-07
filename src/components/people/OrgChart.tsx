@@ -177,6 +177,14 @@ const ORG_DATA: Record<string, OrgNode> = {
 
 const COMPANIES = ["HQ", "Solagron", "Eco CM", "Entoflow", "BMD"];
 
+const LEGAL_REP: Record<string, string> = {
+  HQ:       "Yoo Jihyun",
+  Solagron: "To Thi Ngoc Quynh",
+  "Eco CM": "Yoo Jihyun",
+  Entoflow: "Yoo Jihyun",
+  BMD:      "Le Thi Thu Suong",
+};
+
 // ── 노드 렌더러 ─────────────────────────────────────────────────
 
 function OrgNode({ node, depth = 0 }: { node: OrgNode; depth?: number }) {
@@ -200,17 +208,6 @@ function OrgNode({ node, depth = 0 }: { node: OrgNode; depth?: number }) {
       >
         <p className="text-xs font-semibold leading-tight">{node.name}</p>
         <p className="text-[10px] opacity-70 leading-tight mt-0.5">{node.role}</p>
-        <div className="flex gap-1 justify-center mt-1 flex-wrap">
-          {node.legalRep && (
-            <span className="text-[8px] bg-orange-100 text-orange-600 px-1 rounded font-medium">법인장</span>
-          )}
-          {node.actualHead && !node.legalRep && (
-            <span className="text-[8px] bg-emerald-100 text-emerald-600 px-1 rounded font-medium">실수장</span>
-          )}
-          {node.actualHead && node.legalRep && (
-            <span className="text-[8px] bg-emerald-100 text-emerald-600 px-1 rounded font-medium">법인장=실수장</span>
-          )}
-        </div>
         {hasChildren && (
           <span className="text-[9px] opacity-50">{open ? "▲" : `▼ ${node.children!.length}`}</span>
         )}
@@ -256,6 +253,9 @@ export default function OrgChart() {
         <div>
           <p className="text-xs text-gray-400 font-medium">Org Chart</p>
           <h3 className="text-base font-bold text-gray-900">{company}</h3>
+          <p className="text-[11px] text-gray-400 mt-0.5">
+            Legal Rep: <span className="text-gray-600 font-medium">{LEGAL_REP[company]}</span>
+          </p>
         </div>
         <div className="flex items-center gap-2">
           <button
