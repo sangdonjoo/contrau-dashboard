@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect, useState } from 'react'
 import {
   ComposedChart, Bar, Line, XAxis, YAxis, CartesianGrid,
   Tooltip, ResponsiveContainer, Legend, ReferenceLine
@@ -18,101 +19,19 @@ interface SubsidiaryFinancials {
   data: MonthlyFinancial[]
 }
 
-const MONTHS = [
-  '2025-05', '2025-06', '2025-07', '2025-08', '2025-09', '2025-10',
-  '2025-11', '2025-12', '2026-01', '2026-02', '2026-03', '2026-04',
-]
+function formatMonth(month: string): string {
+  return month.split('-')[1].replace(/^0/, '')
+}
 
-const subsidiaries: SubsidiaryFinancials[] = [
-  {
-    id: 'eco', name: 'Contrau Eco', nameKo: 'Parent Co.',
-    data: [
-      { month: '2025-05', grossProfit: 95, operatingIncome: 22 },
-      { month: '2025-06', grossProfit: 88, operatingIncome: 18 },
-      { month: '2025-07', grossProfit: 102, operatingIncome: 28 },
-      { month: '2025-08', grossProfit: 91, operatingIncome: 20 },
-      { month: '2025-09', grossProfit: 85, operatingIncome: 17 },
-      { month: '2025-10', grossProfit: 98, operatingIncome: 25 },
-      { month: '2025-11', grossProfit: 110, operatingIncome: 32 },
-      { month: '2025-12', grossProfit: 118, operatingIncome: 35 },
-      { month: '2026-01', grossProfit: 105, operatingIncome: 30 },
-      { month: '2026-02', grossProfit: 92, operatingIncome: 21 },
-      { month: '2026-03', grossProfit: 99, operatingIncome: 26 },
-      { month: '2026-04', grossProfit: 108, operatingIncome: 29 },
-    ],
-  },
-  {
-    id: 'shrimp', name: 'Contrau Shrimp', nameKo: 'Shrimp',
-    data: [
-      { month: '2025-05', grossProfit: 210, operatingIncome: 45 },
-      { month: '2025-06', grossProfit: 185, operatingIncome: 38 },
-      { month: '2025-07', grossProfit: 195, operatingIncome: 41 },
-      { month: '2025-08', grossProfit: 220, operatingIncome: 50 },
-      { month: '2025-09', grossProfit: 240, operatingIncome: 55 },
-      { month: '2025-10', grossProfit: 265, operatingIncome: 62 },
-      { month: '2025-11', grossProfit: 310, operatingIncome: 72 },
-      { month: '2025-12', grossProfit: 348, operatingIncome: 80 },
-      { month: '2026-01', grossProfit: 330, operatingIncome: 76 },
-      { month: '2026-02', grossProfit: 295, operatingIncome: 68 },
-      { month: '2026-03', grossProfit: 255, operatingIncome: 58 },
-      { month: '2026-04', grossProfit: 228, operatingIncome: 52 },
-    ],
-  },
-  {
-    id: 'algae', name: 'Contrau Algae', nameKo: 'Algae',
-    data: [
-      { month: '2025-05', grossProfit: 32, operatingIncome: -8 },
-      { month: '2025-06', grossProfit: 35, operatingIncome: -5 },
-      { month: '2025-07', grossProfit: 38, operatingIncome: -3 },
-      { month: '2025-08', grossProfit: 42, operatingIncome: 2 },
-      { month: '2025-09', grossProfit: 45, operatingIncome: 5 },
-      { month: '2025-10', grossProfit: 48, operatingIncome: 7 },
-      { month: '2025-11', grossProfit: 52, operatingIncome: 10 },
-      { month: '2025-12', grossProfit: 55, operatingIncome: 12 },
-      { month: '2026-01', grossProfit: 58, operatingIncome: 13 },
-      { month: '2026-02', grossProfit: 50, operatingIncome: 8 },
-      { month: '2026-03', grossProfit: 44, operatingIncome: 3 },
-      { month: '2026-04', grossProfit: 40, operatingIncome: -2 },
-    ],
-  },
-  {
-    id: 'bsf', name: 'Contrau BSF', nameKo: 'BSF',
-    data: [
-      { month: '2025-05', grossProfit: 52, operatingIncome: 6 },
-      { month: '2025-06', grossProfit: 55, operatingIncome: 8 },
-      { month: '2025-07', grossProfit: 58, operatingIncome: 10 },
-      { month: '2025-08', grossProfit: 62, operatingIncome: 13 },
-      { month: '2025-09', grossProfit: 65, operatingIncome: 15 },
-      { month: '2025-10', grossProfit: 68, operatingIncome: 17 },
-      { month: '2025-11', grossProfit: 72, operatingIncome: 19 },
-      { month: '2025-12', grossProfit: 78, operatingIncome: 22 },
-      { month: '2026-01', grossProfit: 82, operatingIncome: 23 },
-      { month: '2026-02', grossProfit: 79, operatingIncome: 21 },
-      { month: '2026-03', grossProfit: 85, operatingIncome: 24 },
-      { month: '2026-04', grossProfit: 88, operatingIncome: 25 },
-    ],
-  },
-  {
-    id: 'feed', name: 'Contrau Feed', nameKo: 'Feed',
-    data: [
-      { month: '2025-05', grossProfit: 155, operatingIncome: 32 },
-      { month: '2025-06', grossProfit: 162, operatingIncome: 34 },
-      { month: '2025-07', grossProfit: 170, operatingIncome: 36 },
-      { month: '2025-08', grossProfit: 175, operatingIncome: 38 },
-      { month: '2025-09', grossProfit: 180, operatingIncome: 40 },
-      { month: '2025-10', grossProfit: 190, operatingIncome: 43 },
-      { month: '2025-11', grossProfit: 205, operatingIncome: 48 },
-      { month: '2025-12', grossProfit: 218, operatingIncome: 52 },
-      { month: '2026-01', grossProfit: 228, operatingIncome: 56 },
-      { month: '2026-02', grossProfit: 235, operatingIncome: 58 },
-      { month: '2026-03', grossProfit: 242, operatingIncome: 59 },
-      { month: '2026-04', grossProfit: 248, operatingIncome: 60 },
-    ],
-  },
-]
-
-function buildConsolidated(): MonthlyFinancial[] {
-  return MONTHS.map(month => {
+function buildConsolidated(subsidiaries: SubsidiaryFinancials[]): MonthlyFinancial[] {
+  if (subsidiaries.length === 0) return []
+  // Collect all unique months
+  const monthSet = new Set<string>()
+  for (const sub of subsidiaries) {
+    for (const d of sub.data) monthSet.add(d.month)
+  }
+  const months = Array.from(monthSet).sort()
+  return months.map(month => {
     let grossProfit = 0, operatingIncome = 0
     for (const sub of subsidiaries) {
       const d = sub.data.find(x => x.month === month)
@@ -120,10 +39,6 @@ function buildConsolidated(): MonthlyFinancial[] {
     }
     return { month, grossProfit, operatingIncome }
   })
-}
-
-function formatMonth(month: string): string {
-  return month.split('-')[1].replace(/^0/, '')
 }
 
 function FinancialChart({ title, data, height = 250 }: { title: string; data: MonthlyFinancial[]; height?: number }) {
@@ -137,13 +52,22 @@ function FinancialChart({ title, data, height = 250 }: { title: string; data: Mo
         <ComposedChart data={chartData} margin={{ top: 5, right: 10, left: 10, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" />
           <XAxis dataKey="monthLabel" tick={{ fontSize: 11, fill: '#9CA3AF' }} />
-          <YAxis tick={{ fontSize: 11, fill: '#9CA3AF' }} tickFormatter={(v: number) => `${v}M₫`} />
+          <YAxis tick={{ fontSize: 11, fill: '#9CA3AF' }} tickFormatter={(v: number) => {
+            if (Math.abs(v) >= 1_000_000) return `${(v / 1_000_000).toFixed(1)}M₫`
+            if (Math.abs(v) >= 1_000) return `${(v / 1_000).toFixed(0)}K₫`
+            return `${v}₫`
+          }} />
           {hasNegative && <ReferenceLine y={0} stroke="#9CA3AF" strokeDasharray="4 2" />}
           <Tooltip
-            formatter={(value, name) => [
-              `${value}M₫`,
-              name === 'grossProfit' ? 'Gross Profit' : 'Operating Income'
-            ]}
+            formatter={(value, name) => {
+              const v = Number(value)
+              const formatted = v >= 1_000_000
+                ? `${(v / 1_000_000).toFixed(2)}M₫`
+                : v >= 1_000
+                ? `${(v / 1_000).toFixed(0)}K₫`
+                : `${v}₫`
+              return [formatted, name === 'grossProfit' ? 'Gross Profit' : 'Operating Income']
+            }}
             contentStyle={{ fontSize: 12, borderRadius: 8 }}
           />
           <Legend
@@ -158,8 +82,63 @@ function FinancialChart({ title, data, height = 250 }: { title: string; data: Mo
   )
 }
 
+function SkeletonChart({ height = 250 }: { height?: number }) {
+  return (
+    <div className="bg-white rounded-lg border border-gray-200 p-4 animate-pulse">
+      <div className="h-4 w-32 bg-gray-200 rounded mb-3" />
+      <div className="bg-gray-100 rounded" style={{ height }} />
+    </div>
+  )
+}
+
 export default function AccountingCompanyPage() {
-  const consolidatedData = buildConsolidated()
+  const [subsidiaries, setSubsidiaries] = useState<SubsidiaryFinancials[]>([])
+  const [loading, setLoading] = useState(true)
+  const [available, setAvailable] = useState(false)
+
+  useEffect(() => {
+    let cancelled = false
+    setLoading(true)
+    fetch('/api/accounting/financials?months=12')
+      .then(r => r.json())
+      .then((json: { available: boolean; data: SubsidiaryFinancials[] }) => {
+        if (cancelled) return
+        setAvailable(json.available ?? false)
+        setSubsidiaries(Array.isArray(json.data) ? json.data : [])
+      })
+      .catch(err => {
+        console.error('Financials fetch error:', err)
+        if (!cancelled) { setAvailable(false); setSubsidiaries([]) }
+      })
+      .finally(() => { if (!cancelled) setLoading(false) })
+    return () => { cancelled = true }
+  }, [])
+
+  const consolidatedData = buildConsolidated(subsidiaries)
+
+  if (loading) {
+    return (
+      <div className="py-2">
+        <div className="mb-6">
+          <SkeletonChart height={300} />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {[1, 2].map(i => <SkeletonChart key={i} />)}
+        </div>
+      </div>
+    )
+  }
+
+  if (!available || subsidiaries.length === 0) {
+    return (
+      <div className="py-2">
+        <div className="bg-white rounded-lg border border-gray-200 p-8 text-center text-sm text-gray-400">
+          No financial data available
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div>
       <div className="py-2">

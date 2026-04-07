@@ -28,7 +28,7 @@ function ThresholdDot({ amount }: { amount: number }) {
 }
 
 function ConfidencePill({ value }: { value: number | null }) {
-  if (value === null) return <span className="text-gray-300 text-xs">-</span>
+  if (value === null) return <span className="text-xs font-medium px-1.5 py-0.5 rounded bg-gray-100 text-gray-500">Exported</span>
   const color = value >= 85 ? 'text-blue-600 bg-blue-50' : value >= 60 ? 'text-yellow-600 bg-yellow-50' : 'text-red-600 bg-red-50'
   return <span className={`text-xs font-medium px-1.5 py-0.5 rounded ${color}`}>{value}%</span>
 }

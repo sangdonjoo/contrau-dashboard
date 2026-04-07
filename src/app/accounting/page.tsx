@@ -17,7 +17,7 @@ type StatusFilter = 'active' | 'archived'
 export default function AccountingPage() {
   const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS)
   const [keyword, setKeyword] = useState('')
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>('active')
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>('archived')
   const [allTransactions, setAllTransactions] = useState<WorkflowTransaction[]>([])
 
   useEffect(() => {
