@@ -2,10 +2,10 @@ import { NextResponse } from 'next/server';
 
 // company_code → subsidiary metadata mapping
 const COMPANY_META: Record<string, { id: string; name: string; nameKo: string }> = {
-  SOLAGRON: { id: 'algae', name: 'Solagron', nameKo: 'Algae' },
-  CPLUS:    { id: 'cplus', name: 'Contrau Plus', nameKo: 'C Plus' },  // CONTRAU_PLUS
-  ECCM:     { id: 'eccm',  name: 'Eco Ca Mau', nameKo: 'Eco CM' },
-  ENTOFLOW: { id: 'entoflow', name: 'Entoflow', nameKo: 'BSF' },
+  SOLAGRON: { id: 'algae',    name: 'Solagron', nameKo: 'Solagron' },
+  CPLUS:    { id: 'cplus',   name: 'Contrau Plus', nameKo: 'C Plus' },
+  ECCM:     { id: 'eccm',   name: 'Eco CM',    nameKo: 'Eco CM' },
+  ENTOFLOW: { id: 'entoflow', name: 'Entoflow', nameKo: 'Entoflow' },
   CTSF:     { id: 'ctsf', name: 'Contrau Seafood', nameKo: 'Seafood' },
 };
 

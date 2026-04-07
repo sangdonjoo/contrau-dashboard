@@ -10,7 +10,7 @@ const navItems = [
   { href: "/override", label: "Context" },
   { href: "divider", label: "" },
   { href: "/shrimp", label: "~Shrimp" },
-  { href: "/spirulina", label: "~Algae" },
+  { href: "/spirulina", label: "~Solagron" },
 ];
 
 export default function GlobalNav() {

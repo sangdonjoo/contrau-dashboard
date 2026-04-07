@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import ContributionBar from '@/components/ContributionBar'
 import StreakBadge from '@/components/StreakBadge'
 import HeadcountPanel from '@/components/people/HeadcountPanel'
+import OrgChart from '@/components/people/OrgChart'
 import { fetchContributions } from '@/api/people-contributions'
 import type { ContributionPerson } from '@/api/people/contribution-types'
 
@@ -64,7 +65,10 @@ export default function PeoplePage() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-6">
-      <HeadcountPanel />
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+        <HeadcountPanel />
+        <OrgChart />
+      </div>
 
       <header className="mb-4">
         <div className="flex items-center justify-between">
