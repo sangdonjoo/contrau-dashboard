@@ -2,11 +2,12 @@ import { NextResponse } from 'next/server';
 
 // company_code → subsidiary metadata mapping
 const COMPANY_META: Record<string, { id: string; name: string; nameKo: string }> = {
-  SOLAGRON: { id: 'algae',    name: 'Solagron', nameKo: 'Solagron' },
-  CPLUS:    { id: 'cplus',   name: 'Contrau Plus', nameKo: 'C Plus' },
-  ECCM:     { id: 'eccm',   name: 'Eco CM',    nameKo: 'Eco CM' },
-  ENTOFLOW: { id: 'entoflow', name: 'Entoflow', nameKo: 'Entoflow' },
-  CTSF:     { id: 'ctsf', name: 'Contrau Seafood', nameKo: 'Seafood' },
+  SOLAGRON:    { id: 'algae',    name: 'Solagron',        nameKo: 'Solagron' },
+  CPLUS:       { id: 'cplus',   name: 'Contrau Plus',    nameKo: 'C Plus' },
+  ECCM:        { id: 'eccm',   name: 'Eco CM',           nameKo: 'Eco CM' },
+  ENTOFLOW:    { id: 'entoflow', name: 'Entoflow',        nameKo: 'Entoflow' },
+  CTSF:        { id: 'ctsf',    name: 'Contrau Seafood', nameKo: 'Seafood' },
+  CONTRAU_KR:  { id: 'kr_hq',   name: 'Contrau Eco KR',  nameKo: 'KR HQ' },
 };
 
 interface MonthlyRow {
@@ -205,13 +206,21 @@ export async function GET(request: Request): Promise<NextResponse<ApiResponse>> 
       const debit = d.debit_account ?? '';
       const credit = d.credit_account ?? '';
 
-      // VAS accounting rules
+      // VAS accounting rules (Vietnamese subsidiaries)
       if (credit.startsWith('5')) row.revenue += amount;          // Revenue: credit 5xx
       if (debit === '632')        row.cogs += amount;             // COGS
       if (credit === '515')       row.financialIncome += amount;  // Financial income
       if (debit === '635')        row.financialExpense += amount; // Financial expense
       if (debit.startsWith('641')) row.sellingExpense += amount;  // Selling expense
       if (debit.startsWith('642')) row.adminExpense += amount;    // Admin expense
+
+      // Korean GAAP rules (CONTRAU_KR)
+      // Revenue accounts 900-949: credit side entries
+      if (credit.startsWith('9') && !credit.startsWith('95') && !credit.startsWith('96')) {
+        row.revenue += amount;
+      }
+      // Expense accounts 800-899: debit side entries → admin expense
+      if (debit.startsWith('8')) row.adminExpense += amount;
     }
 
     // Step 4: Build response
