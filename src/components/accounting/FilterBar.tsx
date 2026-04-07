@@ -10,11 +10,12 @@ interface Props {
 
 const SUBSIDIARIES: Array<{ value: Subsidiary | 'all'; label: string }> = [
   { value: 'all', label: 'All Entities' },
-  { value: 'CONTRAU_ECO', label: 'Eco' },
-  { value: 'CONTRAU_SHRIMP', label: 'Shrimp' },
-  { value: 'CONTRAU_ALGAE', label: 'Algae' },
-  { value: 'CONTRAU_BSF', label: 'BSF' },
-  { value: 'CONTRAU_FEED', label: 'Feed' },
+  { value: 'CONTRAU_ECO', label: 'HQ' },
+  { value: 'CONTRAU_PLUS', label: 'Contrau Plus' },
+  { value: 'CONTRAU_SHRIMP', label: 'Eco Ca Mau' },
+  { value: 'CONTRAU_ALGAE', label: 'Solagron' },
+  { value: 'CONTRAU_BSF', label: 'Entoflow' },
+  { value: 'CONTRAU_FEED', label: 'Seafood Imexco' },
 ]
 
 const TYPES: Array<{ value: WorkflowType | 'all'; label: string }> = [

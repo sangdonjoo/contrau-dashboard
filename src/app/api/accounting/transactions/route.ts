@@ -29,7 +29,7 @@ const VOUCHER_TYPE_MAP: Record<number, WorkflowType> = {
 
 const COMPANY_SUBSIDIARY_MAP: Record<string, Subsidiary> = {
   SOLAGRON: 'CONTRAU_ALGAE',
-  CPLUS:    'CONTRAU_ECO',
+  CPLUS:    'CONTRAU_PLUS',
   ECCM:     'CONTRAU_SHRIMP',
   ENTOFLOW: 'CONTRAU_BSF',
   CTSF:     'CONTRAU_FEED',

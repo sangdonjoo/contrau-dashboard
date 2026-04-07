@@ -47,11 +47,12 @@ export function getStageIndex(stage: StageCode): number {
 }
 
 const SUBSIDIARY_SHORT: Record<Subsidiary, string> = {
-  CONTRAU_ECO: 'Eco',
-  CONTRAU_SHRIMP: 'Shrimp',
-  CONTRAU_ALGAE: 'Algae',
-  CONTRAU_BSF: 'BSF',
-  CONTRAU_FEED: 'Feed',
+  CONTRAU_ECO: 'HQ',
+  CONTRAU_PLUS: 'C Plus',
+  CONTRAU_SHRIMP: 'Eco CM',
+  CONTRAU_ALGAE: 'Solagron',
+  CONTRAU_BSF: 'Entoflow',
+  CONTRAU_FEED: 'Seafood',
 }
 
 export function getSubsidiaryShort(sub: Subsidiary): string {
