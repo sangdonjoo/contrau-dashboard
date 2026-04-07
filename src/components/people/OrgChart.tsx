@@ -7,6 +7,8 @@ interface OrgNode {
   role: string;
   vacant?: boolean;
   resigned?: boolean;
+  legalRep?: boolean;   // 법인 Legal Representative
+  actualHead?: boolean; // 실질 수장 (Legal Rep과 다를 때)
   children?: OrgNode[];
 }
 
@@ -14,14 +16,16 @@ interface OrgNode {
 
 const ORG_DATA: Record<string, OrgNode> = {
   HQ: {
-    name: "Sangdon Joo", role: "CEO",
+    name: "Sangdon Joo", role: "CEO", actualHead: true,
     children: [{
-      name: "Yoo Jihyun", role: "Chief of Staff",
+      name: "Yoo Jihyun", role: "Chief of Staff", legalRep: true,
       children: [
         {
           name: "Nguyen Thi Tuong Vi", role: "Finance Controller",
           children: [
             { name: "Bui Cam Van", role: "Accountant" },
+            { name: "Tran Thi Ngoc Giau", role: "Chief Accountant (Solagron 파견)" },
+            { name: "Nguyen Thi Hong Y", role: "Accountant (Solagron 파견)" },
           ],
         },
         {
@@ -42,7 +46,9 @@ const ORG_DATA: Record<string, OrgNode> = {
   },
 
   Solagron: {
-    name: "Nguyen Van Cu", role: "Factory Director",
+    name: "To Thi Ngoc Quynh", role: "PL", legalRep: true,
+    children: [{
+    name: "Nguyen Van Cu", role: "Factory Director", actualHead: true,
     children: [
       {
         name: "(VACANT)", role: "QA/QC Manager", vacant: true,
@@ -51,9 +57,7 @@ const ORG_DATA: Record<string, OrgNode> = {
           { name: "Nguyen Ngoc Ngan", role: "QC Staff" },
         ],
       },
-      {
-        name: "Pham Thi Diem Trinh", role: "Lab Leader",
-      },
+      { name: "Pham Thi Diem Trinh", role: "Lab Leader" },
       {
         name: "(VACANT)", role: "Production Manager", vacant: true,
         children: [
@@ -87,20 +91,15 @@ const ORG_DATA: Record<string, OrgNode> = {
           { name: "Thach So Thia", role: "Security" },
         ],
       },
-      {
-        name: "Tran Thi Ngoc Giau", role: "Chief Accountant",
-        children: [
-          { name: "Nguyen Thi Hong Y", role: "Accountant" },
-          { name: "Doan Van Dung", role: "Warehouse" },
-        ],
-      },
+      { name: "Doan Van Dung", role: "Warehouse" },
     ],
+    }],
   },
 
   "Eco CM": {
-    name: "Yoo Jihyun", role: "General Director (겸직)",
+    name: "Yoo Jihyun", role: "General Director", legalRep: true,
     children: [
-      { name: "Lee Kyutae", role: "Technical Leader" },
+      { name: "Lee Kyutae", role: "Technical Leader", actualHead: true },
       {
         name: "Admin", role: "Administrative",
         children: [
@@ -110,9 +109,7 @@ const ORG_DATA: Record<string, OrgNode> = {
       },
       {
         name: "P1 Team", role: "Shrimp Farm",
-        children: [
-          { name: "Huynh Tien Phong", role: "Team Leader" },
-        ],
+        children: [{ name: "Huynh Tien Phong", role: "Team Leader" }],
       },
       {
         name: "P2 Team", role: "Shrimp Farm",
@@ -134,7 +131,7 @@ const ORG_DATA: Record<string, OrgNode> = {
   },
 
   BMD: {
-    name: "Le Thi Thu Suong", role: "Overall Manager",
+    name: "Le Thi Thu Suong", role: "Overall Manager", legalRep: true, actualHead: true,
     children: [
       {
         name: "Nguyen Thi Xuan Thuy", role: "Manager",
@@ -159,7 +156,9 @@ const ORG_DATA: Record<string, OrgNode> = {
   },
 
   Entoflow: {
-    name: "Seo Youngin", role: "Project Leader",
+    name: "Yoo Jihyun", role: "Project Director", legalRep: true,
+    children: [{
+    name: "Seo Youngin", role: "Project Leader", actualHead: true,
     children: [
       {
         name: "Doan Duy Tung", role: "Factory Manager",
@@ -172,6 +171,7 @@ const ORG_DATA: Record<string, OrgNode> = {
       },
       { name: "Vo Thien Nhi", role: "Admin" },
     ],
+    }],
   },
 };
 
@@ -200,6 +200,17 @@ function OrgNode({ node, depth = 0 }: { node: OrgNode; depth?: number }) {
       >
         <p className="text-xs font-semibold leading-tight">{node.name}</p>
         <p className="text-[10px] opacity-70 leading-tight mt-0.5">{node.role}</p>
+        <div className="flex gap-1 justify-center mt-1 flex-wrap">
+          {node.legalRep && (
+            <span className="text-[8px] bg-orange-100 text-orange-600 px-1 rounded font-medium">법인장</span>
+          )}
+          {node.actualHead && !node.legalRep && (
+            <span className="text-[8px] bg-emerald-100 text-emerald-600 px-1 rounded font-medium">실수장</span>
+          )}
+          {node.actualHead && node.legalRep && (
+            <span className="text-[8px] bg-emerald-100 text-emerald-600 px-1 rounded font-medium">법인장=실수장</span>
+          )}
+        </div>
         {hasChildren && (
           <span className="text-[9px] opacity-50">{open ? "▲" : `▼ ${node.children!.length}`}</span>
         )}
