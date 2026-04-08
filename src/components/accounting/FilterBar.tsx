@@ -14,6 +14,7 @@ const SUBSIDIARIES: Array<{ value: Subsidiary | 'all'; label: string }> = [
   { value: 'CONTRAU_SHRIMP', label: 'Eco Ca Mau' },
   { value: 'CONTRAU_ALGAE', label: 'Solagron' },
   { value: 'CONTRAU_BSF', label: 'Entoflow' },
+  { value: 'CONTRAU_KR', label: 'KR HQ' },
 ]
 
 const TYPES: Array<{ value: WorkflowType | 'all'; label: string }> = [

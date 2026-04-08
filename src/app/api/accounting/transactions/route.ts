@@ -28,11 +28,12 @@ const VOUCHER_TYPE_MAP: Record<number, WorkflowType> = {
 };
 
 const COMPANY_SUBSIDIARY_MAP: Record<string, Subsidiary> = {
-  SOLAGRON: 'CONTRAU_ALGAE',
-  CPLUS:    'CONTRAU_ECO',
-  ECCM:     'CONTRAU_SHRIMP',
-  ENTOFLOW: 'CONTRAU_BSF',
-  CTSF:     'CONTRAU_FEED',
+  SOLAGRON:    'CONTRAU_ALGAE',
+  CPLUS:       'CONTRAU_ECO',
+  ECCM:        'CONTRAU_SHRIMP',
+  ENTOFLOW:    'CONTRAU_BSF',
+  CTSF:        'CONTRAU_FEED',
+  CONTRAU_KR:  'CONTRAU_KR',
 };
 
 function voucherTypeToWorkflow(voucherType: number | null): WorkflowType {

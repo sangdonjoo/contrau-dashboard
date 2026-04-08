@@ -16,7 +16,7 @@ const SUBSIDIARIES: Array<{ value: Subsidiary | 'all'; label: string }> = [
   { value: 'CONTRAU_SHRIMP', label: 'Shrimp' },
   { value: 'CONTRAU_ALGAE', label: 'Algae' },
   { value: 'CONTRAU_BSF', label: 'BSF' },
-  { value: 'CONTRAU_FEED', label: 'Feed' },
+  { value: 'CONTRAU_KR', label: 'KR HQ' },
 ]
 
 const TYPES: Array<{ value: WorkflowType | 'all'; label: string }> = [

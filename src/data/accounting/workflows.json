@@ -1,1465 +1,1620 @@
 [
   {
-    "id": "wf-purchase-feed",
-    "name": "Feed Purchase",
+    "id": "wf-purchase",
+    "name": "Purchase",
     "type": "PURCHASE",
     "steps": [
-      { "stage": "REQUESTED", "label": "Purchase Request", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": true, "ai_active": true, "ai_confidence": 92 },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": true, "ai_active": true, "ai_confidence": 90 },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": true, "ai_active": false, "ai_confidence": 71 },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": true, "ai_active": false, "ai_confidence": 68 },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": true, "ai_active": true, "ai_confidence": 91 }
-      }},
-      { "stage": "REVIEWING", "label": "Review", "approvers": {
-        "CONTRAU_ECO": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "PENDING_APPROVAL", "label": "Approval", "approvers": {
-        "CONTRAU_ECO": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "PROCESSING", "label": "Order Execution", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 95 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 93 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 95 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 91 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 94 }
-      }},
-      { "stage": "JOURNALED", "label": "Journal Entry Confirmed", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": true, "ai_active": true, "ai_confidence": 96 },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": true, "ai_active": true, "ai_confidence": 91 },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": true, "ai_active": false, "ai_confidence": 78 },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": true, "ai_active": true, "ai_confidence": 89 },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": true, "ai_active": true, "ai_confidence": 93 }
-      }}
+      {
+        "stage": "REQUESTED",
+        "label": "Purchase Request",
+        "approvers": {
+          "CONTRAU_ECO": {
+            "person": "Tam",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 90
+          },
+          "CONTRAU_ALGAE": {
+            "person": "Hau",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 88
+          },
+          "CONTRAU_SHRIMP": {
+            "person": "Kha",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 89
+          },
+          "CONTRAU_BSF": {
+            "person": "Nhi",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 87
+          },
+          "CONTRAU_KR": {
+            "person": "Sangdon",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 92
+          }
+        }
+      },
+      {
+        "stage": "REVIEWING",
+        "label": "Line Manager Review",
+        "approvers": {
+          "CONTRAU_ECO": {
+            "person": "Jihyun",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 85
+          },
+          "CONTRAU_ALGAE": {
+            "person": "Charlie",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 83
+          },
+          "CONTRAU_SHRIMP": {
+            "person": "Kyutae",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 84
+          },
+          "CONTRAU_BSF": {
+            "person": "Youngin",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 82
+          },
+          "CONTRAU_KR": {
+            "person": "Sangdon",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 88
+          }
+        }
+      },
+      {
+        "stage": "PENDING_APPROVAL",
+        "label": "PL Approval",
+        "approvers": {
+          "CONTRAU_ECO": {
+            "person": "Sangdon",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_ALGAE": {
+            "person": "Quynh",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_SHRIMP": {
+            "person": "Kyutae",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_BSF": {
+            "person": "Youngin",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_KR": {
+            "person": "Sangdon",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          }
+        }
+      },
+      {
+        "stage": "PROCESSING",
+        "label": "GA Processing",
+        "approvers": {
+          "CONTRAU_ECO": {
+            "person": "Vi",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 93
+          },
+          "CONTRAU_ALGAE": {
+            "person": "Giau",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 91
+          },
+          "CONTRAU_SHRIMP": {
+            "person": "Phuong",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 92
+          },
+          "CONTRAU_BSF": {
+            "person": "Vi",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 90
+          },
+          "CONTRAU_KR": {
+            "person": "Sangdon",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 96
+          }
+        }
+      },
+      {
+        "stage": "JOURNALED",
+        "label": "Journal Entry Confirmed",
+        "approvers": {
+          "CONTRAU_ECO": {
+            "person": "Jihyun",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_ALGAE": {
+            "person": "Quynh",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_SHRIMP": {
+            "person": "Jihyun",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_BSF": {
+            "person": "Jihyun",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_KR": {
+            "person": "Sangdon",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          }
+        }
+      }
     ]
   },
   {
-    "id": "wf-purchase-material",
-    "name": "Raw Material Purchase",
-    "type": "PURCHASE",
-    "steps": [
-      { "stage": "REQUESTED", "label": "Purchase Request", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": true, "ai_active": true, "ai_confidence": 90 },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": true, "ai_active": true, "ai_confidence": 88 },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": true, "ai_active": true, "ai_confidence": 86 },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": true, "ai_active": false, "ai_confidence": 72 },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": true, "ai_active": true, "ai_confidence": 89 }
-      }},
-      { "stage": "REVIEWING", "label": "Review", "approvers": {
-        "CONTRAU_ECO": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "PENDING_APPROVAL", "label": "Approval", "approvers": {
-        "CONTRAU_ECO": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "PROCESSING", "label": "Order Execution", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 93 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 91 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 92 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 88 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 93 }
-      }},
-      { "stage": "JOURNALED", "label": "Journal Entry Confirmed", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": true, "ai_active": true, "ai_confidence": 94 },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": true, "ai_active": true, "ai_confidence": 90 },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": true, "ai_active": true, "ai_confidence": 87 },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": true, "ai_active": false, "ai_confidence": 76 },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": true, "ai_active": true, "ai_confidence": 92 }
-      }}
-    ]
-  },
-  {
-    "id": "wf-purchase-packaging",
-    "name": "Packaging Material Purchase",
-    "type": "PURCHASE",
-    "steps": [
-      { "stage": "REQUESTED", "label": "Purchase Request", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": true, "ai_active": true, "ai_confidence": 93 },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": true, "ai_active": true, "ai_confidence": 91 },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": true, "ai_active": true, "ai_confidence": 88 },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": true, "ai_active": true, "ai_confidence": 85 },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": true, "ai_active": true, "ai_confidence": 92 }
-      }},
-      { "stage": "REVIEWING", "label": "Review", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 90 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 88 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 87 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 86 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 89 }
-      }},
-      { "stage": "PENDING_APPROVAL", "label": "Approval", "approvers": {
-        "CONTRAU_ECO": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "PROCESSING", "label": "Order Execution", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 94 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 92 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 93 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 90 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 94 }
-      }},
-      { "stage": "JOURNALED", "label": "Journal Entry Confirmed", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": true, "ai_active": true, "ai_confidence": 95 },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": true, "ai_active": true, "ai_confidence": 92 },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": true, "ai_active": true, "ai_confidence": 89 },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": true, "ai_active": true, "ai_confidence": 87 },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": true, "ai_active": true, "ai_confidence": 94 }
-      }}
-    ]
-  },
-  {
-    "id": "wf-purchase-equipment",
-    "name": "Equipment Purchase",
-    "type": "PURCHASE",
-    "steps": [
-      { "stage": "REQUESTED", "label": "Purchase Request", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "REVIEWING", "label": "Technical Review", "approvers": {
-        "CONTRAU_ECO": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "PENDING_APPROVAL", "label": "CEO Approval", "approvers": {
-        "CONTRAU_ECO": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "PROCESSING", "label": "Order Execution", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "JOURNALED", "label": "Journal Entry Confirmed", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": true, "ai_active": true, "ai_confidence": 88 },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": true, "ai_active": false, "ai_confidence": 74 },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": true, "ai_active": false, "ai_confidence": 72 },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": true, "ai_active": false, "ai_confidence": 70 },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": true, "ai_active": true, "ai_confidence": 86 }
-      }}
-    ]
-  },
-  {
-    "id": "wf-purchase-service",
-    "name": "Service Purchase",
-    "type": "PURCHASE",
-    "steps": [
-      { "stage": "REQUESTED", "label": "Service Request", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": true, "ai_active": true, "ai_confidence": 89 },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": true, "ai_active": false, "ai_confidence": 75 },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": true, "ai_active": false, "ai_confidence": 73 },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": true, "ai_active": false, "ai_confidence": 70 },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": true, "ai_active": true, "ai_confidence": 87 }
-      }},
-      { "stage": "REVIEWING", "label": "Review", "approvers": {
-        "CONTRAU_ECO": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "PENDING_APPROVAL", "label": "Approval", "approvers": {
-        "CONTRAU_ECO": { "person": "Jihyun", "ai_eligible": true, "ai_active": true, "ai_confidence": 85 },
-        "CONTRAU_SHRIMP": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Jihyun", "ai_eligible": true, "ai_active": true, "ai_confidence": 86 }
-      }},
-      { "stage": "PROCESSING", "label": "Execution", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 92 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 89 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 90 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 87 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 91 }
-      }},
-      { "stage": "JOURNALED", "label": "Journal Entry Confirmed", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": true, "ai_active": true, "ai_confidence": 93 },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": true, "ai_active": true, "ai_confidence": 88 },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": true, "ai_active": false, "ai_confidence": 79 },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": true, "ai_active": false, "ai_confidence": 77 },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": true, "ai_active": true, "ai_confidence": 91 }
-      }}
-    ]
-  },
-  {
-    "id": "wf-inventory-feed-in",
-    "name": "Feed Receiving",
-    "type": "INVENTORY",
-    "steps": [
-      { "stage": "REQUESTED", "label": "Receiving Request", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 94 },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": true, "ai_active": true, "ai_confidence": 91 },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": true, "ai_active": true, "ai_confidence": 88 },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": true, "ai_active": true, "ai_confidence": 86 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 93 }
-      }},
-      { "stage": "REVIEWING", "label": "Inspection", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "JOURNALED", "label": "Inventory Update", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 96 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 93 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 94 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 91 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 95 }
-      }}
-    ]
-  },
-  {
-    "id": "wf-inventory-material-in",
-    "name": "Raw Material Receiving",
-    "type": "INVENTORY",
-    "steps": [
-      { "stage": "REQUESTED", "label": "Receiving Request", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 93 },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": true, "ai_active": true, "ai_confidence": 89 },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": true, "ai_active": true, "ai_confidence": 87 },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": true, "ai_active": true, "ai_confidence": 85 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 92 }
-      }},
-      { "stage": "REVIEWING", "label": "Inspection", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "JOURNALED", "label": "Inventory Update", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 95 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 92 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 93 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 90 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 94 }
-      }}
-    ]
-  },
-  {
-    "id": "wf-inventory-product-out",
-    "name": "Finished Goods Shipment",
-    "type": "INVENTORY",
-    "steps": [
-      { "stage": "REQUESTED", "label": "Shipment Request", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": true, "ai_active": true, "ai_confidence": 91 },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": true, "ai_active": true, "ai_confidence": 89 },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": true, "ai_active": true, "ai_confidence": 86 },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": true, "ai_active": true, "ai_confidence": 84 },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": true, "ai_active": true, "ai_confidence": 90 }
-      }},
-      { "stage": "REVIEWING", "label": "Shipment Verification", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 92 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 89 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 90 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 87 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 91 }
-      }},
-      { "stage": "JOURNALED", "label": "Inventory Deduction", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 95 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 93 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 94 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 91 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 95 }
-      }}
-    ]
-  },
-  {
-    "id": "wf-inventory-audit",
-    "name": "Inventory Audit",
-    "type": "INVENTORY",
-    "steps": [
-      { "stage": "REQUESTED", "label": "Audit Initiation", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 90 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 88 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 87 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 85 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 89 }
-      }},
-      { "stage": "REVIEWING", "label": "Physical Count", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "PENDING_APPROVAL", "label": "Variance Approval", "approvers": {
-        "CONTRAU_ECO": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "JOURNALED", "label": "Inventory Adjustment", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": true, "ai_active": true, "ai_confidence": 88 },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": true, "ai_active": false, "ai_confidence": 73 },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": true, "ai_active": false, "ai_confidence": 71 },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": true, "ai_active": false, "ai_confidence": 69 },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": true, "ai_active": true, "ai_confidence": 86 }
-      }}
-    ]
-  },
-  {
-    "id": "wf-inventory-transfer",
-    "name": "Inventory Transfer",
-    "type": "INVENTORY",
-    "steps": [
-      { "stage": "REQUESTED", "label": "Transfer Request", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": true, "ai_active": true, "ai_confidence": 88 },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": true, "ai_active": true, "ai_confidence": 86 },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": true, "ai_active": false, "ai_confidence": 78 },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": true, "ai_active": false, "ai_confidence": 76 },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": true, "ai_active": true, "ai_confidence": 87 }
-      }},
-      { "stage": "REVIEWING", "label": "Transfer Verification", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 91 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 88 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 87 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 85 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 90 }
-      }},
-      { "stage": "JOURNALED", "label": "Inventory Update", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 94 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 91 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 92 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 89 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 93 }
-      }}
-    ]
-  },
-  {
-    "id": "wf-inventory-dispose",
-    "name": "Disposal Processing",
-    "type": "INVENTORY",
-    "steps": [
-      { "stage": "REQUESTED", "label": "Disposal Request", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "REVIEWING", "label": "Disposal Reason Review", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 82 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": false, "ai_confidence": 68 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": false, "ai_confidence": 65 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": false, "ai_confidence": 63 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 80 }
-      }},
-      { "stage": "PENDING_APPROVAL", "label": "Disposal Approval", "approvers": {
-        "CONTRAU_ECO": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "JOURNALED", "label": "Disposal Journal Entry", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": true, "ai_active": true, "ai_confidence": 87 },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": true, "ai_active": false, "ai_confidence": 74 },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": true, "ai_active": false, "ai_confidence": 72 },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": true, "ai_active": false, "ai_confidence": 70 },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": true, "ai_active": true, "ai_confidence": 85 }
-      }}
-    ]
-  },
-  {
-    "id": "wf-inventory-adjust",
-    "name": "Inventory Adjustment",
-    "type": "INVENTORY",
-    "steps": [
-      { "stage": "REQUESTED", "label": "Adjustment Request", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": true, "ai_active": true, "ai_confidence": 86 },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": true, "ai_active": false, "ai_confidence": 74 },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": true, "ai_active": false, "ai_confidence": 72 },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": true, "ai_active": false, "ai_confidence": 70 },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": true, "ai_active": true, "ai_confidence": 85 }
-      }},
-      { "stage": "REVIEWING", "label": "Variance Analysis", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 88 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 85 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 84 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 82 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 87 }
-      }},
-      { "stage": "PENDING_APPROVAL", "label": "Adjustment Approval", "approvers": {
-        "CONTRAU_ECO": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "JOURNALED", "label": "Adjustment Journal Entry", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": true, "ai_active": true, "ai_confidence": 90 },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": true, "ai_active": false, "ai_confidence": 77 },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": true, "ai_active": false, "ai_confidence": 75 },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": true, "ai_active": false, "ai_confidence": 73 },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": true, "ai_active": true, "ai_confidence": 88 }
-      }}
-    ]
-  },
-  {
-    "id": "wf-sales-product",
-    "name": "Product Sales",
+    "id": "wf-sales",
+    "name": "Sales",
     "type": "SALES",
     "steps": [
-      { "stage": "REQUESTED", "label": "Order Received", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 94 },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": true, "ai_active": false, "ai_confidence": 76 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 91 },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": true, "ai_active": false, "ai_confidence": 69 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 93 }
-      }},
-      { "stage": "PROCESSING", "label": "Shipment/Dispatch", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "JOURNALED", "label": "Billing Confirmed", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 96 },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": true, "ai_active": true, "ai_confidence": 88 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 95 },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": true, "ai_active": false, "ai_confidence": 74 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 94 }
-      }}
+      {
+        "stage": "REQUESTED",
+        "label": "Sales Request",
+        "approvers": {
+          "CONTRAU_ECO": {
+            "person": "Tam",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 89
+          },
+          "CONTRAU_ALGAE": {
+            "person": "Hau",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 87
+          },
+          "CONTRAU_SHRIMP": {
+            "person": "Kha",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 88
+          },
+          "CONTRAU_BSF": {
+            "person": "Nhi",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 86
+          },
+          "CONTRAU_KR": {
+            "person": "Sangdon",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 91
+          }
+        }
+      },
+      {
+        "stage": "REVIEWING",
+        "label": "GA Review",
+        "approvers": {
+          "CONTRAU_ECO": {
+            "person": "Vi",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 84
+          },
+          "CONTRAU_ALGAE": {
+            "person": "Giau",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 82
+          },
+          "CONTRAU_SHRIMP": {
+            "person": "Phuong",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 83
+          },
+          "CONTRAU_BSF": {
+            "person": "Vi",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 81
+          },
+          "CONTRAU_KR": {
+            "person": "Sangdon",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 87
+          }
+        }
+      },
+      {
+        "stage": "PENDING_APPROVAL",
+        "label": "PL Approval",
+        "approvers": {
+          "CONTRAU_ECO": {
+            "person": "Sangdon",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_ALGAE": {
+            "person": "Quynh",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_SHRIMP": {
+            "person": "Kyutae",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_BSF": {
+            "person": "Youngin",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_KR": {
+            "person": "Sangdon",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          }
+        }
+      },
+      {
+        "stage": "JOURNALED",
+        "label": "Journal Entry Confirmed",
+        "approvers": {
+          "CONTRAU_ECO": {
+            "person": "Jihyun",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_ALGAE": {
+            "person": "Quynh",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_SHRIMP": {
+            "person": "Jihyun",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_BSF": {
+            "person": "Jihyun",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_KR": {
+            "person": "Sangdon",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          }
+        }
+      }
     ]
   },
   {
-    "id": "wf-sales-export",
-    "name": "Export Sales",
-    "type": "SALES",
-    "steps": [
-      { "stage": "REQUESTED", "label": "Export Order Received", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "REVIEWING", "label": "Export Document Review", "approvers": {
-        "CONTRAU_ECO": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "PROCESSING", "label": "Export Customs Clearance", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "JOURNALED", "label": "Export Revenue Confirmed", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": true, "ai_active": false, "ai_confidence": 78 },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": true, "ai_active": false, "ai_confidence": 72 },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": true, "ai_active": false, "ai_confidence": 70 },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": true, "ai_active": false, "ai_confidence": 65 },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": true, "ai_active": false, "ai_confidence": 76 }
-      }}
-    ]
-  },
-  {
-    "id": "wf-sales-sample",
-    "name": "Sample Shipment",
-    "type": "SALES",
-    "steps": [
-      { "stage": "REQUESTED", "label": "Sample Request", "approvers": {
-        "CONTRAU_ECO": { "person": "Anyone", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Anyone", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Anyone", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Anyone", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Anyone", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "PENDING_APPROVAL", "label": "Sample Approval", "approvers": {
-        "CONTRAU_ECO": { "person": "Jihyun", "ai_eligible": true, "ai_active": true, "ai_confidence": 86 },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": true, "ai_active": false, "ai_confidence": 74 },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": true, "ai_active": false, "ai_confidence": 72 },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": true, "ai_active": false, "ai_confidence": 70 },
-        "CONTRAU_FEED": { "person": "Jihyun", "ai_eligible": true, "ai_active": true, "ai_confidence": 85 }
-      }},
-      { "stage": "PROCESSING", "label": "Sample Dispatch", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "JOURNALED", "label": "Sample Cost Entry", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 93 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 90 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 91 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 88 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 92 }
-      }}
-    ]
-  },
-  {
-    "id": "wf-sales-return",
-    "name": "Sales Return",
-    "type": "SALES",
-    "steps": [
-      { "stage": "REQUESTED", "label": "Return Received", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": true, "ai_active": false, "ai_confidence": 75 },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": true, "ai_active": false, "ai_confidence": 70 },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": true, "ai_active": false, "ai_confidence": 68 },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": true, "ai_active": false, "ai_confidence": 65 },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": true, "ai_active": false, "ai_confidence": 73 }
-      }},
-      { "stage": "REVIEWING", "label": "Return Reason Review", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 85 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": false, "ai_confidence": 72 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": false, "ai_confidence": 70 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": false, "ai_confidence": 67 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 83 }
-      }},
-      { "stage": "PENDING_APPROVAL", "label": "Return Approval", "approvers": {
-        "CONTRAU_ECO": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "JOURNALED", "label": "Return Journal Entry", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": true, "ai_active": true, "ai_confidence": 87 },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": true, "ai_active": false, "ai_confidence": 75 },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": true, "ai_active": false, "ai_confidence": 73 },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": true, "ai_active": false, "ai_confidence": 71 },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": true, "ai_active": true, "ai_confidence": 86 }
-      }}
-    ]
-  },
-  {
-    "id": "wf-expense-office",
-    "name": "Office Expenses",
+    "id": "wf-expense",
+    "name": "Expense",
     "type": "EXPENSE",
     "steps": [
-      { "stage": "REQUESTED", "label": "Expense Request", "approvers": {
-        "CONTRAU_ECO": { "person": "Anyone", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Anyone", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Anyone", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Anyone", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Anyone", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "PENDING_APPROVAL", "label": "Approval", "approvers": {
-        "CONTRAU_ECO": { "person": "Jihyun", "ai_eligible": true, "ai_active": true, "ai_confidence": 90 },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": true, "ai_active": true, "ai_confidence": 87 },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": true, "ai_active": true, "ai_confidence": 85 },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": true, "ai_active": false, "ai_confidence": 72 },
-        "CONTRAU_FEED": { "person": "Jihyun", "ai_eligible": true, "ai_active": true, "ai_confidence": 89 }
-      }},
-      { "stage": "PROCESSING", "label": "Payment", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "JOURNALED", "label": "Journal Entry Confirmed", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 97 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 94 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 96 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 92 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 95 }
-      }}
+      {
+        "stage": "REQUESTED",
+        "label": "Expense Request",
+        "approvers": {
+          "CONTRAU_ECO": {
+            "person": "Tam",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 91
+          },
+          "CONTRAU_ALGAE": {
+            "person": "Hau",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 89
+          },
+          "CONTRAU_SHRIMP": {
+            "person": "Kha",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 90
+          },
+          "CONTRAU_BSF": {
+            "person": "Nhi",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 88
+          },
+          "CONTRAU_KR": {
+            "person": "Sangdon",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 92
+          }
+        }
+      },
+      {
+        "stage": "REVIEWING",
+        "label": "GA Review",
+        "approvers": {
+          "CONTRAU_ECO": {
+            "person": "Vi",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 86
+          },
+          "CONTRAU_ALGAE": {
+            "person": "Giau",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 84
+          },
+          "CONTRAU_SHRIMP": {
+            "person": "Phuong",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 85
+          },
+          "CONTRAU_BSF": {
+            "person": "Vi",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 83
+          },
+          "CONTRAU_KR": {
+            "person": "Sangdon",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 89
+          }
+        }
+      },
+      {
+        "stage": "PENDING_APPROVAL",
+        "label": "PL Approval",
+        "approvers": {
+          "CONTRAU_ECO": {
+            "person": "Sangdon",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_ALGAE": {
+            "person": "Quynh",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_SHRIMP": {
+            "person": "Kyutae",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_BSF": {
+            "person": "Youngin",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_KR": {
+            "person": "Sangdon",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          }
+        }
+      },
+      {
+        "stage": "JOURNALED",
+        "label": "Journal Entry Confirmed",
+        "approvers": {
+          "CONTRAU_ECO": {
+            "person": "Jihyun",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_ALGAE": {
+            "person": "Quynh",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_SHRIMP": {
+            "person": "Jihyun",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_BSF": {
+            "person": "Jihyun",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_KR": {
+            "person": "Sangdon",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          }
+        }
+      }
     ]
   },
   {
-    "id": "wf-expense-travel",
-    "name": "Travel Expenses",
-    "type": "EXPENSE",
-    "steps": [
-      { "stage": "REQUESTED", "label": "Travel Expense Request", "approvers": {
-        "CONTRAU_ECO": { "person": "Anyone", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Anyone", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Anyone", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Anyone", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Anyone", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "PENDING_APPROVAL", "label": "Approval", "approvers": {
-        "CONTRAU_ECO": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Charlie", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "PROCESSING", "label": "Payment", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "JOURNALED", "label": "Journal Entry Confirmed", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 91 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 88 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 89 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 86 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 90 }
-      }}
-    ]
-  },
-  {
-    "id": "wf-expense-entertain",
-    "name": "Entertainment Expenses",
-    "type": "EXPENSE",
-    "steps": [
-      { "stage": "REQUESTED", "label": "Entertainment Expense Request", "approvers": {
-        "CONTRAU_ECO": { "person": "Anyone", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Anyone", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Anyone", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Anyone", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Anyone", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "PENDING_APPROVAL", "label": "Approval", "approvers": {
-        "CONTRAU_ECO": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "PROCESSING", "label": "Payment", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "JOURNALED", "label": "Journal Entry Confirmed", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": true, "ai_active": true, "ai_confidence": 86 },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": true, "ai_active": false, "ai_confidence": 74 },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": true, "ai_active": false, "ai_confidence": 72 },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": true, "ai_active": false, "ai_confidence": 70 },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": true, "ai_active": true, "ai_confidence": 85 }
-      }}
-    ]
-  },
-  {
-    "id": "wf-payroll-monthly",
-    "name": "Monthly Payroll",
+    "id": "wf-payroll",
+    "name": "Payroll",
     "type": "PAYROLL",
     "steps": [
-      { "stage": "REQUESTED", "label": "Payroll Calculation", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 90 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 88 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 87 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 86 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 89 }
-      }},
-      { "stage": "REVIEWING", "label": "Payroll Review", "approvers": {
-        "CONTRAU_ECO": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "PENDING_APPROVAL", "label": "CEO Approval", "approvers": {
-        "CONTRAU_ECO": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "PROCESSING", "label": "Bank Transfer", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "JOURNALED", "label": "Payroll Journal Entry", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 93 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 90 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 91 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 88 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 92 }
-      }}
+      {
+        "stage": "REQUESTED",
+        "label": "Payroll Request",
+        "approvers": {
+          "CONTRAU_ECO": {
+            "person": "Tam",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 88
+          },
+          "CONTRAU_ALGAE": {
+            "person": "Hau",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 86
+          },
+          "CONTRAU_SHRIMP": {
+            "person": "Kha",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 87
+          },
+          "CONTRAU_BSF": {
+            "person": "Nhi",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 85
+          },
+          "CONTRAU_KR": {
+            "person": "Sangdon",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 90
+          }
+        }
+      },
+      {
+        "stage": "REVIEWING",
+        "label": "GA Review",
+        "approvers": {
+          "CONTRAU_ECO": {
+            "person": "Vi",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 83
+          },
+          "CONTRAU_ALGAE": {
+            "person": "Giau",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 81
+          },
+          "CONTRAU_SHRIMP": {
+            "person": "Phuong",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 82
+          },
+          "CONTRAU_BSF": {
+            "person": "Vi",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 80
+          },
+          "CONTRAU_KR": {
+            "person": "Sangdon",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 86
+          }
+        }
+      },
+      {
+        "stage": "PENDING_APPROVAL",
+        "label": "PL Approval",
+        "approvers": {
+          "CONTRAU_ECO": {
+            "person": "Sangdon",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_ALGAE": {
+            "person": "Quynh",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_SHRIMP": {
+            "person": "Kyutae",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_BSF": {
+            "person": "Youngin",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_KR": {
+            "person": "Sangdon",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          }
+        }
+      },
+      {
+        "stage": "JOURNALED",
+        "label": "Journal Entry Confirmed",
+        "approvers": {
+          "CONTRAU_ECO": {
+            "person": "Jihyun",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_ALGAE": {
+            "person": "Quynh",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_SHRIMP": {
+            "person": "Jihyun",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_BSF": {
+            "person": "Jihyun",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_KR": {
+            "person": "Sangdon",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          }
+        }
+      }
     ]
   },
   {
-    "id": "wf-payroll-bonus",
-    "name": "Bonus Payment",
-    "type": "PAYROLL",
+    "id": "wf-capex",
+    "name": "CAPEX",
+    "type": "CAPEX",
     "steps": [
-      { "stage": "REQUESTED", "label": "Bonus Calculation", "approvers": {
-        "CONTRAU_ECO": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "PENDING_APPROVAL", "label": "CEO Approval", "approvers": {
-        "CONTRAU_ECO": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "PROCESSING", "label": "Bank Transfer", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "JOURNALED", "label": "Bonus Journal Entry", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 91 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 88 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 89 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 86 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 90 }
-      }}
+      {
+        "stage": "REQUESTED",
+        "label": "CAPEX Request",
+        "approvers": {
+          "CONTRAU_ECO": {
+            "person": "Tam",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 87
+          },
+          "CONTRAU_ALGAE": {
+            "person": "Hau",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 85
+          },
+          "CONTRAU_SHRIMP": {
+            "person": "Kha",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 86
+          },
+          "CONTRAU_BSF": {
+            "person": "Nhi",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 85
+          },
+          "CONTRAU_KR": {
+            "person": "Sangdon",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 89
+          }
+        }
+      },
+      {
+        "stage": "REVIEWING",
+        "label": "Line Manager Review",
+        "approvers": {
+          "CONTRAU_ECO": {
+            "person": "Jihyun",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_ALGAE": {
+            "person": "Charlie",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_SHRIMP": {
+            "person": "Kyutae",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_BSF": {
+            "person": "Youngin",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_KR": {
+            "person": "Sangdon",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          }
+        }
+      },
+      {
+        "stage": "PENDING_APPROVAL",
+        "label": "PL Approval",
+        "approvers": {
+          "CONTRAU_ECO": {
+            "person": "Sangdon",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_ALGAE": {
+            "person": "Quynh",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_SHRIMP": {
+            "person": "Kyutae",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_BSF": {
+            "person": "Youngin",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_KR": {
+            "person": "Sangdon",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          }
+        }
+      },
+      {
+        "stage": "PROCESSING",
+        "label": "GA Processing",
+        "approvers": {
+          "CONTRAU_ECO": {
+            "person": "Vi",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 92
+          },
+          "CONTRAU_ALGAE": {
+            "person": "Giau",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 90
+          },
+          "CONTRAU_SHRIMP": {
+            "person": "Phuong",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 91
+          },
+          "CONTRAU_BSF": {
+            "person": "Vi",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 90
+          },
+          "CONTRAU_KR": {
+            "person": "Sangdon",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 95
+          }
+        }
+      },
+      {
+        "stage": "JOURNALED",
+        "label": "Journal Entry Confirmed",
+        "approvers": {
+          "CONTRAU_ECO": {
+            "person": "Jihyun",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_ALGAE": {
+            "person": "Quynh",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_SHRIMP": {
+            "person": "Jihyun",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_BSF": {
+            "person": "Jihyun",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_KR": {
+            "person": "Sangdon",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          }
+        }
+      }
     ]
   },
   {
-    "id": "wf-payroll-severance",
-    "name": "Severance Settlement",
-    "type": "PAYROLL",
-    "steps": [
-      { "stage": "REQUESTED", "label": "Severance Calculation", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": false, "ai_confidence": 72 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": false, "ai_confidence": 68 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": false, "ai_confidence": 66 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": false, "ai_confidence": 64 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": false, "ai_confidence": 70 }
-      }},
-      { "stage": "REVIEWING", "label": "Legal Review", "approvers": {
-        "CONTRAU_ECO": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "PENDING_APPROVAL", "label": "CEO Approval", "approvers": {
-        "CONTRAU_ECO": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "PROCESSING", "label": "Bank Transfer", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "JOURNALED", "label": "Severance Journal Entry", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": true, "ai_active": false, "ai_confidence": 75 },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": true, "ai_active": false, "ai_confidence": 70 },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": true, "ai_active": false, "ai_confidence": 68 },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": true, "ai_active": false, "ai_confidence": 65 },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": true, "ai_active": false, "ai_confidence": 73 }
-      }}
-    ]
-  },
-  {
-    "id": "wf-fixed-asset-acquire",
-    "name": "Asset Acquisition",
-    "type": "FIXED_ASSET",
-    "steps": [
-      { "stage": "REQUESTED", "label": "Acquisition Request", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "REVIEWING", "label": "Asset Classification Review", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 85 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": false, "ai_confidence": 72 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": false, "ai_confidence": 70 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": false, "ai_confidence": 68 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 83 }
-      }},
-      { "stage": "PENDING_APPROVAL", "label": "CEO Approval", "approvers": {
-        "CONTRAU_ECO": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "JOURNALED", "label": "Asset Registration", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": true, "ai_active": true, "ai_confidence": 87 },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": true, "ai_active": false, "ai_confidence": 75 },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": true, "ai_active": false, "ai_confidence": 73 },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": true, "ai_active": false, "ai_confidence": 71 },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": true, "ai_active": true, "ai_confidence": 86 }
-      }}
-    ]
-  },
-  {
-    "id": "wf-fixed-asset-depreciation",
-    "name": "Depreciation",
-    "type": "FIXED_ASSET",
-    "steps": [
-      { "stage": "REQUESTED", "label": "Depreciation Initiation", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 96 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 94 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 95 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 93 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 95 }
-      }},
-      { "stage": "REVIEWING", "label": "Depreciation Verification", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 97 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 95 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 96 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 94 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 96 }
-      }},
-      { "stage": "JOURNALED", "label": "Depreciation Journal Entry", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 98 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 96 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 97 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 95 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 97 }
-      }}
-    ]
-  },
-  {
-    "id": "wf-fixed-asset-dispose",
-    "name": "Asset Disposal",
-    "type": "FIXED_ASSET",
-    "steps": [
-      { "stage": "REQUESTED", "label": "Disposal Request", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "REVIEWING", "label": "Book Value Review", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 88 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": false, "ai_confidence": 74 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": false, "ai_confidence": 72 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": false, "ai_confidence": 70 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 86 }
-      }},
-      { "stage": "PENDING_APPROVAL", "label": "CEO Approval", "approvers": {
-        "CONTRAU_ECO": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "JOURNALED", "label": "Disposal Journal Entry", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": true, "ai_active": false, "ai_confidence": 78 },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": true, "ai_active": false, "ai_confidence": 68 },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": true, "ai_active": false, "ai_confidence": 66 },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": true, "ai_active": false, "ai_confidence": 64 },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": true, "ai_active": false, "ai_confidence": 76 }
-      }}
-    ]
-  },
-  {
-    "id": "wf-bank-transfer",
+    "id": "wf-bank",
     "name": "Bank Transfer",
     "type": "BANK",
     "steps": [
-      { "stage": "REQUESTED", "label": "Transfer Request", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": true, "ai_active": true, "ai_confidence": 88 },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": true, "ai_active": false, "ai_confidence": 75 },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": true, "ai_active": false, "ai_confidence": 73 },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": true, "ai_active": false, "ai_confidence": 71 },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": true, "ai_active": true, "ai_confidence": 87 }
-      }},
-      { "stage": "REVIEWING", "label": "Balance Check", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 95 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 93 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 94 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 92 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 94 }
-      }},
-      { "stage": "PENDING_APPROVAL", "label": "Transfer Approval", "approvers": {
-        "CONTRAU_ECO": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "PROCESSING", "label": "Transfer Execution", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "JOURNALED", "label": "Transfer Journal Entry", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 96 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 93 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 94 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 91 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 95 }
-      }}
+      {
+        "stage": "REQUESTED",
+        "label": "Transfer Request",
+        "approvers": {
+          "CONTRAU_ECO": {
+            "person": "Tam",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 90
+          },
+          "CONTRAU_ALGAE": {
+            "person": "Hau",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 88
+          },
+          "CONTRAU_SHRIMP": {
+            "person": "Kha",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 89
+          },
+          "CONTRAU_BSF": {
+            "person": "Nhi",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 87
+          },
+          "CONTRAU_KR": {
+            "person": "Sangdon",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 92
+          }
+        }
+      },
+      {
+        "stage": "REVIEWING",
+        "label": "GA Review",
+        "approvers": {
+          "CONTRAU_ECO": {
+            "person": "Vi",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 85
+          },
+          "CONTRAU_ALGAE": {
+            "person": "Giau",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 83
+          },
+          "CONTRAU_SHRIMP": {
+            "person": "Phuong",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 84
+          },
+          "CONTRAU_BSF": {
+            "person": "Vi",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 82
+          },
+          "CONTRAU_KR": {
+            "person": "Sangdon",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 88
+          }
+        }
+      },
+      {
+        "stage": "PENDING_APPROVAL",
+        "label": "PL Approval",
+        "approvers": {
+          "CONTRAU_ECO": {
+            "person": "Sangdon",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_ALGAE": {
+            "person": "Quynh",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_SHRIMP": {
+            "person": "Kyutae",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_BSF": {
+            "person": "Youngin",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_KR": {
+            "person": "Sangdon",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          }
+        }
+      },
+      {
+        "stage": "JOURNALED",
+        "label": "Journal Entry Confirmed",
+        "approvers": {
+          "CONTRAU_ECO": {
+            "person": "Jihyun",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_ALGAE": {
+            "person": "Quynh",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_SHRIMP": {
+            "person": "Jihyun",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_BSF": {
+            "person": "Jihyun",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_KR": {
+            "person": "Sangdon",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          }
+        }
+      }
     ]
   },
   {
-    "id": "wf-bank-forex",
-    "name": "Foreign Exchange",
-    "type": "BANK",
-    "steps": [
-      { "stage": "REQUESTED", "label": "FX Request", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "REVIEWING", "label": "Exchange Rate Check", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 90 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 88 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 89 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 87 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 89 }
-      }},
-      { "stage": "PENDING_APPROVAL", "label": "CEO Approval", "approvers": {
-        "CONTRAU_ECO": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "PROCESSING", "label": "FX Execution", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "JOURNALED", "label": "FX Journal Entry", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": true, "ai_active": false, "ai_confidence": 76 },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": true, "ai_active": false, "ai_confidence": 70 },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": true, "ai_active": false, "ai_confidence": 68 },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": true, "ai_active": false, "ai_confidence": 65 },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": true, "ai_active": false, "ai_confidence": 74 }
-      }}
-    ]
-  },
-  {
-    "id": "wf-bank-loan",
-    "name": "Inter-Company Loan",
-    "type": "BANK",
-    "steps": [
-      { "stage": "REQUESTED", "label": "Loan Request", "approvers": {
-        "CONTRAU_ECO": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "REVIEWING", "label": "Loan Terms Review", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 82 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": false, "ai_confidence": 70 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": false, "ai_confidence": 68 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": false, "ai_confidence": 66 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 80 }
-      }},
-      { "stage": "PENDING_APPROVAL", "label": "CEO Approval", "approvers": {
-        "CONTRAU_ECO": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "PROCESSING", "label": "Bank Transfer", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "JOURNALED", "label": "Loan Journal Entry", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": true, "ai_active": false, "ai_confidence": 74 },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": true, "ai_active": false, "ai_confidence": 67 },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": true, "ai_active": false, "ai_confidence": 65 },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": true, "ai_active": false, "ai_confidence": 63 },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": true, "ai_active": false, "ai_confidence": 72 }
-      }}
-    ]
-  },
-  {
-    "id": "wf-tax-vat",
-    "name": "VAT Filing",
+    "id": "wf-tax",
+    "name": "Tax",
     "type": "TAX",
     "steps": [
-      { "stage": "REQUESTED", "label": "Filing Initiation", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 92 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 89 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 90 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 87 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 91 }
-      }},
-      { "stage": "REVIEWING", "label": "Input/Output Reconciliation", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 90 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 87 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 88 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 85 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 89 }
-      }},
-      { "stage": "PENDING_APPROVAL", "label": "Filing Approval", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "PROCESSING", "label": "Tax Office Submission", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "JOURNALED", "label": "Tax Journal Entry", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 93 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 90 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 91 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 88 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 92 }
-      }}
+      {
+        "stage": "REQUESTED",
+        "label": "Tax Filing Request",
+        "approvers": {
+          "CONTRAU_ECO": {
+            "person": "Vi",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 88
+          },
+          "CONTRAU_ALGAE": {
+            "person": "Giau",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 86
+          },
+          "CONTRAU_SHRIMP": {
+            "person": "Phuong",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 87
+          },
+          "CONTRAU_BSF": {
+            "person": "Vi",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 85
+          },
+          "CONTRAU_KR": {
+            "person": "Sangdon",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 91
+          }
+        }
+      },
+      {
+        "stage": "REVIEWING",
+        "label": "GA Review",
+        "approvers": {
+          "CONTRAU_ECO": {
+            "person": "Vi",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 84
+          },
+          "CONTRAU_ALGAE": {
+            "person": "Giau",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 82
+          },
+          "CONTRAU_SHRIMP": {
+            "person": "Phuong",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 83
+          },
+          "CONTRAU_BSF": {
+            "person": "Vi",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 81
+          },
+          "CONTRAU_KR": {
+            "person": "Sangdon",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 87
+          }
+        }
+      },
+      {
+        "stage": "PENDING_APPROVAL",
+        "label": "PL Approval",
+        "approvers": {
+          "CONTRAU_ECO": {
+            "person": "Sangdon",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_ALGAE": {
+            "person": "Quynh",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_SHRIMP": {
+            "person": "Kyutae",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_BSF": {
+            "person": "Youngin",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_KR": {
+            "person": "Sangdon",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          }
+        }
+      },
+      {
+        "stage": "JOURNALED",
+        "label": "Journal Entry Confirmed",
+        "approvers": {
+          "CONTRAU_ECO": {
+            "person": "Jihyun",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_ALGAE": {
+            "person": "Quynh",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_SHRIMP": {
+            "person": "Jihyun",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_BSF": {
+            "person": "Jihyun",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_KR": {
+            "person": "Sangdon",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          }
+        }
+      }
     ]
   },
   {
-    "id": "wf-tax-corporate",
-    "name": "Corporate Income Tax Filing",
-    "type": "TAX",
+    "id": "wf-inventory",
+    "name": "Inventory Adjustment",
+    "type": "INVENTORY",
     "steps": [
-      { "stage": "REQUESTED", "label": "Filing Initiation", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": false, "ai_confidence": 78 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": false, "ai_confidence": 74 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": false, "ai_confidence": 75 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": false, "ai_confidence": 72 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": false, "ai_confidence": 77 }
-      }},
-      { "stage": "REVIEWING", "label": "Tax Adjustment Review", "approvers": {
-        "CONTRAU_ECO": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "PENDING_APPROVAL", "label": "CEO Approval", "approvers": {
-        "CONTRAU_ECO": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "PROCESSING", "label": "Tax Office Submission", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "JOURNALED", "label": "CIT Journal Entry", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": true, "ai_active": false, "ai_confidence": 76 },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": true, "ai_active": false, "ai_confidence": 70 },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": true, "ai_active": false, "ai_confidence": 68 },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": true, "ai_active": false, "ai_confidence": 65 },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": true, "ai_active": false, "ai_confidence": 74 }
-      }}
+      {
+        "stage": "REQUESTED",
+        "label": "Adjustment Request",
+        "approvers": {
+          "CONTRAU_ECO": {
+            "person": "Tam",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 89
+          },
+          "CONTRAU_ALGAE": {
+            "person": "Hau",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 87
+          },
+          "CONTRAU_SHRIMP": {
+            "person": "Kha",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 88
+          },
+          "CONTRAU_BSF": {
+            "person": "Nhi",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 86
+          },
+          "CONTRAU_KR": {
+            "person": "Sangdon",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 91
+          }
+        }
+      },
+      {
+        "stage": "REVIEWING",
+        "label": "GA Review",
+        "approvers": {
+          "CONTRAU_ECO": {
+            "person": "Vi",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 84
+          },
+          "CONTRAU_ALGAE": {
+            "person": "Giau",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 82
+          },
+          "CONTRAU_SHRIMP": {
+            "person": "Phuong",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 83
+          },
+          "CONTRAU_BSF": {
+            "person": "Vi",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 81
+          },
+          "CONTRAU_KR": {
+            "person": "Sangdon",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 87
+          }
+        }
+      },
+      {
+        "stage": "PENDING_APPROVAL",
+        "label": "PL Approval",
+        "approvers": {
+          "CONTRAU_ECO": {
+            "person": "Sangdon",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_ALGAE": {
+            "person": "Quynh",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_SHRIMP": {
+            "person": "Kyutae",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_BSF": {
+            "person": "Youngin",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_KR": {
+            "person": "Sangdon",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          }
+        }
+      },
+      {
+        "stage": "JOURNALED",
+        "label": "Journal Entry Confirmed",
+        "approvers": {
+          "CONTRAU_ECO": {
+            "person": "Jihyun",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_ALGAE": {
+            "person": "Quynh",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_SHRIMP": {
+            "person": "Jihyun",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_BSF": {
+            "person": "Jihyun",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_KR": {
+            "person": "Sangdon",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          }
+        }
+      }
     ]
   },
   {
-    "id": "wf-tax-withholding",
-    "name": "Withholding Tax Payment",
-    "type": "TAX",
+    "id": "wf-fixed-asset",
+    "name": "Fixed Asset",
+    "type": "FIXED_ASSET",
     "steps": [
-      { "stage": "REQUESTED", "label": "WHT Calculation", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 91 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 88 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 89 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 86 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 90 }
-      }},
-      { "stage": "REVIEWING", "label": "Amount Verification", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": true, "ai_active": true, "ai_confidence": 89 },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": true, "ai_active": false, "ai_confidence": 76 },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": true, "ai_active": false, "ai_confidence": 74 },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": true, "ai_active": false, "ai_confidence": 72 },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": true, "ai_active": true, "ai_confidence": 87 }
-      }},
-      { "stage": "PENDING_APPROVAL", "label": "Payment Approval", "approvers": {
-        "CONTRAU_ECO": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "PROCESSING", "label": "Payment Execution", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "JOURNALED", "label": "Payment Journal Entry", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 94 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 91 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 92 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 89 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 93 }
-      }}
+      {
+        "stage": "REQUESTED",
+        "label": "Fixed Asset Request",
+        "approvers": {
+          "CONTRAU_ECO": {
+            "person": "Tam",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 87
+          },
+          "CONTRAU_ALGAE": {
+            "person": "Hau",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 85
+          },
+          "CONTRAU_SHRIMP": {
+            "person": "Kha",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 86
+          },
+          "CONTRAU_BSF": {
+            "person": "Nhi",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 85
+          },
+          "CONTRAU_KR": {
+            "person": "Sangdon",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 89
+          }
+        }
+      },
+      {
+        "stage": "REVIEWING",
+        "label": "Line Manager Review",
+        "approvers": {
+          "CONTRAU_ECO": {
+            "person": "Jihyun",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 83
+          },
+          "CONTRAU_ALGAE": {
+            "person": "Charlie",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 81
+          },
+          "CONTRAU_SHRIMP": {
+            "person": "Kyutae",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 82
+          },
+          "CONTRAU_BSF": {
+            "person": "Youngin",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 80
+          },
+          "CONTRAU_KR": {
+            "person": "Sangdon",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 86
+          }
+        }
+      },
+      {
+        "stage": "PENDING_APPROVAL",
+        "label": "PL Approval",
+        "approvers": {
+          "CONTRAU_ECO": {
+            "person": "Sangdon",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_ALGAE": {
+            "person": "Quynh",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_SHRIMP": {
+            "person": "Kyutae",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_BSF": {
+            "person": "Youngin",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_KR": {
+            "person": "Sangdon",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          }
+        }
+      },
+      {
+        "stage": "PROCESSING",
+        "label": "GA Processing",
+        "approvers": {
+          "CONTRAU_ECO": {
+            "person": "Vi",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 92
+          },
+          "CONTRAU_ALGAE": {
+            "person": "Giau",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 90
+          },
+          "CONTRAU_SHRIMP": {
+            "person": "Phuong",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 91
+          },
+          "CONTRAU_BSF": {
+            "person": "Vi",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 90
+          },
+          "CONTRAU_KR": {
+            "person": "Sangdon",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 95
+          }
+        }
+      },
+      {
+        "stage": "JOURNALED",
+        "label": "Journal Entry Confirmed",
+        "approvers": {
+          "CONTRAU_ECO": {
+            "person": "Jihyun",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_ALGAE": {
+            "person": "Quynh",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_SHRIMP": {
+            "person": "Jihyun",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_BSF": {
+            "person": "Jihyun",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_KR": {
+            "person": "Sangdon",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          }
+        }
+      }
     ]
   },
   {
-    "id": "wf-tax-adjustment",
-    "name": "Tax Adjustment",
-    "type": "TAX",
-    "steps": [
-      { "stage": "REQUESTED", "label": "Adjustment Initiation", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "REVIEWING", "label": "Tax Variance Analysis", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": false, "ai_confidence": 72 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": false, "ai_confidence": 66 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": false, "ai_confidence": 64 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": false, "ai_confidence": 62 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": false, "ai_confidence": 70 }
-      }},
-      { "stage": "PENDING_APPROVAL", "label": "CEO Approval", "approvers": {
-        "CONTRAU_ECO": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "JOURNALED", "label": "Adjustment Journal Entry", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": true, "ai_active": false, "ai_confidence": 70 },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": true, "ai_active": false, "ai_confidence": 64 },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": true, "ai_active": false, "ai_confidence": 62 },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": true, "ai_active": false, "ai_confidence": 60 },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": true, "ai_active": false, "ai_confidence": 68 }
-      }}
-    ]
-  },
-  {
-    "id": "wf-month-close-accrual",
-    "name": "Accrued Liabilities Review",
+    "id": "wf-month-close",
+    "name": "Month Close",
     "type": "MONTH_CLOSE",
     "steps": [
-      { "stage": "REQUESTED", "label": "Accrual Check Initiation", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 93 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 90 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 91 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 88 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 92 }
-      }},
-      { "stage": "REVIEWING", "label": "Accrual Reconciliation", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 91 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 88 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 89 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 86 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 90 }
-      }},
-      { "stage": "PENDING_APPROVAL", "label": "COO Confirmation", "approvers": {
-        "CONTRAU_ECO": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "JOURNALED", "label": "Accrual Entry", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 94 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 91 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 92 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 89 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 93 }
-      }}
-    ]
-  },
-  {
-    "id": "wf-month-close-prepaid",
-    "name": "Prepaid Expense Settlement",
-    "type": "MONTH_CLOSE",
-    "steps": [
-      { "stage": "REQUESTED", "label": "Prepaid Settlement Initiation", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 94 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 91 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 92 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 89 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 93 }
-      }},
-      { "stage": "REVIEWING", "label": "Prepaid Balance Verification", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 92 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 89 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 90 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 87 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 91 }
-      }},
-      { "stage": "PENDING_APPROVAL", "label": "COO Confirmation", "approvers": {
-        "CONTRAU_ECO": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "JOURNALED", "label": "Prepaid Amortization Entry", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 95 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 92 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 93 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 90 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 94 }
-      }}
-    ]
-  },
-  {
-    "id": "wf-month-close-depreciation",
-    "name": "Depreciation Posting",
-    "type": "MONTH_CLOSE",
-    "steps": [
-      { "stage": "REQUESTED", "label": "Depreciation Posting Initiation", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 96 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 94 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 95 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 93 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 95 }
-      }},
-      { "stage": "REVIEWING", "label": "Depreciation Amount Verification", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 97 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 95 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 96 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 94 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 96 }
-      }},
-      { "stage": "JOURNALED", "label": "Depreciation Journal Entry", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 98 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 96 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 97 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 95 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 97 }
-      }}
-    ]
-  },
-  {
-    "id": "wf-month-close-forex-eval",
-    "name": "FX Revaluation",
-    "type": "MONTH_CLOSE",
-    "steps": [
-      { "stage": "REQUESTED", "label": "FX Revaluation Initiation", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 89 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 86 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 87 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 84 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 88 }
-      }},
-      { "stage": "REVIEWING", "label": "Translation Difference Review", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 87 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 84 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 85 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 82 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 86 }
-      }},
-      { "stage": "PENDING_APPROVAL", "label": "COO Confirmation", "approvers": {
-        "CONTRAU_ECO": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "JOURNALED", "label": "Translation Journal Entry", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 90 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 87 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 88 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 85 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 89 }
-      }}
-    ]
-  },
-  {
-    "id": "wf-month-close-settlement",
-    "name": "Month-End Closing",
-    "type": "MONTH_CLOSE",
-    "steps": [
-      { "stage": "REQUESTED", "label": "Closing Initiation", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 88 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 85 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 86 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 83 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 87 }
-      }},
-      { "stage": "REVIEWING", "label": "Checklist Verification", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 90 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 87 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 88 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 85 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 89 }
-      }},
-      { "stage": "PENDING_APPROVAL", "label": "COO Final Confirmation", "approvers": {
-        "CONTRAU_ECO": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "JOURNALED", "label": "P&L Closing Entry", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": true, "ai_active": true, "ai_confidence": 86 },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": true, "ai_active": false, "ai_confidence": 74 },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": true, "ai_active": false, "ai_confidence": 72 },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": true, "ai_active": false, "ai_confidence": 70 },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": true, "ai_active": true, "ai_confidence": 85 }
-      }}
-    ]
-  },
-  {
-    "id": "wf-capex-new-invest",
-    "name": "New Investment",
-    "type": "CAPEX",
-    "steps": [
-      { "stage": "REQUESTED", "label": "Investment Request", "approvers": {
-        "CONTRAU_ECO": { "person": "PL", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "PL", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "PL", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "PL", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "PL", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "REVIEWING", "label": "ROI Analysis", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 82 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": false, "ai_confidence": 68 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": false, "ai_confidence": 66 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": false, "ai_confidence": 64 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 80 }
-      }},
-      { "stage": "PENDING_APPROVAL", "label": "CEO Approval", "approvers": {
-        "CONTRAU_ECO": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "PROCESSING", "label": "Disbursement Tracking", "approvers": {
-        "CONTRAU_ECO": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "JOURNALED", "label": "Asset Registration", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 88 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 85 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 86 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": false, "ai_confidence": 77 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 87 }
-      }}
-    ]
-  },
-  {
-    "id": "wf-capex-expansion",
-    "name": "Facility Expansion",
-    "type": "CAPEX",
-    "steps": [
-      { "stage": "REQUESTED", "label": "Expansion Request", "approvers": {
-        "CONTRAU_ECO": { "person": "PL", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "PL", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "PL", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "PL", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "PL", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "REVIEWING", "label": "PL Review", "approvers": {
-        "CONTRAU_ECO": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Charlie", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Vicky", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Youngin", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "PENDING_APPROVAL", "label": "CEO Approval", "approvers": {
-        "CONTRAU_ECO": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "PROCESSING", "label": "Order/Receiving", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "JOURNALED", "label": "Asset Registration", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 90 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 87 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 89 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": false, "ai_confidence": 79 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": true, "ai_confidence": 88 }
-      }}
-    ]
-  },
-  {
-    "id": "wf-capex-rnd",
-    "name": "R&D Investment",
-    "type": "CAPEX",
-    "steps": [
-      { "stage": "REQUESTED", "label": "R&D Request", "approvers": {
-        "CONTRAU_ECO": { "person": "PL", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "PL", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "PL", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "PL", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "PL", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "REVIEWING", "label": "Technical Feasibility Review", "approvers": {
-        "CONTRAU_ECO": { "person": "AI Agent", "ai_eligible": true, "ai_active": false, "ai_confidence": 65 },
-        "CONTRAU_SHRIMP": { "person": "AI Agent", "ai_eligible": true, "ai_active": false, "ai_confidence": 58 },
-        "CONTRAU_ALGAE": { "person": "AI Agent", "ai_eligible": true, "ai_active": false, "ai_confidence": 60 },
-        "CONTRAU_BSF": { "person": "AI Agent", "ai_eligible": true, "ai_active": false, "ai_confidence": 55 },
-        "CONTRAU_FEED": { "person": "AI Agent", "ai_eligible": true, "ai_active": false, "ai_confidence": 63 }
-      }},
-      { "stage": "PENDING_APPROVAL", "label": "CEO Approval", "approvers": {
-        "CONTRAU_ECO": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Sangdon", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "PROCESSING", "label": "Disbursement Tracking", "approvers": {
-        "CONTRAU_ECO": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_SHRIMP": { "person": "Charlie", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_ALGAE": { "person": "Vicky", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_BSF": { "person": "Youngin", "ai_eligible": false, "ai_active": false, "ai_confidence": null },
-        "CONTRAU_FEED": { "person": "Jihyun", "ai_eligible": false, "ai_active": false, "ai_confidence": null }
-      }},
-      { "stage": "JOURNALED", "label": "R&D Cost Entry", "approvers": {
-        "CONTRAU_ECO": { "person": "Nhi", "ai_eligible": true, "ai_active": false, "ai_confidence": 72 },
-        "CONTRAU_SHRIMP": { "person": "Vicky", "ai_eligible": true, "ai_active": false, "ai_confidence": 65 },
-        "CONTRAU_ALGAE": { "person": "Youngin", "ai_eligible": true, "ai_active": false, "ai_confidence": 63 },
-        "CONTRAU_BSF": { "person": "Charlie", "ai_eligible": true, "ai_active": false, "ai_confidence": 60 },
-        "CONTRAU_FEED": { "person": "Nhi", "ai_eligible": true, "ai_active": false, "ai_confidence": 70 }
-      }}
+      {
+        "stage": "REQUESTED",
+        "label": "Month Close Request",
+        "approvers": {
+          "CONTRAU_ECO": {
+            "person": "Vi",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 88
+          },
+          "CONTRAU_ALGAE": {
+            "person": "Giau",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 86
+          },
+          "CONTRAU_SHRIMP": {
+            "person": "Phuong",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 87
+          },
+          "CONTRAU_BSF": {
+            "person": "Vi",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 85
+          },
+          "CONTRAU_KR": {
+            "person": "Sangdon",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 91
+          }
+        }
+      },
+      {
+        "stage": "REVIEWING",
+        "label": "GA Review",
+        "approvers": {
+          "CONTRAU_ECO": {
+            "person": "Vi",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 84
+          },
+          "CONTRAU_ALGAE": {
+            "person": "Giau",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 82
+          },
+          "CONTRAU_SHRIMP": {
+            "person": "Phuong",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 83
+          },
+          "CONTRAU_BSF": {
+            "person": "Vi",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 81
+          },
+          "CONTRAU_KR": {
+            "person": "Sangdon",
+            "ai_eligible": true,
+            "ai_active": true,
+            "ai_confidence": 87
+          }
+        }
+      },
+      {
+        "stage": "PENDING_APPROVAL",
+        "label": "PL Approval",
+        "approvers": {
+          "CONTRAU_ECO": {
+            "person": "Sangdon",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_ALGAE": {
+            "person": "Quynh",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_SHRIMP": {
+            "person": "Kyutae",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_BSF": {
+            "person": "Youngin",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_KR": {
+            "person": "Sangdon",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          }
+        }
+      },
+      {
+        "stage": "JOURNALED",
+        "label": "Journal Entry Confirmed",
+        "approvers": {
+          "CONTRAU_ECO": {
+            "person": "Jihyun",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_ALGAE": {
+            "person": "Quynh",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_SHRIMP": {
+            "person": "Jihyun",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_BSF": {
+            "person": "Jihyun",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          },
+          "CONTRAU_KR": {
+            "person": "Sangdon",
+            "ai_eligible": false,
+            "ai_active": false,
+            "ai_confidence": null
+          }
+        }
+      }
     ]
   }
 ]

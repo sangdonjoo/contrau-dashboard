@@ -7,6 +7,8 @@ const tabs = [
   { href: '/accounting', label: '~Transactions', exact: true },
   { href: '/accounting/workflow', label: '~Workflows' },
   { href: '/accounting/company', label: '~Financials' },
+  { href: '/accounting/balance-sheet', label: 'Balance Sheet' },
+  { href: '/accounting/cash-flow', label: 'Cash Flow' },
 ]
 
 function AccountingNav() {
