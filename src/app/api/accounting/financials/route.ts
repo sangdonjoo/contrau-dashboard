@@ -3,11 +3,13 @@ import { NextResponse } from 'next/server';
 // company_code → subsidiary metadata mapping
 const COMPANY_META: Record<string, { id: string; name: string; nameKo: string }> = {
   SOLAGRON:    { id: 'algae',    name: 'Solagron',        nameKo: 'Solagron' },
-  CPLUS:       { id: 'cplus',   name: 'Contrau Plus',    nameKo: 'C Plus' },
+  CTPLUS:      { id: 'ctplus',  name: 'Contrau Plus',    nameKo: 'CT Plus' },
   ECCM:        { id: 'eccm',   name: 'Eco CM',           nameKo: 'Eco CM' },
   ENTOFLOW:    { id: 'entoflow', name: 'Entoflow',        nameKo: 'Entoflow' },
   CTSF:        { id: 'ctsf',    name: 'Contrau Seafood', nameKo: 'Seafood' },
   CONTRAU_KR:  { id: 'kr_hq',   name: 'Contrau Eco KR',  nameKo: 'KR HQ' },
+  CINV:        { id: 'cinv',    name: 'Contrau Investment', nameKo: '투자' },
+  AQUATECH:    { id: 'aquatech', name: 'Contrau Aqua Tech',  nameKo: 'Aqua Tech' },
 };
 
 interface MonthlyRow {
