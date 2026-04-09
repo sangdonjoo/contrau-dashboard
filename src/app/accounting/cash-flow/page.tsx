@@ -30,11 +30,14 @@ interface ApiResponse {
 
 const COMPANIES = [
   { code: 'all',        label: 'All (Consolidated)' },
-  { code: 'CPLUS',      label: 'Contrau Plus (CECO)' },
-  { code: 'SOLAGRON',   label: 'Solagron (Algae)' },
+  { code: 'CONTRAU_KR', label: 'Contrau KR (F0)' },
+  { code: 'CTSF',       label: 'Contrau Seafood Imexco' },
+  { code: 'CINV',       label: 'Contrau Investment' },
+  { code: 'CTPLUS',     label: 'Contrau Plus' },
   { code: 'ECCM',       label: 'Eco CM (Shrimp)' },
   { code: 'ENTOFLOW',   label: 'Entoflow (BSF)' },
-  { code: 'CONTRAU_KR', label: 'Contrau KR' },
+  { code: 'CTAT',       label: 'Contrau Aqua Tech' },
+  { code: 'SOLAGRON',   label: 'Solagron (Algae)' },
 ]
 
 const CURRENT_YEAR = new Date().getFullYear()
