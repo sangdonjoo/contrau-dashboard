@@ -9,7 +9,7 @@ const COMPANY_META: Record<string, { id: string; name: string; nameKo: string }>
   CTSF:        { id: 'ctsf',    name: 'Contrau Seafood', nameKo: 'Seafood' },
   CONTRAU_KR:  { id: 'kr_hq',   name: 'Contrau Eco KR',  nameKo: 'KR HQ' },
   CINV:        { id: 'cinv',    name: 'Contrau Investment', nameKo: '투자' },
-  AQUATECH:    { id: 'aquatech', name: 'Contrau Aqua Tech',  nameKo: 'Aqua Tech' },
+  CTAT:        { id: 'ctat',     name: 'Contrau Aqua Tech',  nameKo: 'Aqua Tech' },
 };
 
 interface MonthlyRow {

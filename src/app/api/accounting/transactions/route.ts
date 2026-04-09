@@ -35,7 +35,7 @@ const COMPANY_SUBSIDIARY_MAP: Record<string, Subsidiary> = {
   CTSF:        'CONTRAU_FEED',
   CONTRAU_KR:  'CONTRAU_KR',
   CINV:        'CONTRAU_INV',
-  AQUATECH:    'CONTRAU_AQUA',
+  CTAT:        'CONTRAU_AQUA',
 };
 
 function voucherTypeToWorkflow(voucherType: number | null): WorkflowType {
