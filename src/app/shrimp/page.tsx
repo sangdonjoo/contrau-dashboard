@@ -7,7 +7,11 @@ import PondRow from "@/components/PhaseFlow";
 import { farms, computeKpiForLines } from "@/data/mock";
 import type { FarmInfo, LineInfo } from "@/data/mock";
 
-const BATCH_REPORTS = [
+const BATCH_REPORTS: Array<{
+  batch: number; status: string; period: string;
+  harvestKg: number | null; revenueB: string | null;
+  survivalRate: string | null; grossMargin: string | null; note: string | null;
+}> = [
   {
     batch: 11, status: 'completed',
     period: 'Jan 23 – Apr 8, 2026 (75일)',
@@ -47,6 +51,13 @@ const BATCH_REPORTS = [
 
 export default function OverviewPage() {
   const [selectedFarmId, setSelectedFarmId] = useState<string | null>(null);
+  const [selectedBatch, setSelectedBatch] = useState<number | null>(null);
+
+  const completedBatches = BATCH_REPORTS.filter(b => b.status === 'completed');
+  const avgHarvest = completedBatches.reduce((s, b) => s + (b.harvestKg ?? 0), 0) / completedBatches.length;
+  const avgSurvival = completedBatches.filter(b => b.survivalRate).length;
+  const activeBatch = BATCH_REPORTS.find(b => b.status === 'active') ?? null;
+  const displayBatch = selectedBatch !== null ? BATCH_REPORTS.find(b => b.batch === selectedBatch) : null;
 
   const now = new Date().toLocaleDateString("en-US", {
     weekday: "long",
@@ -145,39 +156,108 @@ export default function OverviewPage() {
       {/* Batch Reports */}
       <section className="mb-6">
         <h2 className="text-sm font-semibold text-gray-700 mb-3">Batch Reports</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-          {BATCH_REPORTS.map((b) => (
-            <div key={b.batch} className={`rounded-xl border p-4 bg-white shadow-sm ${b.status === 'completed' ? 'border-gray-200' : 'border-green-300'}`}>
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-bold text-gray-800">Batch {b.batch}</span>
-                <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${b.status === 'completed' ? 'bg-gray-100 text-gray-500' : 'bg-green-100 text-green-700'}`}>
-                  {b.status === 'completed' ? 'Completed' : 'Active'}
-                </span>
+        <div className="flex gap-3 flex-col md:flex-row">
+
+          {/* 전체 평균 카드 (항상 표시) */}
+          <div className="rounded-xl border border-blue-200 bg-blue-50 p-4 shadow-sm w-full md:w-56 flex-shrink-0">
+            <p className="text-[10px] font-semibold text-blue-500 uppercase tracking-wide mb-2">Overall Average</p>
+            <div className="space-y-2">
+              <div>
+                <p className="text-[10px] text-gray-400">Avg Harvest / Batch</p>
+                <p className="text-sm font-bold text-gray-800">{(avgHarvest / 1000).toFixed(1)} MT</p>
               </div>
-              <p className="text-[10px] text-gray-400 mb-3">{b.period}</p>
-              <div className="grid grid-cols-2 gap-2 mb-3">
-                <div>
-                  <p className="text-[10px] text-gray-400">Harvest</p>
-                  <p className="text-sm font-semibold text-gray-800">{b.harvestKg ? `${(b.harvestKg/1000).toFixed(1)} MT` : '—'}</p>
-                </div>
-                <div>
-                  <p className="text-[10px] text-gray-400">Revenue</p>
-                  <p className="text-sm font-semibold text-gray-800">{b.revenueB ? `${b.revenueB}B ₫` : '—'}</p>
-                </div>
-                <div>
-                  <p className="text-[10px] text-gray-400">Survival</p>
-                  <p className="text-sm font-semibold text-gray-800">{b.survivalRate ?? '—'}</p>
-                </div>
-                <div>
-                  <p className="text-[10px] text-gray-400">Gross Margin</p>
-                  <p className={`text-sm font-semibold ${b.grossMargin ? (b.grossMargin.startsWith('-') ? 'text-red-500' : 'text-green-600') : 'text-gray-400'}`}>
-                    {b.grossMargin ?? '계산 중'}
-                  </p>
-                </div>
+              <div>
+                <p className="text-[10px] text-gray-400">Total Batches</p>
+                <p className="text-sm font-bold text-gray-800">{BATCH_REPORTS.length}</p>
               </div>
-              {b.note && <p className="text-[10px] text-gray-400 border-t border-gray-100 pt-2">{b.note}</p>}
+              <div>
+                <p className="text-[10px] text-gray-400">Best Batch</p>
+                <p className="text-sm font-bold text-green-600">B11 — 25.1 MT</p>
+              </div>
+              {activeBatch && (
+                <div className="pt-1 border-t border-blue-200">
+                  <p className="text-[10px] text-green-600 font-semibold">● Active: B{activeBatch.batch}</p>
+                </div>
+              )}
             </div>
-          ))}
+          </div>
+
+          {/* 배치 선택 + 카드 */}
+          <div className="flex-1">
+            {/* 배치 선택 버튼 */}
+            <div className="flex flex-wrap gap-2 mb-3">
+              {BATCH_REPORTS.map((b) => (
+                <button
+                  key={b.batch}
+                  type="button"
+                  onClick={() => setSelectedBatch(selectedBatch === b.batch ? null : b.batch)}
+                  className={`px-3 py-1 text-xs font-medium rounded-full border transition-colors ${
+                    selectedBatch === b.batch
+                      ? 'bg-green-600 text-white border-green-600'
+                      : b.status === 'active'
+                      ? 'bg-green-50 text-green-700 border-green-300'
+                      : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
+                  }`}
+                >
+                  B{b.batch} {b.status === 'active' ? '●' : ''}
+                </button>
+              ))}
+              {selectedBatch !== null && (
+                <button
+                  type="button"
+                  onClick={() => setSelectedBatch(null)}
+                  className="px-3 py-1 text-xs text-gray-400 hover:text-gray-600"
+                >
+                  ✕ 닫기
+                </button>
+              )}
+            </div>
+
+            {/* 선택된 배치 카드 */}
+            {displayBatch ? (
+              <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-bold text-gray-800">Batch {displayBatch.batch}</span>
+                  <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${
+                    displayBatch.status === 'completed' ? 'bg-gray-100 text-gray-500' : 'bg-green-100 text-green-700'
+                  }`}>
+                    {displayBatch.status === 'completed' ? 'Completed' : 'Active'}
+                  </span>
+                </div>
+                <p className="text-[10px] text-gray-400 mb-3">{displayBatch.period}</p>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-3">
+                  <div>
+                    <p className="text-[10px] text-gray-400">Harvest</p>
+                    <p className="text-sm font-semibold text-gray-800">{displayBatch.harvestKg ? `${(displayBatch.harvestKg/1000).toFixed(1)} MT` : '—'}</p>
+                  </div>
+                  <div>
+                    <p className="text-[10px] text-gray-400">Revenue</p>
+                    <p className="text-sm font-semibold text-gray-800">{displayBatch.revenueB ? `${displayBatch.revenueB}B ₫` : '—'}</p>
+                  </div>
+                  <div>
+                    <p className="text-[10px] text-gray-400">Survival Rate</p>
+                    <p className="text-sm font-semibold text-gray-800">{displayBatch.survivalRate ?? '—'}</p>
+                  </div>
+                  <div>
+                    <p className="text-[10px] text-gray-400">Gross Margin</p>
+                    <p className={`text-sm font-semibold ${
+                      !displayBatch.grossMargin ? 'text-gray-400' :
+                      displayBatch.grossMargin.startsWith('-') ? 'text-red-500' : 'text-green-600'
+                    }`}>
+                      {displayBatch.grossMargin ?? 'COGS 계산 중'}
+                    </p>
+                  </div>
+                </div>
+                {displayBatch.note && (
+                  <p className="text-[10px] text-gray-400 border-t border-gray-100 pt-2">{displayBatch.note}</p>
+                )}
+              </div>
+            ) : (
+              <div className="rounded-xl border border-dashed border-gray-200 p-4 text-center text-xs text-gray-400">
+                배치를 선택하면 상세 정보를 볼 수 있어요
+              </div>
+            )}
+          </div>
         </div>
       </section>
 

@@ -54,6 +54,8 @@ const SUBSIDIARY_SHORT: Record<Subsidiary, string> = {
   CONTRAU_BSF: 'Entoflow',
   CONTRAU_FEED: 'Seafood',
   CONTRAU_KR: 'KR HQ',
+  CONTRAU_INV: 'Investment',
+  CONTRAU_AQUA: 'Aqua Tech',
 }
 
 export function getSubsidiaryShort(sub: Subsidiary): string {
