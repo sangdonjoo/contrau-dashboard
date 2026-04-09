@@ -7,6 +7,44 @@ import PondRow from "@/components/PhaseFlow";
 import { farms, computeKpiForLines } from "@/data/mock";
 import type { FarmInfo, LineInfo } from "@/data/mock";
 
+const BATCH_REPORTS = [
+  {
+    batch: 11, status: 'completed',
+    period: 'Jan 23 – Apr 8, 2026 (75일)',
+    harvestKg: 25067, revenueB: '2.54', survivalRate: '~71%',
+    grossMargin: 'COGS 계산 중',
+    note: 'B11: 첫 상업 수확 성공. 주요 바이어: Vu Duong, Nguyen Chi Nguyen',
+  },
+  {
+    batch: 10, status: 'completed',
+    period: 'Nov 8 – Dec 24, 2025 (47일)',
+    harvestKg: 10326, revenueB: '0.80', survivalRate: '54.8%',
+    grossMargin: null,
+    note: '6–8g급. P1→P2→P3 운영',
+  },
+  {
+    batch: 9, status: 'completed',
+    period: 'Sep 21 – Oct 26, 2025 (36일)',
+    harvestKg: 7915, revenueB: '0.33', survivalRate: '79.2%',
+    grossMargin: null,
+    note: '5g급 급매. 33일차 바이러스 감염 증세',
+  },
+  {
+    batch: 7, status: 'completed',
+    period: 'Jul 7 – Aug 19, 2025 (44일)',
+    harvestKg: 3189, revenueB: null, survivalRate: '52.8%',
+    grossMargin: null,
+    note: 'P2에서 폐사 발생 후 전량 급매',
+  },
+  {
+    batch: 3, status: 'completed',
+    period: 'Jan 11 – Mar 14, 2025',
+    harvestKg: 2422, revenueB: '0.18', survivalRate: '8.8%',
+    grossMargin: '-',
+    note: 'COGS 1.2B / 매출 0.18B — 손실',
+  },
+];
+
 export default function OverviewPage() {
   const [selectedFarmId, setSelectedFarmId] = useState<string | null>(null);
 
@@ -102,6 +140,45 @@ export default function OverviewPage() {
           unit="tons"
           subtitle="Cumulative this year"
         />
+      </section>
+
+      {/* Batch Reports */}
+      <section className="mb-6">
+        <h2 className="text-sm font-semibold text-gray-700 mb-3">Batch Reports</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          {BATCH_REPORTS.map((b) => (
+            <div key={b.batch} className={`rounded-xl border p-4 bg-white shadow-sm ${b.status === 'completed' ? 'border-gray-200' : 'border-green-300'}`}>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-bold text-gray-800">Batch {b.batch}</span>
+                <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${b.status === 'completed' ? 'bg-gray-100 text-gray-500' : 'bg-green-100 text-green-700'}`}>
+                  {b.status === 'completed' ? 'Completed' : 'Active'}
+                </span>
+              </div>
+              <p className="text-[10px] text-gray-400 mb-3">{b.period}</p>
+              <div className="grid grid-cols-2 gap-2 mb-3">
+                <div>
+                  <p className="text-[10px] text-gray-400">Harvest</p>
+                  <p className="text-sm font-semibold text-gray-800">{b.harvestKg ? `${(b.harvestKg/1000).toFixed(1)} MT` : '—'}</p>
+                </div>
+                <div>
+                  <p className="text-[10px] text-gray-400">Revenue</p>
+                  <p className="text-sm font-semibold text-gray-800">{b.revenueB ? `${b.revenueB}B ₫` : '—'}</p>
+                </div>
+                <div>
+                  <p className="text-[10px] text-gray-400">Survival</p>
+                  <p className="text-sm font-semibold text-gray-800">{b.survivalRate ?? '—'}</p>
+                </div>
+                <div>
+                  <p className="text-[10px] text-gray-400">Gross Margin</p>
+                  <p className={`text-sm font-semibold ${b.grossMargin ? (b.grossMargin.startsWith('-') ? 'text-red-500' : 'text-green-600') : 'text-gray-400'}`}>
+                    {b.grossMargin ?? '계산 중'}
+                  </p>
+                </div>
+              </div>
+              {b.note && <p className="text-[10px] text-gray-400 border-t border-gray-100 pt-2">{b.note}</p>}
+            </div>
+          ))}
+        </div>
       </section>
 
       {/* Production Lines — Factory Floor Panel */}
