@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 const SUPABASE_URL = process.env.SUPABASE_URL ?? 'https://uyvghswdreirwhflvxhm.supabase.co';
 
-const COMPANIES = ['CONTRAU_KR', 'CTSF', 'CINV', 'CTPLUS', 'ECCM', 'ENTOFLOW', 'CTAT', 'SOLAGRON', 'CINVNT', 'CENT', 'GALG_INV', 'SAVN'] as const;
+const COMPANIES = ['CONTRAU_KR', 'CTSF', 'CINV', 'CTPLUS', 'ECCM', 'ENTOFLOW', 'CTAT', 'SOLAGRON', 'CTNTINV', 'CTECONT', 'GAINV', 'SAVN'] as const;
 
 interface VoucherRow {
   refid: string;

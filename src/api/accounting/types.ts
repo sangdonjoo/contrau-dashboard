@@ -8,7 +8,7 @@ export type WorkflowType = 'PURCHASE' | 'SALES' | 'EXPENSE' | 'CAPEX'
 
 export type Subsidiary = 'CONTRAU_ECO' | 'CONTRAU_SHRIMP' | 'CONTRAU_ALGAE'
   | 'CONTRAU_BSF' | 'CONTRAU_FEED' | 'CONTRAU_PLUS' | 'CONTRAU_KR' | 'CONTRAU_INV' | 'CONTRAU_AQUA'
-  | 'CONTRAU_NT_INV' | 'CONTRAU_NT_ECO' | 'GALG_INV' | 'SAVN'
+  | 'CONTRAU_NT_INV' | 'CONTRAU_NT_ECO' | 'GAINV' | 'SAVN'
 
 export type TransactionStatus = 'active' | 'archived'
 export type ActorType = 'AI' | 'BOT' | 'HUMAN'

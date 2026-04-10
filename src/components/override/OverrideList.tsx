@@ -7,8 +7,9 @@ import {
   type DeepDive,
 } from "@/data/override-mock";
 import type { SpecialTask, STStatus } from "@/app/api/special-tasks/route";
+import KebabTab from "@/components/override/KebabTab";
 
-type Tab = "deep-dive" | "monthly-plan" | "special-task" | "note";
+type Tab = "kebab" | "deep-dive" | "monthly-plan" | "special-task" | "note";
 
 interface NoteItem {
   id: string;
@@ -72,7 +73,7 @@ function LevelBadge({ level }: { level: number }) {
 const DD_PAGE_SIZE = 10;
 
 export default function OverrideList() {
-  const [tab, setTab] = useState<Tab>("deep-dive");
+  const [tab, setTab] = useState<Tab>("kebab");
   const [deepDives, setDeepDives] = useState<DeepDive[]>([]);
   const [ddLoading, setDdLoading] = useState(true);
   const [ddLoadingMore, setDdLoadingMore] = useState(false);
@@ -120,11 +121,12 @@ export default function OverrideList() {
       .finally(() => setDdLoadingMore(false));
   }
 
-  const tabs: { key: Tab; label: string; count: number }[] = [
-    { key: "deep-dive", label: "Deep Dive", count: deepDives.length },
-    { key: "monthly-plan", label: "Monthly Plan", count: 0 },
+  const tabs: { key: Tab; label: string; count?: number }[] = [
+    { key: "kebab",        label: "케밥 인터뷰" },
+    { key: "deep-dive",   label: "Deep Dive",   count: deepDives.length },
+    { key: "monthly-plan", label: "Monthly Plan" },
     { key: "special-task", label: "Special Task", count: specialTasks.length },
-    { key: "note", label: "Note", count: notes.length },
+    { key: "note",         label: "Note",          count: notes.length },
   ];
 
   return (
@@ -142,12 +144,17 @@ export default function OverrideList() {
             }`}
           >
             {t.label}
-            <span className="ml-1.5 px-1.5 py-0.5 rounded-full bg-gray-100 text-gray-500 text-[10px]">
-              {t.count}
-            </span>
+            {t.count !== undefined && (
+              <span className="ml-1.5 px-1.5 py-0.5 rounded-full bg-gray-100 text-gray-500 text-[10px]">
+                {t.count}
+              </span>
+            )}
           </button>
         ))}
       </div>
+
+      {/* 케밥 인터뷰 */}
+      {tab === "kebab" && <KebabTab />}
 
       {/* Deep Dive list */}
       {tab === "deep-dive" && (

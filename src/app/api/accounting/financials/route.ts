@@ -2,18 +2,18 @@ import { NextResponse } from 'next/server';
 
 // company_code → subsidiary metadata mapping
 const COMPANY_META: Record<string, { id: string; name: string; nameKo: string }> = {
-  SOLAGRON:    { id: 'algae',    name: 'Solagron',           nameKo: 'Solagron' },
-  CTPLUS:      { id: 'ctplus',   name: 'Contrau Plus',       nameKo: 'CT Plus' },
-  ECCM:        { id: 'eccm',     name: 'Eco CM',             nameKo: 'Eco CM' },
-  ENTOFLOW:    { id: 'entoflow', name: 'Entoflow',           nameKo: 'Entoflow' },
-  CTSF:        { id: 'ctsf',     name: 'Contrau Seafood',    nameKo: 'Seafood' },
-  CONTRAU_KR:  { id: 'kr_hq',   name: 'Contrau Eco KR',     nameKo: 'KR HQ' },
-  CINV:        { id: 'cinv',     name: 'Contrau Investment', nameKo: '투자' },
-  CTAT:        { id: 'ctat',     name: 'Contrau Aqua Tech',  nameKo: 'Aqua Tech' },
-  CINVNT:      { id: 'cinvnt',   name: 'Contrau NT Inv',     nameKo: 'NT 투자' },
-  CENT:        { id: 'cent',     name: 'Con Trau Eco NT',    nameKo: 'NT Eco' },
-  GALG_INV:    { id: 'galg_inv', name: 'Green Algae Inv',    nameKo: 'Green Algae' },
-  SAVN:        { id: 'savn',     name: 'Star Algae VN',      nameKo: 'Star Algae VN' },
+  SOLAGRON:    { id: 'algae',    name: 'Solagron',     nameKo: 'Solagron' },
+  CTPLUS:      { id: 'ctplus',   name: 'CT Plus',      nameKo: 'CT Plus' },
+  ECCM:        { id: 'eccm',     name: 'Eco CM',       nameKo: 'Eco CM' },
+  ENTOFLOW:    { id: 'entoflow', name: 'Entoflow',     nameKo: 'Entoflow' },
+  CTSF:        { id: 'ctsf',     name: 'CT SF',        nameKo: 'CT SF' },
+  CONTRAU_KR:  { id: 'kr_hq',   name: 'CT Eco KR',    nameKo: 'CT Eco KR' },
+  CINV:        { id: 'cinv',     name: 'CT Inv',       nameKo: 'CT Inv' },
+  CTAT:        { id: 'ctat',     name: 'CT Aqua',      nameKo: 'CT Aqua' },
+  CTNTINV:     { id: 'ctntinv',  name: 'CT NT Inv',    nameKo: 'CT NT Inv' },
+  CTECONT:     { id: 'ctecont',  name: 'CT Eco NT',    nameKo: 'CT Eco NT' },
+  GAINV:       { id: 'gainv',    name: 'GA Inv',       nameKo: 'GA Inv' },
+  SAVN:        { id: 'savn',     name: 'SA VN',        nameKo: 'SA VN' },
 };
 
 interface MonthlyRow {
