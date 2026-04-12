@@ -48,7 +48,7 @@ function CopyPromptButton({ prompt }: { prompt: string }) {
 }
 
 function ddPrompt(id: string): string {
-  return `Find and read ${id}.md under contrau-ssot/07_context-override/pull-interview/interviews/ and proceed with the interview.`;
+  return `Find and read ${id}.md under contrau-ssot/01_raw/kebab/ and proceed with the interview.`;
 }
 
 function stPrompt(id: string): string {

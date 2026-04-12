@@ -58,7 +58,7 @@ export const deepDives: DeepDive[] = [
     status: "submitted",
     domain: "production",
     createdAt: "2026-03-19",
-    filePath: "07_context-override/pull-interview/interviews/DD-20260319-001.md",
+    filePath: "_refactor/2026-04/pre-refactor-fc-tickets/pre-refactor-fc-tickets/DD-20260319-001.md",
   },
   {
     id: "DD-20260327-001",
@@ -71,7 +71,7 @@ export const deepDives: DeepDive[] = [
     status: "submitted",
     domain: "company, legal, production",
     createdAt: "2026-03-27",
-    filePath: "07_context-override/pull-interview/interviews/DD-20260327-001.md",
+    filePath: "_refactor/2026-04/pre-refactor-fc-tickets/pre-refactor-fc-tickets/DD-20260327-001.md",
   },
   {
     id: "DD-20260327-002",
@@ -84,7 +84,7 @@ export const deepDives: DeepDive[] = [
     status: "in_progress",
     domain: "production",
     createdAt: "2026-03-27",
-    filePath: "07_context-override/pull-interview/interviews/DD-20260327-002.md",
+    filePath: "_refactor/2026-04/pre-refactor-fc-tickets/pre-refactor-fc-tickets/DD-20260327-002.md",
   },
 ];
 
@@ -102,7 +102,7 @@ export const monthlyPlans: MonthlyPlan[] = [
     status: "pl_review",
     version: "v1 (AI draft)",
     createdAt: "2026-04-01",
-    filePath: "07_context-override/monthly-plan/2026-04/solagron_2026-04.md",
+    filePath: "06_monthly-plan/solagron_2026-04.md",
   },
   {
     id: "MP-202604-shrimp",
@@ -116,7 +116,7 @@ export const monthlyPlans: MonthlyPlan[] = [
     status: "ai_draft",
     version: "v1 (AI draft)",
     createdAt: "2026-04-01",
-    filePath: "07_context-override/monthly-plan/2026-04/shrimp_2026-04.md",
+    filePath: "06_monthly-plan/shrimp_2026-04.md",
   },
   {
     id: "MP-202604-bsfl",
@@ -130,7 +130,7 @@ export const monthlyPlans: MonthlyPlan[] = [
     status: "ceo_review",
     version: "v2 (PL confirmed)",
     createdAt: "2026-03-28",
-    filePath: "07_context-override/monthly-plan/2026-04/bsfl_2026-04.md",
+    filePath: "06_monthly-plan/bsfl_2026-04.md",
   },
 ];
 
@@ -147,7 +147,7 @@ export const specialTasks: SpecialTask[] = [
     status: "in_progress",
     progress: 35,
     createdAt: "2026-04-01",
-    filePath: "07_context-override/pull-task/cards/TK-20260401-001.md",
+    filePath: "_refactor/2026-04/pre-refactor-fc-tickets/pre-refactor-fc-tickets/TK-20260401-001.md",
   },
   {
     id: "TK-20260401-002",
@@ -160,7 +160,7 @@ export const specialTasks: SpecialTask[] = [
     status: "pending",
     progress: 0,
     createdAt: "2026-04-02",
-    filePath: "07_context-override/pull-task/cards/TK-20260401-002.md",
+    filePath: "_refactor/2026-04/pre-refactor-fc-tickets/pre-refactor-fc-tickets/TK-20260401-002.md",
   },
   {
     id: "TK-20260330-001",
@@ -173,7 +173,7 @@ export const specialTasks: SpecialTask[] = [
     status: "in_progress",
     progress: 72,
     createdAt: "2026-03-30",
-    filePath: "07_context-override/pull-task/cards/TK-20260330-001.md",
+    filePath: "_refactor/2026-04/pre-refactor-fc-tickets/pre-refactor-fc-tickets/TK-20260330-001.md",
   },
 ];
 
